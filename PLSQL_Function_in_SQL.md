@@ -48,6 +48,7 @@ This feature can be used to provide PL/SQL logic with a SQL query and for the li
 It is also useful in read-only database environments where no names functions can be created.
 
 ## Further information
-* Introduces: Oracle Database 12.1
+* Introduced: 12.1.0.2
+* Availability: all editions
 * [Documentation](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFAFID)
   * [Example](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJFIDC)
