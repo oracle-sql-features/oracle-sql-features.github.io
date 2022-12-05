@@ -3,7 +3,7 @@ This feature enables users to write anonymous PL/SQL functions for the lifetime 
 
 The PL/SQL function can be specified in the `WITH` clause (Common Table Expression (CTE)) and then referenced in one or many SQL queries below.
 
-This example demonstrates how to leverage a quick PL/SQL function to get the domain of a URL by:
+This example demonstrates how to leverage a quick PL/SQL function to get the domain name of an URL:
 ```sql
 WITH
  FUNCTION get_domain(url VARCHAR2) RETURN VARCHAR2
