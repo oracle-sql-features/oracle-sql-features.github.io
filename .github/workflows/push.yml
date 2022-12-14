@@ -11,12 +11,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Generate navigation
+        shell: bash
+        run: |
+          sh .github/scripts/generate-navigation.sh
+
       - name: Run Antora
         uses: kameshsampath/antora-site-action@master
         with:
           antora_playbook: antora-playbook.yml
 
       - name: Copy site
+        shell: bash
         run: |
           cp -rf $GITHUB_WORKSPACE/build/site/* $GITHUB_WORKSPACE/website
           touch $GITHUB_WORKSPACE/website/.nojekyll
