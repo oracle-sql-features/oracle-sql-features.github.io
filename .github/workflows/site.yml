@@ -5,12 +5,10 @@ on:
 
 jobs:
   site:
-    name: site
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Run Antora
         uses: kameshsampath/antora-site-action@master
@@ -20,7 +18,6 @@ jobs:
       - name: Copy site
         run: |
           cp -rf $GITHUB_WORKSPACE/build/site/* $GITHUB_WORKSPACE/website
-#          cp -rf $GITHUB_WORKSPACE/landing/* $GITHUB_WORKSPACE/website
           touch $GITHUB_WORKSPACE/website/.nojekyll
 
       - name: Deploy to GitHub Pages
