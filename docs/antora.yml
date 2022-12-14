@@ -1,0 +1,14 @@
+name: guide
+title: Oracle SQL Features
+version: latest
+asciidoc:
+  attributes:
+    icons: font
+    icon_req_y: icon:check[role="green"]
+    icon_req_n: icon:times[role="red"]
+    icon_req_c: icon:exclamation-triangle[role="yellow"]
+
+nav:
+- modules/ROOT/start-nav.adoc
+- modules/categories/nav.adoc
+- modules/versions/nav.adoc

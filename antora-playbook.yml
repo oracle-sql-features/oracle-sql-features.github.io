@@ -1,0 +1,20 @@
+site:
+  title: Oracle SQL Features
+  url: https://oracle-sql-features.github.io
+  start_page: guide::index.adoc
+
+content:
+  sources:
+    - url: https://github.com/oracle-sql-features/oracle-sql-features.github.io.git
+      branches: main
+      start_path: docs
+
+ui: 
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
+  supplemental_files: './supplemental_ui'
+
+asciidoc:
+  extensions:
+    - ./extensions/remote-include-processor/extension
+    - ./extensions/tabs-block/extension
