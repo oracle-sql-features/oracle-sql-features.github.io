@@ -11,4 +11,4 @@ $ sh .github/scripts/generate-navigation.sh
 ```sh
 $ antora local-playbook.yml
 ```
-4 Inspect the generated site at `build/site/index.html`
+4. Inspect the generated site at `build/site/index.html`
