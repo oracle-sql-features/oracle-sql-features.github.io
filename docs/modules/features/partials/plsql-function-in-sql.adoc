@@ -1,29 +1,48 @@
 = PL/SQL Function in SQL
-:database-version: 12.1.0.2
+:database-version: 12.1.0.1
 :database-category: plsql
 
 This feature enables users to write anonymous PL/SQL functions for the lifetime of a SQL query.
 
-The PL/SQL function can be specified in the `WITH` clause (Common Table Expression (CTE)) and then referenced in one or
+The PL/SQL functions can be specified in the `WITH` clause (Common Table Expression (CTE)) and then referenced in one or
 many SQL queries below.
 
-This example demonstrates how to leverage a quick PL/SQL function to get the domain name of an URL:
+This example demonstrates how to leverage two anonymous PL/SQL functions with in a SQL statement:
+. The "capitalize" function capitalizes the first letter of the input string.
+. The "get_domain_name" function retrieves the domain name from a URL.
 
 [source,sql]
 [subs="verbatim"]
 ----
 WITH
- FUNCTION get_domain(url VARCHAR2) RETURN VARCHAR2
- IS
-   pos BINARY_INTEGER;
-   len BINARY_INTEGER;
- BEGIN
-   pos := INSTR(url, 'www.');
-   len := INSTR(SUBSTR(url, pos + 4), '.') - 1;
-   RETURN SUBSTR(url, pos + 4, len);
- END;
-SELECT get_domain(catalog_url), catalog_url
-  FROM orders;
+  -- Function to capitalize input string
+  FUNCTION capitalize
+    (
+      p_string VARCHAR2
+    )
+    RETURN VARCHAR2
+  IS
+  BEGIN
+    RETURN CONCAT(UPPER(SUBSTR(p_string,1,1)), SUBSTR(p_string,2));
+  END;
+  -- Function to retrieve the domain name from a URL
+  FUNCTION get_domain_name
+    (
+      p_url VARCHAR2,
+      p_sub_domain VARCHAR2 DEFAULT 'www.'
+    )
+    RETURN VARCHAR2
+  IS
+    v_begin_pos BINARY_INTEGER;
+    v_length    BINARY_INTEGER;
+  BEGIN
+    v_begin_pos := INSTR(p_url, p_sub_domain) + LENGTH(p_sub_domain);
+    v_length := INSTR(SUBSTR(p_url, v_begin_pos), '.') - 1;
+    RETURN SUBSTR(p_url, v_begin_pos, v_length);
+  END;
+-- SQL statement
+SELECT capitalize(name) as name, capitalize(get_domain_name(url)) AS domain_name, url
+  FROM products;
 ----
 
 [source,sql]
@@ -31,32 +50,46 @@ SELECT get_domain(catalog_url), catalog_url
 .Result
 ----
 SQL> WITH
-  2   FUNCTION get_domain(url VARCHAR2) RETURN VARCHAR2
-  3   IS
-  4     pos BINARY_INTEGER;
-  5     len BINARY_INTEGER;
-  6   BEGIN
-  7     pos := INSTR(url, 'www.');
-  8     len := INSTR(SUBSTR(url, pos + 4), '.') - 1;
-  9     RETURN SUBSTR(url, pos + 4, len);
- 10   END;
- 11  SELECT get_domain(catalog_url), catalog_url
- 12    FROM orders;
- 13 /
+  2    -- Function to capitalize input string
+  3    FUNCTION capitalize
+  4      (
+  5        p_string VARCHAR2
+  6      )
+  7      RETURN VARCHAR2
+  8    IS
+  9    BEGIN
+ 10      RETURN CONCAT(UPPER(SUBSTR(p_string,1,1)), SUBSTR(p_string,2));
+ 11    END;
+ 12    -- Function to retrieve the domain name from a URL
+ 13    FUNCTION get_domain_name
+ 14      (
+ 15        p_url VARCHAR2,
+ 16        p_sub_domain VARCHAR2 DEFAULT 'www.'
+ 17      )
+ 18      RETURN VARCHAR2
+ 19    IS
+ 20      v_begin_pos BINARY_INTEGER;
+ 21      v_length    BINARY_INTEGER;
+ 22    BEGIN
+ 23      v_begin_pos := INSTR(p_url, p_sub_domain) + LENGTH(p_sub_domain);
+ 24      v_length := INSTR(SUBSTR(p_url, v_begin_pos), '.') - 1;
+ 25      RETURN SUBSTR(p_url, v_begin_pos, v_length);
+ 26    END;
+ 27  -- SQL statement
+ 28  SELECT capitalize(name) as name, capitalize(get_domain_name(url)) AS domain_name, url
+ 29    FROM products;
+ 30 /
 
-   GET_DOMAIN(CATALOG_URL)                                                                             CATALOG_URL
-__________________________ _______________________________________________________________________________________
-apple                      https://www.apple.com/shop/product/MQD83AM/A/airpods-pro
-bestbuy                    https://www.bestbuy.com/site/sandisk-ultra-512gb-usb-3-0-flash-drive-black/6422265.p
+NAME                             DOMAIN_NAME    URL
+________________________________ ______________ _______________________________________________________________________________________
+AirPods Pro (2nd gen)            Apple          https://www.apple.com/shop/product/MQD83AM/A/airpods-pro
+SanDisk - Ultra 512GB USB 3.0    Bestbuy        https://www.bestbuy.com/site/sandisk-ultra-512gb-usb-3-0-flash-drive-black/6422265.p
 ----
 
 == Benefits
 
-Sometimes a PL/SQL function can be an easier way and/or provide cleaner and better maintainable code than expressing the
-same logic in the SQL query itself. Creating a named function (i.e. `CREATE FUNCTION x`) for a single SQL statement can
-be considered overkill and detaches the maintenance of the function and the SQL statement although they are logically
-one entity. This feature can be used to provide PL/SQL logic with a SQL query and for the lifetime of the SQL query only.
-It is also useful in read-only database environments where no names functions can be created.
+Being able to run anonymous PL/SQL function with SQL statements can be useful where processing through PL/SQL is required or wanted
+but the user does either not have the necessary privileges to create a named function or does not want to reuse the function.
 
 == Further information
 
