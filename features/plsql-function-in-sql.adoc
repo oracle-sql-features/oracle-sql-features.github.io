@@ -46,9 +46,9 @@ SELECT capitalize(name) as name, capitalize(get_domain_name(url)) AS domain_name
   FROM products;
 ----
 
+.Result
 [source,sql]
 [subs="verbatim"]
-.Result
 ----
 SQL> WITH
   2    -- Function to capitalize input string

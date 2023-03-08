@@ -1,0 +1,30 @@
+= ###Feature Name###
+:database-version: ###Database version###
+:database-category: ###Category###
+
+Replace this text with a brief feature description.
+
+
+[source,sql]
+[subs="verbatim"]
+----
+###Put your SQL syntax here###
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+###Put an example of the SQL syntax here (syntax and output)###
+----
+
+== Benefits
+
+Replace this text with the benefits the feature provides
+
+== Further information
+
+* Introduced: xref:versions:{database-version}/index.adoc[]
+* Availability: ###Oracle Database feature edition availability, use "all editions" if it is not factored###
+* link:###URL Link to the Doc###[Documentation]
+* link:###URL Link to an example###[Example]
