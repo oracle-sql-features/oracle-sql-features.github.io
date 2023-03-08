@@ -14,7 +14,7 @@ jobs:
       - name: Generate navigation
         shell: bash
         run: |
-          sh .github/scripts/generate-navigation.sh
+          bash .github/scripts/generate-navigation.sh
 
       - name: Run Antora
         uses: kameshsampath/antora-site-action@master
