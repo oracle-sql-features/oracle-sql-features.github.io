@@ -8,14 +8,14 @@ Replace this text with a brief feature description.
 [source,sql]
 [subs="verbatim"]
 ----
-SQL syntax
+###Put your SQL syntax here###
 ----
 
+.Result
 [source,sql]
 [subs="verbatim"]
-.Result
 ----
-SQL result output
+###Put an example of the SQL syntax here (syntax and output)###
 ----
 
 == Benefits
