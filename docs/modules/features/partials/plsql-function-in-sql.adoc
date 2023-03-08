@@ -8,8 +8,9 @@ The PL/SQL functions can be specified in the `WITH` clause (Common Table Express
 many SQL queries below.
 
 This example demonstrates how to leverage two anonymous PL/SQL functions with in a SQL statement:
-. The "capitalize" function capitalizes the first letter of the input string.
-. The "get_domain_name" function retrieves the domain name from a URL.
+
+. The `capitalize` function capitalizes the first letter of the input string.
+. The `get_domain_name` function retrieves the domain name from a URL.
 
 [source,sql]
 [subs="verbatim"]
