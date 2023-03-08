@@ -1,17 +1,19 @@
 #!/bin/bash
 
 PWD=$(pwd)
-FEATURES="${PWD}/docs/modules/features/partials"
+FEATURES="${PWD}/features/"
 CATEGORIES="${PWD}/docs/modules/categories"
 VERSIONS="${PWD}/docs/modules/versions"
 GIT_COMMIT=""
 
 echo "* xref:index.adoc[]" > "${CATEGORIES}/nav.adoc"
 echo "* xref:index.adoc[]" > "${VERSIONS}/nav.adoc"
+mkdir -p "${PWD}/docs/modules/features/partials"
 
 for page in $(ls ${FEATURES})
 do
     echo "➡️  Processing ${page}"
+    cp "${FEATURES}/${page}" "${PWD}/docs/modules/features/partials/${page}"
     DATABASE_CATEGORY=$(grep ":database-category:" "${FEATURES}/${page}" | awk '{print $2}')
     DATABASE_VERSION=$(grep ":database-version:" "${FEATURES}/${page}" | awk '{print $2}')
 
