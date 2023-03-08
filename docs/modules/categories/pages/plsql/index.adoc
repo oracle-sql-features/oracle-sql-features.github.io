@@ -1,3 +1,22 @@
 = PL/SQL
 
-What is PL/SQL ...
+PL/SQL provides a server-side, stored procedural language that is easy-to-use,
+seamless with SQL, robust, portable, and secure. You can access and manipulate
+data inside the database using procedural objects called `PL/SQL units`.
+
+PL/SQL units generally are categorized as follows:
+
+* A `PL/SQL subprogram` is a PL/SQL block that is stored in the database and
+can be called by name from an application. When you create a subprogram, the
+database parses the subprogram and stores its parsed representation in the database.
+You can declare a subprogram as a procedure or a function.
+* A `PL/SQL anonymous block` is a PL/SQL block that appears in your application
+and is not named or stored in the database. In many applications,
+PL/SQL blocks can appear wherever SQL statements can appear.
+
+PL/SQL includes procedural language elements such as *conditions* and *loops*
+and can handle *exceptions*. It allows declaration of *constants*, *variables*,
+*procedures*, *functions*, *packages*, *types* and *variables of those types*,
+and *triggers*. *Arrays* are supported via the use of `PL/SQL collections`.
+
+For more information about PL/SQL see link:https://docs.oracle.com/en/database/oracle/oracle-database/19/cncpt/server-side-programming.html#GUID-1E17CED5-73C6-4C10-85F1-A2CB4D5F9855[Overview of PL/SQL].
