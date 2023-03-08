@@ -14,19 +14,38 @@ for page in $(ls ${FEATURES})
 do
     echo "➡️  Processing ${page}"
     cp "${FEATURES}/${page}" "${PWD}/docs/modules/features/partials/${page}"
-    DATABASE_CATEGORY=$(grep ":database-category:" "${FEATURES}/${page}" | awk '{print $2}')
+    DATABASE_CATEGORIES=$(grep ":database-category:" "${FEATURES}/${page}")
     DATABASE_VERSION=$(grep ":database-version:" "${FEATURES}/${page}" | awk '{print $2}')
 
-    # create category page if it does not exist
-    if [ ! -d "${CATEGORIES}/pages/${DATABASE_CATEGORY}" ];
-    then
-        mkdir "${CATEGORIES}/pages/${DATABASE_CATEGORY}"
-        echo "= ${DATABASE_CATEGORY}\n" > "${CATEGORIES}/pages/${DATABASE_CATEGORY}/index.adoc"
-        echo "* xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/pages/index.adoc"
-        git add "${CATEGORIES}/pages/${DATABASE_CATEGORY}/index.adoc"
-        GIT_COMMIT="true"
-    fi
+    IFS=\  read -a CATEGORIES_ARRAY <<<"$DATABASE_CATEGORIES"
+    for DATABASE_CATEGORY in "${CATEGORIES_ARRAY[@]:1}"; do
+        DATABASE_CATEGORY=$(echo "$DATABASE_CATEGORY" | xargs echo -n )
+        echo "DATABASE_CATEGORY = $DATABASE_CATEGORY"
 
+        # create category page if it does not exist
+        if [ ! -d "${CATEGORIES}/pages/${DATABASE_CATEGORY}" ];
+        then
+            mkdir "${CATEGORIES}/pages/${DATABASE_CATEGORY}"
+            echo "= ${DATABASE_CATEGORY}\n" > "${CATEGORIES}/pages/${DATABASE_CATEGORY}/index.adoc"
+            echo "* xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/pages/index.adoc"
+            git add "${CATEGORIES}/pages/${DATABASE_CATEGORY}/index.adoc"
+            GIT_COMMIT="true"
+        fi
+
+        # create pages
+        echo "include::features:partial\$${page}[]" > "${CATEGORIES}/pages/${DATABASE_CATEGORY}/${page}"
+
+        # update navs
+        CATEGORY_EXISTS=$(grep "${DATABASE_CATEGORY}/index.adoc" "${CATEGORIES}/nav.adoc")
+
+        if [ -z "${CATEGORY_EXISTS}" ];
+        then
+          echo "** xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/nav.adoc"
+        fi
+        echo "*** xref:${DATABASE_CATEGORY}/${page}[]" >> "${CATEGORIES}/nav.adoc"
+    done
+
+    echo "DATABASE_VERSION = $DATABASE_VERSION"
     # create version page if it does not exist
     if [ ! -d "${VERSIONS}/pages/${DATABASE_VERSION}" ];
     then
@@ -38,18 +57,10 @@ do
     fi
 
     # create pages
-    echo "include::features:partial\$${page}[]" > "${CATEGORIES}/pages/${DATABASE_CATEGORY}/${page}"
     echo "include::features:partial\$${page}[]" > "${VERSIONS}/pages/${DATABASE_VERSION}/${page}"
 
     # update navs
-    CATEGORY_EXISTS=$(grep "${DATABASE_CATEGORY}/index.adoc" "${CATEGORIES}/nav.adoc")
     VERSION_EXISTS=$(grep "${DATABASE_VERSION}/index.adoc" "${VERSIONS}/nav.adoc")
-
-    if [ -z "${CATEGORY_EXISTS}" ];
-    then
-      echo "** xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/nav.adoc"
-    fi
-    echo "*** xref:${DATABASE_CATEGORY}/${page}[]" >> "${CATEGORIES}/nav.adoc"
 
     if [ -z "${VERSION_EXISTS}" ];
     then
