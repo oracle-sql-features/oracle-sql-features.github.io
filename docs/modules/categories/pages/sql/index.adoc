@@ -1,0 +1,18 @@
+= SQL
+
+SQL is the set-based, high-level declarative (4GL) computer language with which
+all programs and users access data in a relational database.
+
+SQL unifies tasks such as the following in one consistent language:
+
+* Creating, replacing, altering, and dropping objects
+* Inserting, updating, and deleting table rows
+* Querying and analyzing data
+* Controlling access to the database and its objects
+* Guaranteeing database consistency and integrity
+
+SQL became a standard of the American National Standards Institute (ANSI) in 1986
+and of the International Organization for Standardization (ISO) in 1987.
+
+Oracle SQL includes many extensions to the ANSI/ISO standard SQL language,
+and Oracle Database tools and applications provide additional statements.

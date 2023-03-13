@@ -1,6 +1,6 @@
 = PL/SQL Function in SQL
 :database-version: 12.1.0.1
-:database-category: plsql
+:database-category: sql plsql
 
 This feature enables users to write anonymous PL/SQL functions for the lifetime of a SQL query.
 
