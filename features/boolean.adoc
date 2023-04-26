@@ -1,0 +1,82 @@
+= Boolean data type
+:database-version: 23.2.0
+:database-category: sql
+
+The `BOOLEAN` data type enables the storage and processing of `TRUE` and `FALSE` values.
+
+Boolean values can be used as table column values or inside SQL query expressions.
+
+To declare a table column of type `BOOLEAN`, either use the `BOOLEAN` or `BOOL` keyword:
+
+[source,sql]
+[subs="verbatim"]
+----
+CREATE TABLE email_addresses
+(
+  user_id   NUMBER        NOT NULL,
+  email     VARCHAR2(255) NOT NULL,
+  active    BOOLEAN       NOT NULL,
+  primary   BOOL          NOT NULL
+);
+----
+
+.Example
+[source,sql]
+[subs="verbatim"]
+----
+SQL> CREATE TABLE email_addresses
+  2  (
+  3    user_id   NUMBER        NOT NULL,
+  4    email     VARCHAR2(255) NOT NULL,
+  5    active    BOOLEAN       NOT NULL,
+  6    primary   BOOL          NOT NULL
+  7  );
+
+Table EMAIL_ADDRESSES created.
+
+SQL> INSERT INTO email_addresses
+  2           (user_id, active, primary,  email)
+  3    VALUES (      1, true,   true,     'jon.doe@example.com'),
+  4           (      2, true,   true,     'jane.smith@gmail.com'),
+  5           (      2, false,  false,    'jsmith@gmail.com'),
+  6           (      3, true,   true,     'max.well@example.com'),
+  7           (      3, true,   false,    'mwell@gmail.com');
+
+5 rows inserted.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> -- Select all email addresses that are active
+SQL> SELECT email FROM email_addresses
+  2   WHERE active;
+
+EMAIL
+--------------------
+jon.doe@example.com
+jane.smith@gmail.com
+max.well@example.com
+mwell@gmail.com
+
+SQL> -- Select all email addresses that are active and primary
+SQL> SELECT email FROM email_addresses
+  2   WHERE active AND primary;
+
+EMAIL
+--------------------
+jon.doe@example.com
+jane.smith@gmail.com
+max.well@example.com
+----
+
+== Benefits
+
+The `BOOLEAN` data type standardizes the storage of "Yes" and "No" values.
+
+== Further information
+
+* Introduced: xref:versions:{database-version}/index.adoc[]
+* Availability: all editions
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/Data-Types.html[Documentation]
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/Data-Types.html[Example]
