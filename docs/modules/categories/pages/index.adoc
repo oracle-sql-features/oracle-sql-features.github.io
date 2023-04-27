@@ -1,3 +1,4 @@
 = Categories
 
 * xref:plsql/index.adoc[]
+* xref:sql/index.adoc[]

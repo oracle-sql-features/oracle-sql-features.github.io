@@ -28,9 +28,15 @@ do
         then
             mkdir "${CATEGORIES}/pages/${DATABASE_CATEGORY}"
             echo "= ${DATABASE_CATEGORY}\n" > "${CATEGORIES}/pages/${DATABASE_CATEGORY}/index.adoc"
-            echo "* xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/pages/index.adoc"
             git add "${CATEGORIES}/pages/${DATABASE_CATEGORY}/index.adoc"
             GIT_COMMIT="true"
+        fi
+
+        # add category to list if not there already
+        CATEGORY_LISTED=$(grep "* xref:${DATABASE_CATEGORY}/index.adoc" "${CATEGORIES}/pages/index.adoc")
+        if [ -z "${CATEGORY_LISTED}" ];
+        then
+            echo "* xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/pages/index.adoc"
         fi
 
         # create pages
@@ -41,7 +47,7 @@ do
 
         if [ -z "${CATEGORY_EXISTS}" ];
         then
-          echo "** xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/nav.adoc"
+            echo "** xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/nav.adoc"
         fi
         echo "*** xref:${DATABASE_CATEGORY}/${PAGE}[]" >> "${CATEGORIES}/nav.adoc"
     done
@@ -52,9 +58,15 @@ do
     then
         mkdir "${VERSIONS}/pages/${DATABASE_VERSION}"
         echo "= ${DATABASE_VERSION}\n" > "${VERSIONS}/pages/${DATABASE_VERSION}/index.adoc"
-        echo "* xref:${DATABASE_VERSION}/index.adoc[]" >> "${VERSIONS}/pages/index.adoc"
         git add "${VERSIONS}/pages/${DATABASE_VERSION}/index.adoc"
         GIT_COMMIT="true"
+    fi
+
+    # add version to list if not there already
+    VERSION_LISTED=$(grep "* xref:${DATABASE_VERSION}/index.adoc" "${VERSIONS}/pages/index.adoc")
+    if [ -z "${VERSION_LISTED}" ];
+    then
+        echo "* xref:${DATABASE_VERSION}/index.adoc[]" >> "${VERSIONS}/pages/index.adoc"
     fi
 
     # create pages
