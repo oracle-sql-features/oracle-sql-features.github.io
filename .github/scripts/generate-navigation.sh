@@ -4,17 +4,29 @@ PWD=$(pwd)
 FEATURES="${PWD}/features/"
 CATEGORIES="${PWD}/docs/modules/categories"
 VERSIONS="${PWD}/docs/modules/versions"
+PARTIALS="${PWD}/docs/modules/features/partials"
 GIT_COMMIT=""
 
 echo "* xref:index.adoc[]" > "${CATEGORIES}/nav.adoc"
 echo "* xref:index.adoc[]" > "${VERSIONS}/nav.adoc"
-mkdir -p "${PWD}/docs/modules/features/partials"
+rm -rf "${PARTIALS}"
+mkdir -p "${PARTIALS}"
 
 for FEATURE in $(find "${FEATURES}" -name "*.adoc" -print)
 do
     PAGE=$(basename "${FEATURE}")
     echo "➡️  Processing ${PAGE}"
-    cp "${FEATURE}" "${PWD}/docs/modules/features/partials/${PAGE}"
+    TARGET_PAGE="${PARTIALS}/${PAGE}"
+
+    # bail out if target page already exists
+    if [ -f "${TARGET_PAGE}" ];
+    then
+        echo "${PAGE} is not unique. One of these must be renamed:"
+        find "${FEATURES}" -name "*.adoc" | grep "${PAGE}"
+        exit 1
+    fi
+
+    cp "${FEATURE}" "${TARGET_PAGE}"
     DATABASE_CATEGORIES=$(grep ":database-category:" "${FEATURES}/${PAGE}")
     DATABASE_VERSION=$(grep ":database-version:" "${FEATURES}/${PAGE}" | awk '{print $2}')
 
@@ -33,7 +45,7 @@ do
         fi
 
         # add category to list if not there already
-        CATEGORY_LISTED=$(grep "* xref:${DATABASE_CATEGORY}/index.adoc" "${CATEGORIES}/pages/index.adoc")
+        CATEGORY_LISTED=$(grep "xref:${DATABASE_CATEGORY}/index.adoc" "${CATEGORIES}/pages/index.adoc")
         if [ -z "${CATEGORY_LISTED}" ];
         then
             echo "* xref:${DATABASE_CATEGORY}/index.adoc[]" >> "${CATEGORIES}/pages/index.adoc"
@@ -63,7 +75,7 @@ do
     fi
 
     # add version to list if not there already
-    VERSION_LISTED=$(grep "* xref:${DATABASE_VERSION}/index.adoc" "${VERSIONS}/pages/index.adoc")
+    VERSION_LISTED=$(grep "xref:${DATABASE_VERSION}/index.adoc" "${VERSIONS}/pages/index.adoc")
     if [ -z "${VERSION_LISTED}" ];
     then
         echo "* xref:${DATABASE_VERSION}/index.adoc[]" >> "${VERSIONS}/pages/index.adoc"
