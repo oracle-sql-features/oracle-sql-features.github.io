@@ -13,6 +13,7 @@ To declare a column as an identity in a table, use the `GENERATED AS IDENTITY` c
 [source,sql]
 [subs="verbatim"]
 ----
+-- Create a table with the column "ID" generated as Identity column
 CREATE TABLE employees
 (
    id           NUMBER        GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
@@ -20,6 +21,22 @@ CREATE TABLE employees
    last_name    VARCHAR2(10)                        NOT NULL,
    job_title    VARCHAR2(20)                        NOT NULL
 );
+
+-- Note the absence of the "ID" column in the INSERT statement.
+-- Although it is a primary key and NOT NULL, the inserts succeed.
+INSERT INTO employees (first_name, last_name, job_title)
+  VALUES ('Gerald', 'Venzl', 'Developer');
+
+INSERT INTO employees (first_name, last_name, job_title)
+  VALUES ('Andres', 'Almiray', 'Developer');
+
+INSERT INTO employees (first_name, last_name, job_title)
+  VALUES ('Chris', 'Saxon', 'Developer Evangelist');
+
+COMMIT;
+
+-- The SELECT statement will show the "ID" column with values filled by the generated identity values.
+SELECT * FROM employees;
 ----
 
 The identity column provides additional syntax modifiers to:
@@ -33,6 +50,7 @@ The identity column provides additional syntax modifiers to:
 [source,sql]
 [subs="verbatim"]
 ----
+SQL> -- Create a table with the column "ID" generated as Identity column
 SQL> CREATE TABLE employees
   2  (
   3     id           NUMBER        GENERATED AS IDENTITY NOT NULL PRIMARY KEY,
@@ -43,18 +61,21 @@ SQL> CREATE TABLE employees
 
 Table EMPLOYEES created.
 
+SQL> -- Note the absence of the "ID" column in the INSERT statement.
+SQL> -- Although it is a primary key and NOT NULL, the inserts succeed.
+
 SQL> INSERT INTO employees (first_name, last_name, job_title)
-  2    VALUES ('Gerald', 'Venzl', 'Developer');
+  VALUES ('Gerald', 'Venzl', 'Developer');
 
 1 row inserted.
 
 SQL> INSERT INTO employees (first_name, last_name, job_title)
-  2    VALUES ('Andres', 'Almiray', 'Developer');
+  VALUES ('Andres', 'Almiray', 'Developer');
 
 1 row inserted.
 
 SQL> INSERT INTO employees (first_name, last_name, job_title)
-  2    VALUES ('Chris', 'Saxon', 'Developer Evangelist');
+  VALUES ('Chris', 'Saxon', 'Developer Evangelist');
 
 1 row inserted.
 
@@ -62,6 +83,7 @@ SQL> COMMIT;
 
 Commit complete.
 
+SQL> -- The SELECT statement will show the "ID" column with values filled by the generated identity values.
 SQL> SELECT * FROM employees;
 
 ID FIRST_NAME LAST_NAME JOB_TITLE
@@ -82,6 +104,6 @@ Identity columns ensure that the value for a new row will always be unique by us
 == Further information
 
 * Introduced: xref:versions:{database-version}/index.adoc[]
-* Availability: all editions
+* Availability: All Offerings
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6__CJAECCFH[Documentation - CREATE TABLE identity_clause]
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6__CJAHCAFF[Example]
