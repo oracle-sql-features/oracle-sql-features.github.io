@@ -11,6 +11,7 @@ To declare a table column of type `BOOLEAN`, either use the `BOOLEAN` or `BOOL` 
 [source,sql]
 [subs="verbatim"]
 ----
+-- Create a new table containing two boolean columns
 CREATE TABLE email_addresses
 (
   user_id   NUMBER        NOT NULL,
@@ -18,31 +19,52 @@ CREATE TABLE email_addresses
   active    BOOLEAN       NOT NULL,
   primary   BOOL          NOT NULL
 );
+
+-- Insert values into the table
+INSERT INTO email_addresses
+         (user_id, active, primary,  email)
+  VALUES (      1, true,   true,     'jon.doe@example.com'),
+         (      2, true,   true,     'jane.smith@gmail.com'),
+         (      2, false,  false,    'jsmith@gmail.com'),
+         (      3, true,   true,     'max.well@example.com'),
+         (      3, true,   false,    'mwell@gmail.com');
+
+COMMIT;
+
+-- Select all email addresses that are active
+SELECT email FROM email_addresses
+  WHERE active;
+
+-- Select all email addresses that are active but not primary
+SELECT email FROM email_addresses
+  WHERE active AND NOT primary;
 ----
 
-.Example
+.Result
 [source,sql]
 [subs="verbatim"]
 ----
+SQL> -- Create a new table containing two boolean columns
 SQL> CREATE TABLE email_addresses
-  2  (
-  3    user_id   NUMBER        NOT NULL,
-  4    email     VARCHAR2(255) NOT NULL,
-  5    active    BOOLEAN       NOT NULL,
-  6    primary   BOOL          NOT NULL
-  7  );
+(
+  user_id   NUMBER        NOT NULL,
+  email     VARCHAR2(255) NOT NULL,
+  active    BOOLEAN       NOT NULL,
+  primary   BOOL          NOT NULL
+);
 
-Table EMAIL_ADDRESSES created.
+Table created.
 
+SQL> -- Insert values into the table
 SQL> INSERT INTO email_addresses
-  2           (user_id, active, primary,  email)
-  3    VALUES (      1, true,   true,     'jon.doe@example.com'),
-  4           (      2, true,   true,     'jane.smith@gmail.com'),
-  5           (      2, false,  false,    'jsmith@gmail.com'),
-  6           (      3, true,   true,     'max.well@example.com'),
-  7           (      3, true,   false,    'mwell@gmail.com');
+         (user_id, active, primary,  email)
+  VALUES (      1, true,   true,     'jon.doe@example.com'),
+         (      2, true,   true,     'jane.smith@gmail.com'),
+         (      2, false,  false,    'jsmith@gmail.com'),
+         (      3, true,   true,     'max.well@example.com'),
+         (      3, true,   false,    'mwell@gmail.com');
 
-5 rows inserted.
+5 rows created.
 
 SQL> COMMIT;
 
@@ -50,24 +72,22 @@ Commit complete.
 
 SQL> -- Select all email addresses that are active
 SQL> SELECT email FROM email_addresses
-  2   WHERE active;
+  WHERE active;
 
 EMAIL
---------------------
+--------------------------------------------------------------------------------
 jon.doe@example.com
 jane.smith@gmail.com
 max.well@example.com
 mwell@gmail.com
 
-SQL> -- Select all email addresses that are active and primary
+SQL> -- Select all email addresses that are active but not primary
 SQL> SELECT email FROM email_addresses
-  2   WHERE active AND primary;
+  WHERE active AND NOT primary;
 
 EMAIL
---------------------
-jon.doe@example.com
-jane.smith@gmail.com
-max.well@example.com
+--------------------------------------------------------------------------------
+mwell@gmail.com
 ----
 
 == Benefits
@@ -77,6 +97,6 @@ The `BOOLEAN` data type standardizes the storage of "Yes" and "No" values.
 == Further information
 
 * Introduced: xref:versions:{database-version}/index.adoc[]
-* Availability: all editions
+* Availability: All Offerings
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/Data-Types.html[Documentation]
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/Data-Types.html[Example]

@@ -95,6 +95,6 @@ but the user does either not have the necessary privileges to create a named fun
 == Further information
 
 * Introduced: xref:versions:{database-version}/index.adoc[]
-* Availability: all editions
+* Availability: All Offerings
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABFAFID[Documentation]
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABJFIDC[Example]
