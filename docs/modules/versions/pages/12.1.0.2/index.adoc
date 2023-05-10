@@ -1,3 +1,11 @@
 = 12.1.0.2
 
-Details on this version ...
+Oracle Database 12c Release 1 Patchset 2 was first released in July 2014.
+
+== Marquee Features
+
+* JSON support
+* In-Memory Column Store
+* Advanced Index Compression
+
+For more information about all the new features in this release, see link:https://docs.oracle.com/database/121/NEWFT/chapter12102.htm#NEWFT003[Oracle Database 12c Release 1 (12.1.0.2) New Features].
