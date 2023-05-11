@@ -16,3 +16,5 @@ and of the International Organization for Standardization (ISO) in 1987.
 
 Oracle SQL includes many extensions to the ANSI/ISO standard SQL language,
 and Oracle Database tools and applications provide additional statements.
+
+For more information about SQL see link:https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Basic-Elements-of-Oracle-SQL.html#GUID-41D065C3-3449-4DAE-B2D8-4DF256FFC88A[SQL Language Reference].
