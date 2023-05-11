@@ -6,7 +6,9 @@ The `BOOLEAN` data type enables the storage and processing of `TRUE` and `FALSE`
 
 Boolean values can be used as table column values or inside SQL query expressions.
 
-To declare a table column of type `BOOLEAN`, either use the `BOOLEAN` or `BOOL` keyword:
+To declare a table column of type `BOOLEAN`, either use the `BOOLEAN` or `BOOL` keyword.
+
+*This feature is part of the ISO SQL:1999 standard.*
 
 [source,sql]
 [subs="verbatim"]
