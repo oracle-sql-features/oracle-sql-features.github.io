@@ -21,7 +21,7 @@ detect rendering issues or typos before the changes go live.
 
 ### Build
 
-1. Run the generate script
+1. Run the `generate.sh` script
 ```shell
 $ sh generate.sh
 ```
