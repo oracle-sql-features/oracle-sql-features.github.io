@@ -1,0 +1,104 @@
+= Table Value Constructor
+:database-version: 23.2.0
+:database-category: sql
+
+The Table Value Constructor can be used to generate multiple
+table values (e.g. rows) in a single invocation.
+
+*This feature is part of the ISO SQL:1992 standard.*
+
+
+[source,sql]
+[subs="verbatim"]
+----
+-- Table to demonstrate the table value constructor
+CREATE TABLE bookings
+(
+  id        NUMBER,
+  location  VARCHAR2(25),
+  type      VARCHAR2(25)
+);
+
+-- Insert multiple rows with a single insert statement
+INSERT INTO bookings
+ VALUES (12113, 'Vienna', 'Family'),
+        (62361, 'San Francisco', 'Business'),
+        (38172, 'Berlin', 'Leisure');
+
+-- Retrieve newly inserted rows
+SELECT * FROM bookings;
+
+-- Generate multiple rows using the table value constructor
+SELECT employee_id, first_name
+ FROM (
+  VALUES (1,'Scott'),
+         (2,'James'),
+         (3,'John')
+ ) employees (employee_id, first_name);
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> -- Table to demonstrate the table value constructor
+SQL> CREATE TABLE bookings
+  2  (
+  3    id        NUMBER,
+  4    location  VARCHAR2(25),
+  5    type      VARCHAR2(25)
+  6  );
+
+Table BOOKINGS created.
+
+SQL> -- Insert multiple rows with a single insert statement
+SQL> INSERT INTO bookings
+  2   VALUES (12113, 'Vienna', 'Family'),
+  3          (62361, 'San Francisco', 'Business'),
+  4          (38172, 'Berlin', 'Leisure');
+
+3 rows inserted.
+
+SQL> -- Retrieve newly inserted rows
+SQL> SELECT * FROM bookings;
+
+      ID LOCATION         TYPE
+-------- ---------------- --------
+   12113 Vienna           Family
+   62361 San Francisco    Business
+   38172 Berlin           Leisure
+
+SQL> -- Generate multiple rows using the table value constructor
+SQL> SELECT employee_id, first_name
+  2   FROM (
+  3    VALUES (1,'Scott'),
+  4           (2,'James'),
+  5           (3,'John')
+  6   ) employees (employee_id, first_name);
+
+   EMPLOYEE_ID FIRST_NAME
+-------------- ----------
+             1 Scott
+             2 James
+             3 John
+----
+
+== Benefits
+
+The table value constructor enables users to insert multiple rows within a
+single `INSERT` operation. This avoids unnecessary additional `INSERT`
+executions and roundtrips from and to the client for inserting multiple rows.
+
+Using this feature can make SQL scripts more concise and readable.
+
+Using this feature can save time when writing `INSERT` statements manually.
+
+The table value constructor provides a convenient and concise way to
+generate multiple rows with values.
+
+== Further information
+
+* Introduced: xref:versions:{database-version}/index.adoc[]
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[Multi-row `INSERT`] and link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[`VALUES` row generation] documentation
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[Multi-row `INSERT`] and link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[`VALUES` row generation] example
