@@ -21,12 +21,8 @@ detect rendering issues or typos before the changes go live.
 
 ### Build
 
-1. Refresh navigation files by invoking
-```shell
-$ sh .github/scripts/generate-navigation.sh
-```
-1. Generate the site using the `local-playbook.yml` file
-```sh
-$ antora local-playbook.yml
-```
-1. Inspect the generated site at `build/site/index.html`
+1. Run the `generate.sh` script
+    ```shell
+    $ sh generate.sh
+    ```
+1. Inspect the generated site at `$PWD/build/site/index.html`

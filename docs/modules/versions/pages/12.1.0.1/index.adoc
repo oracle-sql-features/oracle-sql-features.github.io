@@ -1,2 +1,14 @@
 = 12.1.0.1
 
+Oracle Database 12c Release 1 was first released in July 2013.
+
+== Marquee Features
+
+* Multitenant Architecture
+* Automatic Data Optimization
+* Data Guard Far Sync
+* Privilege Analysis
+* Application Continuity
+* SQL Pattern Matching
+
+For more information about all the new features in this release, see link:https://docs.oracle.com/database/121/NEWFT/chapter12101.htm#NEWFT002[Oracle Database 12c Release 1 (12.1.0.1) New Features].
