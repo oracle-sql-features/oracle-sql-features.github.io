@@ -1,0 +1,142 @@
+= IF [NOT] EXISTS
+:database-version: 23.2.0
+:database-category: sql
+
+The `IF [NOT] EXISTS` syntax can be used to ignore errors when dropping objects
+that do not exist or create objects that already exist.
+
+* Objects can now be dropped via `DROP IF EXISTS <object_type>`
+* Objects can now be created via `CREATE IF NOT EXISTS <object_type>`
+
+[source,sql]
+[subs="verbatim"]
+----
+-- Drop table if left over from a previous incomplete test run
+-- (this will produce an error)
+DROP TABLE my_test;
+
+-- Recreate the table in a clean state
+CREATE TABLE my_test
+(
+  id          NUMBER          NOT NULL PRIMARY KEY,
+  name        VARCHAR2(255),
+  created_tms DATE            DEFAULT SYSDATE NOT NULL
+);
+
+-- Execute INSERT INTO tests for default value
+INSERT INTO my_test (id, name) VALUES (1, 'Test');
+
+-- Clean up test
+DROP TABLE my_test;
+
+--
+-- Second test run
+--
+
+-- Drop table if left over from a previous incomplete test run
+-- (the table has already been dropped in a previous test run,
+--  however, due to using IF EXISTS, no error will be raised)
+DROP TABLE IF EXISTS my_test;
+
+-- Recreate the table in a clean state
+CREATE TABLE my_test
+(
+  id          NUMBER          NOT NULL PRIMARY KEY,
+  name        VARCHAR2(255),
+  created_tms DATE            DEFAULT SYSDATE NOT NULL
+);
+
+-- Execute INSERT INTO tests for default value of `created_tms`
+INSERT INTO my_test (id, name) VALUES (1, 'Test');
+
+-- Clean up test
+DROP TABLE my_test;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> -- Drop table if left over from a previous incomplete test run
+SQL> -- (this will produce an error)
+SQL> DROP TABLE my_test;
+
+Error starting at line : 1 in command -
+DROP TABLE my_test
+Error report -
+ORA-00942: table or view does not exist
+00942. 00000 -  "table or view does not exist"
+*Cause:
+*Action:
+SQL>
+SQL> -- Recreate the table in a clean state
+SQL> CREATE TABLE my_test
+  2  (
+  3    id          NUMBER          NOT NULL PRIMARY KEY,
+  4    name        VARCHAR2(255),
+  5    created_tms DATE            DEFAULT SYSDATE NOT NULL
+  6* );
+
+Table MY_TEST created.
+
+SQL>
+SQL> -- Execute INSERT INTO tests for default value of `created_tms`
+SQL> INSERT INTO my_test (id, name) VALUES (1, 'Test');
+
+1 row inserted.
+
+SQL>
+SQL> -- Clean up test
+SQL> DROP TABLE my_test;
+
+Table MY_TEST dropped.
+
+SQL>
+SQL> --
+  2* -- Second test run
+SQL> --
+  2*
+SQL> -- Drop table if left over from a previous incomplete test run
+SQL> -- (the table has already been dropped in a previous test run,
+SQL> --  however, due to using IF EXISTS, no error will be raised)
+SQL> DROP TABLE IF EXISTS my_test;
+
+Table MY_TEST dropped.
+
+SQL>
+SQL> -- Recreate the table in a clean state
+SQL> CREATE TABLE my_test
+  2  (
+  3    id          NUMBER          NOT NULL PRIMARY KEY,
+  4    name        VARCHAR2(255),
+  5    created_tms DATE            DEFAULT SYSDATE NOT NULL
+  6* );
+
+Table MY_TEST created.
+
+SQL>
+SQL> -- Execute INSERT INTO tests for default value
+SQL> INSERT INTO my_test (id, name) VALUES (1, 'Test');
+
+1 row inserted.
+
+SQL>
+SQL> -- Clean up test
+SQL> DROP TABLE my_test;
+
+Table MY_TEST dropped.
+----
+
+== Benefits
+
+Ignoring the error when dropping a non existing object or creating an object
+that already exists can be very useful especially in testing scripts that always
+want to ensure a clean state at the beginning of tests but not produce
+false positives by e.g. receiving an error when dropping an object that does not exist. 
+
+== Further information
+
+* Introduced: xref:versions:{database-version}/index.adoc[]
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/DROP-TABLE.html#GUID-39D89EDC-155D-4A24-837E-D45DDA757B45[`DROP TABLE` documentation]
+
