@@ -22,7 +22,7 @@ detect rendering issues or typos before the changes go live.
 ### Build
 
 1. Run the `generate.sh` script
-```shell
-$ sh generate.sh
-```
+    ```shell
+    $ sh generate.sh
+    ```
 1. Inspect the generated site at `$PWD/build/site/index.html`
