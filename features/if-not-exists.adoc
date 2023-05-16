@@ -2,6 +2,8 @@
 :database-version: 23.2.0
 :database-category: sql
 
+[[feature_summary]]
+
 The `IF [NOT] EXISTS` syntax can be used to ignore errors when dropping objects
 that do not exist or create objects that already exist.
 

@@ -2,6 +2,8 @@
 :database-version: 12.1.0.1
 :database-category: sql
 
+[[feature_summary]]
+
 The identity columns feature can be used to designate one column in the table as the identity for the row.
 The database will automatically assign an increasing integer value from a sequence generator to the identity column for each subsequent INSERT statement.
 This feature is sometimes also referred to as `autoincrement`.

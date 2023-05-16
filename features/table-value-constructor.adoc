@@ -2,6 +2,8 @@
 :database-version: 23.2.0
 :database-category: sql
 
+[[feature_summary]]
+
 The Table Value Constructor can be used to generate multiple
 table values (e.g. rows) in a single invocation.
 

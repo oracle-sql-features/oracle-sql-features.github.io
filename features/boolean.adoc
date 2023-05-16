@@ -2,6 +2,8 @@
 :database-version: 23.2.0
 :database-category: sql
 
+[[feature_summary]]
+
 The `BOOLEAN` data type enables the storage and processing of `TRUE` and `FALSE` values.
 
 Boolean values can be used as table column values or inside SQL query expressions.

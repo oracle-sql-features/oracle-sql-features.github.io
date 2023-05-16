@@ -10,10 +10,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: oracle
+
       - name: Generate navigation
         shell: bash
         run: |
-          bash .github/scripts/generate-navigation.sh
+          java .github/scripts/generate_navigation.java "$(pwd)"
 
       - name: Run Antora
         uses: kameshsampath/antora-site-action@master

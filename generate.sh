@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "🔄 Generating navigation"
-sh .github/scripts/generate-navigation.sh
+java .github/scripts/generate_navigation.java "$(pwd)"
 
 echo ""
 echo "🛠️  Building site"
