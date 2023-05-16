@@ -100,7 +100,6 @@ The `BOOLEAN` data type standardizes the storage of "Yes" and "No" values.
 
 == Further information
 
-* Introduced: xref:versions:{database-version}/index.adoc[]
 * Availability: All Offerings
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/Data-Types.html[Documentation]
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/Data-Types.html[Example]

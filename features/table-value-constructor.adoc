@@ -100,7 +100,6 @@ generate multiple rows with values.
 
 == Further information
 
-* Introduced: xref:versions:{database-version}/index.adoc[]
 * Availability: All Offerings
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[Multi-row `INSERT`] and link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[`VALUES` row generation] documentation
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[Multi-row `INSERT`] and link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[`VALUES` row generation] example

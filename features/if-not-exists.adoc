@@ -136,7 +136,6 @@ false positives by e.g. receiving an error when dropping an object that does not
 
 == Further information
 
-* Introduced: xref:versions:{database-version}/index.adoc[]
 * Availability: All Offerings
 * link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/DROP-TABLE.html#GUID-39D89EDC-155D-4A24-837E-D45DDA757B45[`DROP TABLE` documentation]
 
