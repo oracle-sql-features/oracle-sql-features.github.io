@@ -1,0 +1,90 @@
+= JavaScript Call Specifications
+:database-version: 23.2.0
+:database-category: javascript
+
+[[feature_summary]]
+
+Writing JavaScript link:javascript-modules.html[modules] and link:javascript-environments.html[environments] are the first steps towards the creation of your application. Once the JavaScript code is ready you can expose it to SQL and PL/SQL thanks to a so-called link:https://docs.oracle.com/en/database/oracle/oracle-database/23/lnpls/call-specification.html#GUID-C5F117AE-E9A2-499B-BA6A-35D072575BAD[call specification]. A JavaScript call specification consists of the following:
+
+* the link:javascript-modules.html[module] name
+* an (optional) reference to a link:javascript-environments.html[environment]
+* the (simplified) JavaScript function's signature as per the link:javascript-modules.html[module] code
+
+All client code, regardless whether it's written in Java, Python, or even with `node-oracledb`, can access JavaScript stored procedures in the database.
+
+The following example demonstrates
+
+. The creation of a JavaScript module (`hello_module`) in the current user's schema featuring a single function named `hello()`
+. The addition of a call specification `f_hello()` exposing the JavaScript function to SQL and PL/SQL
+. A sample invocation of the previously defined function
+
+[source,sql]
+[subs="verbatim"]
+----
+create or replace mle module hello_module 
+language javascript as
+
+// JavaScript code to follow from here
+/**
+ * return a friendly greeting
+ * @param {string} who - who should be greeted?
+ * @returns {string}
+ */
+export function hello(who) {
+    return 'hello ' + who;
+}
+/
+
+create or replace function f_hello(
+    p_who varchar2)
+return varchar2
+as mle module hello_module
+signature 'hello';
+/
+
+select 
+    f_hello('JavaScript');
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> create or replace mle module hello_module 
+  2  language javascript as
+  3  
+  4  export function hello(who) {
+  5  
+  6      return 'hello ' + who;
+  7  }
+  8  /
+
+MLE module created.
+
+SQL> create or replace function f_hello(
+  2      p_who varchar2)
+  3  return varchar2
+  4  as mle module hello_module
+  5  signature 'hello';
+  6  /
+
+Function created.
+
+SQL> select
+  2      hello('JavaScript');
+
+HELLO('JAVASCRIPT')
+-------------------------------------------------------------------------------
+hello JavaScript
+----
+
+== Benefits
+
+JavaScript Call Specifications expose JavaScript code to SQL and PL/SQL allowing any programming language with a SQL driver to make use of it. In addition to standalone functions and procedures packages can be used to create a container for call specifications originating from the same JavaScript module.
+
+== Further information
+
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/mlejs/calling-mle-js-functions.html#GUID-55400971-3660-47D7-B60C-D2F76EE0FD42[Documentation]
+* https://blogs.oracle.com/developers/post/using-javascript-community-modules-in-oracle-database-23c-free-developer-release[Example]
+* https://blogs.oracle.com/developers/post/introduction-javascript-oracle-database-23c-free-developer-release[Introductory Blog Post]
