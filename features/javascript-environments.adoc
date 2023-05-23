@@ -1,0 +1,137 @@
+= JavaScript Environments
+:database-version: 23.2.0
+:database-category: javascript
+
+[[feature_summary]]
+
+JavaScript Environments, just like JavaScript modules, are schema objects persisted in the database. They perform a vital function in applications involving multiple JavaScript modules. Unlike `node.js` or `deno` projects JavaScript modules aren't persisted on the file system, they are stored in the database. Developers cannot simply import modules based on their location in the file system, they need to use environments instead.
+
+The following example demonstrates the use of environments.
+
+
+[source,javascript]
+[subs="verbatim"]
+----
+create or replace MLE module module_one
+language javascript as
+
+// this function is exported and will be called by 
+// module_2's greeting() function
+export function hello(who) {
+
+    return 'hello ' + who;
+}
+/
+
+create or replace MLE module module_two
+language javascript as
+
+// before module_1's hello() function can be imported a
+// so-called import name must be defined by means of creating
+// a JavaScript environment. The module name does not have to
+// match the import name
+import { hello } from 'module1'
+
+export function greeting() {
+
+    const who = 'JavaScript';
+    return hello(who);
+}
+/
+
+// the mapping between import name and module name is defined
+// in an environment
+create or replace mle env example_env
+imports (
+    'module1' module module_one
+);
+
+// with the module in place it is possible to invoke module_2's
+// greeting function. Refer to the section about call specifications
+// for more details about invoking JavaScript code in SQL and PL/SQL
+create or replace function f_greeting
+return varchar2 as
+mle module module_two
+env example_env
+signature 'greeting';
+/
+
+select
+    f_greeting;
+
+----
+
+.Result
+[source]
+[subs="verbatim"]
+----
+SQL> create or replace MLE module module_one
+  2  language javascript as
+  3  
+  4  // this function is exported and will be called by
+  5  // module_2's greeting() function
+  6  export function hello(who) {
+  7  
+  8      return 'hello ' + who;
+  9  }
+ 10  /
+
+MLE module created.
+
+SQL> create or replace MLE module module_two
+  2  language javascript as
+  3  
+  4  // before module_1's hello() function can be imported a
+  5  // so-called import name must be defined by means of creating
+  6  // a JavaScript environment. The module name does not have to
+  7  // match the import name
+  8  import { hello } from 'module1'
+  9  
+ 10  export function greeting() {
+ 11  
+ 12      const who = 'JavaScript';
+ 13      return hello(who);
+ 14  }
+ 15  /
+
+MLE module created.
+
+SQL> -- the mapping between import name and module name is defined
+SQL> -- in an environment
+SQL> create or replace mle env example_env
+  2  imports (
+  3      'module1' module module_one
+  4  );
+
+MLE env created.
+
+SQL> -- with the module in place it is possible to invoke module_2's
+SQL> -- greeting function. Refer to the section about call specifications
+SQL> -- for more details about invoking JavaScript code in SQL and PL/SQL
+SQL> create or replace function f_greeting
+  2  return varchar2 as
+  3  mle module module_two
+  4  env example_env
+  5  signature 'greeting';
+  6  /
+
+Function created.
+
+SQL> -- call the function
+SQL> select
+  2      f_greeting;
+
+F_GREETING
+-------------------------------------------------------------------------------
+hello JavaScript
+----
+
+== Benefits
+
+JavaScript Environments play a crucial role during the development of JavaScript stored procedures. They are most useful providing means to map an import name as used in a JavaScript module to the actual module itself. Furthermore they are essential entities for the definition of link:javascript-call-specifications.html[call specifications. ]
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/mlejs/mle-js-modules-and-environments.html#GUID-EB682328-BA26-4422-9304-62D412D28B2F[Documentation]
+* https://blogs.oracle.com/developers/post/using-javascript-community-modules-in-oracle-database-23c-free-developer-release[Blog post]

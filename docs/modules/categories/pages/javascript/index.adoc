@@ -1,0 +1,4 @@
+= JavaScript
+
+Oracle Database supports a rich set of languages for writing user-defined functions and stored procedures, including PL/SQL, Java, and C.
+With Oracle Database Multilingual Engine (MLE), developers have the additional option to run JavaScript code starting with Oracle Database 23c.

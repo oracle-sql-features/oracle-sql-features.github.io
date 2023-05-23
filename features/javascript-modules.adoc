@@ -1,0 +1,155 @@
+= JavaScript Modules
+:database-version: 23.2.0
+:database-category: javascript
+
+[[feature_summary]]
+
+A JavaScript module is the equivalent of an ECMAScript module commonly found in `node.js` and `deno` projects, but instead of storing it in a file in a file system it is persisted as a schema object in the database.
+
+JavaScript modules can either be provided by the community, or they can consist of specific, custom application code. JavaScript modules can reference functionality from other JavaScript modules allowing you to build complex applications that are easier to maintain.
+
+Just as Java stored procedures JavaScript code can be made available to SQL and PL/SQL by means of a link:javascript-call-specifications.html[call specification]. 
+
+The following example demonstrates the creation of a JavaScript module with the code provided inline with the module definition.
+
+[source,javascript]
+[subs="verbatim"]
+----
+create or replace mle module example_module
+language javascript as 
+// this is where the JavaScript code section begins
+/**
+ * convert a delimited string into key-value pairs and return JSON
+ * @param {string} inputString - the input string to be converted
+ * @returns {JSON}
+ */
+function string2obj(inputString) {
+    if ( inputString === undefined ) {
+        throw `string must comply with a form of key1=value1;...;keyN=valueN`;
+    }
+    let myObject = {};
+    if ( inputString.length === 0 ) {
+        return myObject;
+    }
+    const kvPairs = inputString.split(";");
+    kvPairs.forEach( pair => {
+        const tuple = pair.split("=");
+        if ( tuple.length === 1 ) {
+            tuple[1] = false;
+        } else if ( tuple.length != 2 ) {
+            throw "parse error: you need to use exactly one '=' between " + 
+                    "key and value and not use '=' in either key or value";
+        }
+        myObject[tuple[0]] = tuple[1];
+    });
+    return myObject;
+}
+
+/**
+ * convert a JavaScript object to a string
+ * @param {object} inputObject - the object to transform to a string
+ * @returns {string}
+ */
+function obj2String(inputObject) {
+    if ( typeof inputObject != 'object' ) {
+        throw "inputObject isn't an object";
+    }
+    return JSON.stringify(inputObject);
+}
+
+export { string2obj, obj2String }
+/
+----
+
+.Result
+
+When executing the above statement in `sqlplus` or `sqlcl` you will get a message that the MLE module has been successfully created. 
+
+Verify the module has been created as follows:
+
+[source,sql]
+[subs="verbatim"]
+----
+select
+    module_name,
+    language_name
+from
+    user_mle_modules
+where
+    module_name = 'EXAMPLE_MODULE'
+
+MODULE_NAME                    LANGUAGE_NAME
+------------------------------ ------------------------------
+EXAMPLE_MODULE                 JAVASCRIPT
+----
+
+
+You can also view the source code of the JavaScript module:
+
+[source]
+[subs="verbatim"]
+----
+select
+    text
+from
+    user_source
+where
+    name = 'EXAMPLE_MODULE'
+order by
+    line;
+
+TEXT
+--------------------------------------------------------------------------------
+// this is where the JavaScript code section begins
+/**
+ * convert a delimited string into key-value pairs and return JSON
+ * @param {string} inputString - the input string to be converted
+ * @returns {JSON}
+ */
+function string2obj(inputString) {
+    if ( inputString === undefined ) {
+        throw `string must comply with a form of key1=value1;...;keyN=valueN`;
+    }
+    let myObject = {};
+    if ( inputString.length === 0 ) {
+        return myObject;
+    }
+    const kvPairs = inputString.split(";");
+    kvPairs.forEach( pair => {
+        const tuple = pair.split("=");
+        if ( tuple.length === 1 ) {
+            tuple[1] = false;
+        } else if ( tuple.length != 2 ) {
+            throw "parse error: you need to use exactly one '=' between " +
+                    "key and value and not use '=' in either key or value";
+        }
+        myObject[tuple[0]] = tuple[1];
+    });
+    return myObject;
+}
+
+/**
+ * convert a JavaScript object to a string
+ * @param {object} inputObject - the object to transform to a string
+ * @returns {string}
+ */
+function obj2String(inputObject) {
+    if ( typeof inputObject != 'object' ) {
+        throw "inputObject isn't an object";
+    }
+    return JSON.stringify(inputObject);
+}
+
+export { string2obj, obj2String }
+----
+
+== Benefits
+
+Storing processing logic _inside_ the database rather than in the middle-tier provides numerous advantages especially when it comes to latency, security, auditing, data integrity, and many more. It also helps developers realise the complete database feature set.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/mlejs/index.html[Documentation]
+* https://blogs.oracle.com/developers/post/using-javascript-community-modules-in-oracle-database-23c-free-developer-release[Example]
+* https://blogs.oracle.com/developers/post/introduction-javascript-oracle-database-23c-free-developer-release[Feature Introduction]
