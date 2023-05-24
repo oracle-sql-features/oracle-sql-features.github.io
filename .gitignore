@@ -13,3 +13,10 @@ tmp/
 package.json
 package-lock.json
 node_modules
+
+**/nav.adoc
+!docs/modules/categories/*/index.adoc
+!docs/modules/versions/*/index.adoc
+**/docs/modules/categories/pages
+**/docs/modules/versions/pages
+**/docs/modules/features/partials
