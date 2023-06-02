@@ -6,13 +6,13 @@ site:
 content:
   sources:
     - url: ./
-      branches: HEAD 
+      branches: HEAD
       start_path: docs
 
-ui: 
+ui:
   bundle:
-    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/HEAD/raw/build/ui-bundle.zip?job=bundle-stable
-  supplemental_files: './supplemental_ui'
+    url: ./ui-bundle.zip
+  supplemental_files: ./supplemental_ui
 
 asciidoc:
   extensions:
