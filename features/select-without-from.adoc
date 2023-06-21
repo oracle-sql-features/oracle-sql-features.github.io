@@ -1,0 +1,60 @@
+= SELECT without FROM clause
+:database-version: 23.2.0
+:database-category: sql
+
+You can now run SELECT expression-only queries without a FROM clause, e.g. adding `from dual` is no longer needed in such cases. The `DUAL` table has not disappeared, all queries that use it will continue to work as expected.
+
+[source,sql]
+[subs="verbatim"]
+----
+select
+    2 * 3;
+
+select
+    to_char(
+        sysdate,
+        'dd.mm.yyyy'
+    ) as today;
+
+select
+    sysdate;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> select
+  2      2 * 3;
+
+       2*3
+----------
+         6
+
+SQL> select
+  2      to_char(
+  3          sysdate,
+  4          'dd.mm.yyyy'
+  5      ) as today;
+
+TODAY
+----------
+20.06.2023
+
+SQL> select
+  2      sysdate;
+
+SYSDATE
+---------
+20-JUN-23
+
+----
+
+== Benefits
+
+Making the `from dual` clause optional in expression-only SQL statements improves SQL code portability and ease of use for developers.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6[Documentation]
