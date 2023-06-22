@@ -1,0 +1,323 @@
+= Enhanced Returning-Into Clause
+:database-version: 23.2.0
+:database-category: sql
+
+[[feature_summary]]
+
+The RETURNING INTO clause for `INSERT`, `UPDATE`, and `DELETE` statements are enhanced to report old and new values affected by the respective statement. This allows developers to use the same logic for each of these DML types to obtain values pre- and post-statement execution. Old and new values are valid only for `UPDATE` statements. `INSERT` statements don't report old values and `DELETE` statements don't report new values.
+
+[source,sql]
+[subs="verbatim"]
+----
+
+-- example 01: returning old and new values for a single-row update
+var l_old_salary number 
+var l_new_salary number
+
+UPDATE employees
+SET
+    salary = salary * 1.07
+WHERE
+    employee_id = 103 
+RETURNING 
+    old salary, new salary
+INTO
+    :l_old_salary, :l_new_salary;
+
+SELECT
+    :l_old_salary,
+    :l_new_salary;
+
+ROLLBACK;
+
+-- example 02: returning old and new values for a multi-row update
+-- and storing the values in an audit table
+DROP TABLE IF EXISTS employees_history;
+
+CREATE TABLE employees_history (
+    employee_id NUMBER(6) NOT NULL,
+    old_salary  NUMBER(8, 2) NOT NULL,
+    new_salary  NUMBER(8, 2) NOT NULL,
+    changed_on  DATE NOT NULL
+);
+
+DECLARE
+    TYPE t_change_rec IS RECORD (
+            old_salary  employees_history.old_salary%TYPE,
+            new_salary  employees_history.new_salary%TYPE,
+            employee_id employees_history.employee_id%TYPE
+    );
+    TYPE t_change_details IS
+        TABLE OF t_change_rec;
+    l_changes t_change_details;
+BEGIN
+    UPDATE employees e
+    SET
+        salary = salary * 1.07
+    FROM departments d
+    WHERE
+        d.department_id = e.department_id
+        AND d.department_name = 'IT'
+    RETURNING
+        OLD salary, NEW salary, employee_id
+    BULK COLLECT INTO
+        l_changes;
+
+    FORALL i IN 1..l_changes.count
+        INSERT INTO employees_history (
+            employee_id,
+            old_salary,
+            new_salary,
+            changed_on
+        ) VALUES (
+            l_changes(i).employee_id,
+            l_changes(i).old_salary,
+            l_changes(i).new_salary,
+            sysdate
+        );
+END;
+/
+
+SELECT
+    employee_id,
+    old_salary,
+    new_salary,
+    changed_on
+FROM
+    employees_history;
+
+ROLLBACK;
+
+-- example 03: no "old" value returned by INSERT statements
+DROP TABLE IF EXISTS insert_demo;
+
+CREATE TABLE insert_demo (
+    id NUMBER
+        GENERATED ALWAYS AS IDENTITY,
+    vc VARCHAR2(100) NOT NULL,
+    d  DATE DEFAULT sysdate NOT NULL,
+    CONSTRAINT pk_insert_demo PRIMARY KEY ( id )
+)
+/
+
+var l_old_id number
+var l_new_id number
+
+INSERT INTO insert_demo ( 
+    vc
+) VALUES ( 
+    'insert demo'
+) 
+RETURNING 
+    old id, 
+    new id
+INTO 
+    :l_old_id,
+    :l_new_id;
+
+SELECT
+    :l_old_id,
+    :l_new_id;
+
+-- example 04: no "new" value returning by DELETE statements
+DELETE
+    insert_demo
+WHERE
+    id = :l_new_id
+RETURNING
+    old id, new id
+INTO
+    :l_old_id,
+    :l_new_id;
+
+SELECT
+    :l_old_id,
+    :l_new_id;
+
+ROLLBACK;
+
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+
+SQL> -- example 01: returning old and new values for a single-row update
+SQL> var l_old_salary number
+SQL> var l_new_salary number
+SQL> UPDATE employees
+  2  SET
+  3      salary = salary * 1.07
+  4  WHERE
+  5      employee_id = 103
+  6  RETURNING
+  7      old salary, new salary
+  8  INTO
+  9      :l_old_salary, :l_new_salary;
+
+1 row updated.
+
+SQL> SELECT
+  2      :l_old_salary,
+  3      :l_new_salary;
+
+:L_OLD_SALARY :L_NEW_SALARY                                                     
+------------- -------------                                                     
+         9000          9630                                                     
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> -- example 02: returning old and new values for a multi-row update
+SQL> -- and storing the values in an audit table
+SQL> DROP TABLE IF EXISTS employees_history;
+
+Table dropped.
+
+SQL> CREATE TABLE employees_history (
+  2      employee_id NUMBER(6) NOT NULL,
+  3      old_salary  NUMBER(8, 2) NOT NULL,
+  4      new_salary  NUMBER(8, 2) NOT NULL,
+  5      changed_on  DATE NOT NULL
+  6  );
+
+Table created.
+
+SQL> DECLARE
+  2      TYPE t_change_rec IS RECORD (
+  3              old_salary  employees_history.old_salary%TYPE,
+  4              new_salary  employees_history.new_salary%TYPE,
+  5              employee_id employees_history.employee_id%TYPE
+  6      );
+  7      TYPE t_change_details IS
+  8          TABLE OF t_change_rec;
+  9      l_changes t_change_details;
+ 10  BEGIN
+ 11      UPDATE employees e
+ 12      SET
+ 13          salary = salary * 1.07
+ 14      FROM departments d
+ 15      WHERE
+ 16          d.department_id = e.department_id
+ 17          AND d.department_name = 'IT'
+ 18      RETURNING
+ 19          OLD salary, NEW salary, employee_id
+ 20      BULK COLLECT INTO
+ 21          l_changes;
+ 22  
+ 23      FORALL i IN 1..l_changes.count
+ 24          INSERT INTO employees_history (
+ 25              employee_id,
+ 26              old_salary,
+ 27              new_salary,
+ 28              changed_on
+ 29          ) VALUES (
+ 30              l_changes(i).employee_id,
+ 31              l_changes(i).old_salary,
+ 32              l_changes(i).new_salary,
+ 33              sysdate
+ 34          );
+ 35  END;
+ 36  /
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT
+  2      employee_id,
+  3      old_salary,
+  4      new_salary,
+  5      changed_on
+  6  FROM
+  7      employees_history;
+
+EMPLOYEE_ID OLD_SALARY NEW_SALARY CHANGED_O                                     
+----------- ---------- ---------- ---------                                     
+        103       9000       9630 22-JUN-23                                     
+        104       6000       6420 22-JUN-23                                     
+        105       4800       5136 22-JUN-23                                     
+        106       4800       5136 22-JUN-23                                     
+        107       4200       4494 22-JUN-23                                     
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> -- example 03: no "old" value returned by INSERT statements
+SQL> DROP TABLE IF EXISTS insert_demo;
+
+Table dropped.
+
+SQL> CREATE TABLE insert_demo (
+  2      id NUMBER
+  3          GENERATED ALWAYS AS IDENTITY,
+  4      vc VARCHAR2(100) NOT NULL,
+  5      d  DATE DEFAULT sysdate NOT NULL,
+  6      CONSTRAINT pk_insert_demo PRIMARY KEY ( id )
+  7  )
+  8  /
+
+Table created.
+
+SQL> var l_old_id number
+SQL> var l_new_id number
+SQL> INSERT INTO insert_demo (
+  2      vc
+  3  ) VALUES (
+  4      'insert demo'
+  5  )
+  6  RETURNING
+  7      old id,
+  8      new id
+  9  INTO
+ 10      :l_old_id,
+ 11      :l_new_id;
+
+1 row created.
+
+SQL> SELECT
+  2      :l_old_id,
+  3      :l_new_id;
+
+ :L_OLD_ID  :L_NEW_ID                                                           
+---------- ----------                                                           
+                    1                                                           
+
+SQL> -- example 04: no "new" value returning by DELETE statements
+SQL> DELETE
+  2      insert_demo
+  3  WHERE
+  4      id = :l_new_id
+  5  RETURNING
+  6      old id, new id
+  7  INTO
+  8      :l_old_id,
+  9      :l_new_id;
+
+1 row deleted.
+
+SQL> SELECT
+  2      :l_old_id,
+  3      :l_new_id;
+
+ :L_OLD_ID  :L_NEW_ID                                                           
+---------- ----------                                                           
+         1                                                                      
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+----
+
+== Benefits
+
+The ability to obtain old and new values affected by INSERT, UPDATE, and DELETE statements, as part of the SQL command’s execution, offers developers a uniform approach to reading these values and reduces the amount of work the database must perform.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/DELETE.html#GUID-156845A5-B626-412B-9F95-8869B988ABD7__I2122564[SQL Language Reference: DELETE]
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/INSERT.html#GUID-903F8043-0254-4EE9-ACC1-CB8AC0AF3423__I2122356[SQL Language Reference: INSERT]
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/UPDATE.html#GUID-027A462D-379D-4E35-8611-410F3AC8FDA5__I2126358[SQL Language Reference: UPDATE]
