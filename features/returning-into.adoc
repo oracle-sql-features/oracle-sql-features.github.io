@@ -4,7 +4,11 @@
 
 [[feature_summary]]
 
-The RETURNING INTO clause for `INSERT`, `UPDATE`, and `DELETE` statements are enhanced to report old and new values affected by the respective statement. This allows developers to use the same logic for each of these DML types to obtain values pre- and post-statement execution. Old and new values are valid only for `UPDATE` statements. `INSERT` statements don't report old values and `DELETE` statements don't report new values.
+The RETURNING INTO clause for `INSERT`, `UPDATE`, and `DELETE` statements are enhanced to report old and new values affected by the respective statement. This allows developers to use the same logic for each of these Data Manipulation Language (DML) types to obtain values pre- and post-statement execution. The following rules apply: 
+
+* `UPDATE` statements report old and new values. 
+* `INSERT` statements only report new values. 
+* `DELETE` statements only report old values.
 
 [source,sql]
 [subs="verbatim"]
