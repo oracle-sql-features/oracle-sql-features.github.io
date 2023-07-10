@@ -1,0 +1,75 @@
+= Extended CASE Controls
+:database-version: 23.2.0
+:database-category: plsql
+
+[[feature_summary]]
+
+The `CASE` statement is extended in *PL/SQL* to be consistent with the updated definitions of `CASE` expressions and `CASE` statements in the `SQL:2003 Standard [ISO03a, ISO03b]`.
+
+At the time of writing there is no SQL equivalent of the extended PL/SQL `CASE` statement.
+
+[source,sql]
+[subs="verbatim"]
+----
+begin
+    -- example 01: assign grades to result percentages
+    for inx in -1, 19, 50, 75, 99, null loop
+        dbms_output.put_line ( 
+            nvl ( to_char ( inx ), 'null' ) || ' = ' || 
+            case inx
+                when < 0, > 100 then 'invalid result'
+                when is null then 'no result'
+                when between 90 and 100 then 'A'
+                when >= 80 then 'B'
+                when >= 70 then 'C'
+                when >= 60 then 'D'
+                when >= 50 then 'E'
+                else 'fail'
+            end
+        );
+    end loop;  
+end;
+/
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> begin
+  2      -- example 01: assign grades to result percentages
+  3      for inx in -1, 19, 50, 75, 99, null loop
+  4          dbms_output.put_line (
+  5              nvl ( to_char ( inx ), 'null' ) || ' = ' ||
+  6              case inx
+  7                  when < 0, > 100 then 'invalid result'
+  8                  when is null then 'no result'
+  9                  when between 90 and 100 then 'A'
+ 10                  when >= 80 then 'B'
+ 11                  when >= 70 then 'C'
+ 12                  when >= 60 then 'D'
+ 13                  when >= 50 then 'E'
+ 14                  else 'fail'
+ 15              end
+ 16          );
+ 17      end loop;
+ 18  end;
+ 19  /
+-1 = invalid result
+19 = fail
+50 = E
+75 = C
+99 = A
+null = no result
+
+PL/SQL procedure successfully completed.
+----
+
+== Benefits
+
+Dangling predicates allow tests other than equality to be performed in simple `CASE` operations. Multiple choices in `WHEN` clauses allow `CASE` operations in *PL/SQL* to be written with less duplicated code.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/lnpls/CASE-statement.html#GUID-F4251A23-0284-4990-A156-00A92F83BC35[Database PL/SQL Language Reference]
