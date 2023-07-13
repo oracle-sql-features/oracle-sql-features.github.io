@@ -1,0 +1,177 @@
+= UPDATE/DELETE via JOIN
+:database-version: 23.2.0
+:database-category: sql
+
+[[feature_summary]]
+
+`UPDATE` and `DELETE` statements can leverage join conditions on other tables
+to determine which rows to modify or delete in the source table.
+
+[source,sql]
+[subs="verbatim"]
+----
+-- Get current salary for all employees in the IT department
+SELECT e.first_name, e.last_name, e.salary
+ FROM employees e, departments d
+  WHERE e.department_id=d.department_id
+   AND d.department_name = 'IT';
+
+-- Increase salary by 50% for all employees in the IT department
+UPDATE employees e SET e.salary=e.salary*1.5
+ FROM departments d
+  WHERE e.department_id=d.department_id
+   AND d.department_name = 'IT';
+
+-- Verify changes
+SELECT e.first_name, e.last_name, e.salary
+ FROM employees e, departments d
+  WHERE e.department_id=d.department_id
+   AND d.department_name = 'IT';
+
+-- Commit changes
+COMMIT;
+
+-- Get all Sales Reps who were hired before the 1st of January 2016
+SELECT e.first_name, e.last_name, e.hire_date
+ FROM employees e, departments d, jobs j
+  WHERE e.department_id=d.department_id
+   AND d.department_name = 'Sales'
+   AND e.job_id=j.job_id
+   AND j.job_title = 'Sales Representative'
+   AND e.hire_date < TO_DATE('01-JAN-16','DD-MON-YY');
+
+-- Delete all Sales Reps who were hired before the 1st of January 2016
+DELETE FROM employees e
+ FROM departments d, jobs j
+  WHERE e.department_id=d.department_id
+   AND d.department_name = 'Sales'
+   AND e.job_id=j.job_id
+   AND j.job_title = 'Sales Representative'
+   AND e.hire_date < TO_DATE('01-JAN-16','DD-MON-YY');
+
+-- Verify changes
+SELECT e.first_name, e.last_name, e.hire_date
+ FROM employees e, departments d, jobs j
+  WHERE e.department_id=d.department_id
+   AND d.department_name = 'Sales'
+   AND e.job_id=j.job_id
+   AND j.job_title = 'Sales Representative'
+   AND e.hire_date < TO_DATE('01-JAN-16','DD-MON-YY');
+
+-- Commit changes
+COMMIT;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> -- Get current salary for all employees in the IT department
+SQL> SELECT e.first_name, e.last_name, e.salary
+  2   FROM employees e, departments d
+  3    WHERE e.department_id=d.department_id
+  4*    AND d.department_name = 'IT';
+
+FIRST_NAME    LAST_NAME       SALARY
+_____________ ____________ _________
+Alexander     James             9000
+Bruce         Miller            6000
+David         Williams          4800
+Valli         Jackson           4800
+Diana         Nguyen            4200
+
+SQL>
+SQL> -- Increase salary by 50% for all employees in the IT department
+SQL> UPDATE employees e SET e.salary=e.salary*1.5
+  2   FROM departments d
+  3    WHERE e.department_id=d.department_id
+  4*    AND d.department_name = 'IT';
+
+5 rows updated.
+
+SQL>
+SQL> -- Verify changes
+SQL> SELECT e.first_name, e.last_name, e.salary
+  2   FROM employees e, departments d
+  3    WHERE e.department_id=d.department_id
+  4*    AND d.department_name = 'IT';
+
+FIRST_NAME    LAST_NAME       SALARY
+_____________ ____________ _________
+Alexander     James            13500
+Bruce         Miller            9000
+David         Williams          7200
+Valli         Jackson           7200
+Diana         Nguyen            6300
+
+SQL>
+SQL> -- Commit changes
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> -- Get all Sales Reps who were hired before the 1st of January 2016
+SQL> SELECT e.first_name, e.last_name, e.hire_date
+  2   FROM employees e, departments d, jobs j
+  3    WHERE e.department_id=d.department_id
+  4     AND d.department_name = 'Sales'
+  5     AND e.job_id=j.job_id
+  6     AND j.job_title = 'Sales Representative'
+  7*    AND e.hire_date < TO_DATE('01-JAN-16','DD-MON-YY');
+
+FIRST_NAME    LAST_NAME    HIRE_DATE
+_____________ ____________ ____________
+Sean          Tucker       30-JAN-15
+David         Bernstein    24-MAR-15
+Peter         Hall         20-AUG-15
+Janette       King         30-JAN-14
+Patrick       Sully        04-MAR-14
+Allan         McEwen       01-AUG-14
+Lindsey       Smith        10-MAR-15
+Louise        Doran        15-DEC-15
+Clara         Vishney      11-NOV-15
+Lisa          Ozer         11-MAR-15
+Ellen         Abel         11-MAY-14
+Alyssa        Hutton       19-MAR-15
+
+12 rows selected.
+
+SQL>
+SQL> -- Delete all Sales Reps who were hired before the 1st of January 2016
+SQL> DELETE FROM employees e
+  2   FROM departments d, jobs j
+  3    WHERE e.department_id=d.department_id
+  4     AND d.department_name = 'Sales'
+  5     AND e.job_id=j.job_id
+  6     AND j.job_title = 'Sales Representative'
+  7*    AND e.hire_date < TO_DATE('01-JAN-16','DD-MON-YY');
+
+12 rows deleted.
+
+SQL>
+SQL> -- Verify changes
+SQL> SELECT e.first_name, e.last_name, e.hire_date
+  2   FROM employees e, departments d, jobs j
+  3    WHERE e.department_id=d.department_id
+  4     AND d.department_name = 'Sales'
+  5     AND e.job_id=j.job_id
+  6     AND j.job_title = 'Sales Representative'
+  7*    AND e.hire_date < TO_DATE('01-JAN-16','DD-MON-YY');
+
+no rows selected
+SQL>
+SQL> -- Commit changes
+SQL> COMMIT;
+
+Commit complete.
+----
+
+== Benefits
+
+Leveraging joins as part of `UPDATE` and `DELETE` statements
+makes writing, executing and reading data manipulation statements easier.
+
+== Further information
+
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/UPDATE.html[UPDATE statement] and link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/DELETE.html[DELETE statement]
