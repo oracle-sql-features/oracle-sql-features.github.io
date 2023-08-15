@@ -1,0 +1,138 @@
+= JSON Schema: check constraint
+:database-version: 23.2.0
+:database-category: sql
+
+[[feature_summary]]
+
+JSON offers the flexibility of schemaless application design. Sometimes however, you might want some JSON data to conform to a schema. You might want to ensure that all data stored in a given column has the structure defined by a schema, or you might want to check whether a given JSON document has such a structure, before processing it.
+
+A JSON schema is a JSON document that respects the JSON Schema standard, which is a Request For Comments (RFC) draft. JSON schemas are in turn used to validate other JSON documents. Refer to the https://json-schema.org[JSON schema website] for more details. A JSON schema specifies the structure and the types of allowed values of JSON data that it considers valid. 
+
+This example demonstrates how to add a check constraint to a JSON column ensuring its contents matches a schema.
+
+The following JSON schema ensures that only objects can be stored in the JSON column, containing at least a `firstName` field with a minimum length of 1 character. The numeric `salary` field is optional, however if defined, the salary must be greater than 10000.
+
+[source,json]
+[subs="verbatim"]
+---
+{
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "salary": {
+            "type": "number",
+            "minimum": 10000
+        }
+    },
+    "required": [
+        "firstName"
+    ]
+}
+---
+
+[source,sql]
+[subs="verbatim"]
+----
+CREATE TABLE json_demo(
+    id   NUMBER
+         GENERATED ALWAYS AS IDENTITY,
+    CONSTRAINT pk_json_demo PRIMARY KEY(id),
+    jcol JSON,
+    CONSTRAINT json_chk CHECK (
+        jcol IS JSON VALIDATE
+        '{
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "salary": {
+                    "type": "number",
+                    "minimum": 10000
+                }
+            },
+            "required": [
+                "firstName"
+            ]
+        }'
+    )
+);
+
+-- inserting invalid data results in a constraint violation
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "contents": "does not match JSON schema" }')
+);
+
+-- this insert statement contains a valid JSON document
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Martin" }')
+);
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> CREATE TABLE json_demo(
+  2      id   NUMBER
+  3           GENERATED ALWAYS AS IDENTITY,
+  4      CONSTRAINT pk_json_demo PRIMARY KEY(id),
+  5      jcol JSON,
+  6      CONSTRAINT json_chk CHECK (
+  7          jcol IS JSON VALIDATE
+  8          '{
+  9              "type": "object",
+ 10              "properties": {
+ 11                  "firstName": {
+ 12                      "type": "string",
+ 13                      "minLength": 1
+ 14                  },
+ 15                  "salary": {
+ 16                      "type": "number",
+ 17                      "minimum": 10000
+ 18                  }
+ 19              },
+ 20              "required": [
+ 21                  "firstName"
+ 22              ]
+ 23          }'
+ 24      )
+ 25  );
+
+Table JSON_DEMO created.
+
+SQL> INSERT INTO json_demo (
+  2    jcol
+  3  ) values (
+  4    JSON('{ "contents": "does not match JSON schema" }')
+  5  );
+INSERT INTO json_demo (
+            *
+ERROR at line 1:
+ORA-40875: JSON schema validation error
+
+SQL> INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Martin" }')
+  5  );
+
+1 row inserted.
+----
+
+== Benefits
+
+JSON is a popular format for data exchange, however with flexibility comes the risk of importing incomplete records. JSON schema allows developers to ensure better data quality. Using check constraints attached to JSON columns in relational tables incoming information can be checked against a schema. Any records not matching the schema will be rejected.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/json-schema.html#GUID-980BD95E-D0EF-4E22-8E67-08CD419EE7A2[Documentation]
