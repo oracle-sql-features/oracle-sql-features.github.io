@@ -14,7 +14,7 @@ The following JSON schema ensures that only objects can be stored in the JSON co
 
 [source,json]
 [subs="verbatim"]
----
+----
 {
     "type": "object",
     "properties": {
@@ -31,7 +31,7 @@ The following JSON schema ensures that only objects can be stored in the JSON co
         "firstName"
     ]
 }
----
+----
 
 [source,sql]
 [subs="verbatim"]
