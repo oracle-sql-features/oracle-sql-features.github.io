@@ -1,5 +1,0 @@
-= Categories
-
-* xref:javascript/index.adoc[]
-* xref:plsql/index.adoc[]
-* xref:sql/index.adoc[]
