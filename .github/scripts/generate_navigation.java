@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import static java.lang.System.lineSeparator;
@@ -34,8 +36,8 @@ public class generate_navigation {
         var versionsPath = Paths.get(pwd + "/docs/modules/versions").normalize().toAbsolutePath();
         var partialsPath = Paths.get(pwd + "/docs/modules/features/partials").normalize().toAbsolutePath();
 
-        var categoriesMap = new TreeMap<String, Map<String, Path>>();
-        var versionsMap = new TreeMap<String, Map<String, Path>>();
+        var categoriesMap = new TreeMap<String, Set<Feature>>();
+        var versionsMap = new TreeMap<String, Set<Feature>>();
 
         FeatureFinder featureFinder = new FeatureFinder();
         Files.walkFileTree(featuresPath, featureFinder);
@@ -54,21 +56,19 @@ public class generate_navigation {
         var features = new LinkedHashSet<Feature>();
         for (Map.Entry<String, Path> e : featureFinder.features.entrySet()) {
             var page = e.getKey();
-            var feature = e.getValue();
+            var f = e.getValue();
 
             System.out.printf("➡️  Processing %s%n", page);
-            var version = extractAttribute(feature, ":database-version:");
-            var categories = extractAttribute(feature, ":database-category:").split(" ");
+            var version = extractAttribute(f, ":database-version:");
+            var categories = extractAttribute(f, ":database-category:").split(" ");
+            var feature = new Feature(f, version, categories);
+            features.add(feature);
 
             for (String category : categories) {
-                categoriesMap.computeIfAbsent(category, c -> new TreeMap<>())
-                    .put(page, feature);
+                categoriesMap.computeIfAbsent(category, c -> new TreeSet<>()).add(feature);
             }
 
-            versionsMap.computeIfAbsent(version, v -> new TreeMap<>())
-                .put(page, feature);
-
-            features.add(new Feature(feature, version, categories));
+            versionsMap.computeIfAbsent(version, v -> new TreeSet<>()).add(feature);
         }
 
         System.out.printf("🛠  Generating pages%n");
@@ -77,11 +77,11 @@ public class generate_navigation {
         copyFeatures(features, partialsPath);
     }
 
-    private static void generateNavigation(Path path, Map<String, Map<String, Path>> data) throws IOException {
+    private static void generateNavigation(Path path, Map<String, Set<Feature>> data) throws IOException {
         StringBuilder b = new StringBuilder("* xref:index.adoc[]");
         b.append(lineSeparator());
 
-        for (Map.Entry<String, Map<String, Path>> e : data.entrySet()) {
+        for (Map.Entry<String, Set<Feature>> e : data.entrySet()) {
             var k = e.getKey();
             var v = e.getValue();
 
@@ -95,9 +95,8 @@ public class generate_navigation {
 
             b.append("** xref:" + k + "/index.adoc[]")
                 .append(lineSeparator());
-            for (Map.Entry<String, Path> g : v.entrySet()) {
-                var f = g.getKey();
-                var p = g.getValue();
+            for (Feature feature: v) {
+                var f = feature.path.getFileName().toString();
 
                 b.append("*** xref:" + k + "/" + f + "[]")
                     .append(lineSeparator());
@@ -111,7 +110,7 @@ public class generate_navigation {
         Files.write(path.resolve("nav.adoc"), b.toString().getBytes(UTF_8));
     }
 
-    private static void copyFeatures(LinkedHashSet<Feature> features, Path partials) throws IOException {
+    private static void copyFeatures(Set<Feature> features, Path partials) throws IOException {
         deleteFiles(partials);
         Files.createDirectories(partials);
 
@@ -133,6 +132,20 @@ public class generate_navigation {
         }
 
         return line.get().substring(attributeName.length() + 1).trim();
+    }
+
+    private static String extractTitle(Path file) throws IOException {
+        Optional<String> line = Files.lines(file)
+            .map(String::trim)
+            .filter(s -> s.startsWith("= "))
+            .findFirst();
+
+        if (line.isEmpty()) {
+            System.err.printf("❌ Missing title in %s%n", file.toAbsolutePath());
+            System.exit(1);
+        }
+
+        return line.get().substring(2).trim();
     }
 
     private static void deleteFiles(Path path) throws IOException {
@@ -182,15 +195,17 @@ public class generate_navigation {
         }
     }
 
-    private static class Feature {
+    private static class Feature implements Comparable<Feature> {
         private final Path path;
         private final String version;
         private final String[] categories;
+        private final String title;
 
-        private Feature(Path path, String version, String[] categories) {
+        private Feature(Path path, String version, String[] categories) throws IOException {
             this.path = path;
             this.version = version;
             this.categories = categories;
+            this.title = extractTitle(path);
         }
 
         private String asSummary() {
@@ -214,6 +229,21 @@ public class generate_navigation {
             b.append(lineSeparator());
 
             return b.toString();
+        }
+
+        @Override
+        public int compareTo(Feature o) {
+            return title.compareTo(o.title);
+        }
+
+        @Override
+        public String toString() {
+            return "Feature{" +
+                "path=" + path +
+                ", version='" + version + '\'' +
+                ", title='" + title + '\'' +
+                ", categories=" + Arrays.toString(categories) +
+                '}';
         }
     }
 }
