@@ -1,0 +1,304 @@
+= GROUP BY column alias or position
+:database-version: 23.2.0
+:database-category: sql
+
+[[feature_summary]]
+
+The GROUP BY column alias feature is a shorthand for not having to repeat lengthy expressions from the `SELECT` clause in the `GROUP BY` and/or `HAVING` clause but instead use the defined column alias.
+
+The GROUP BY position feature is a similar shorthand and great for ad-hoc queries by simply referring to the expression position in the `SELECT` clause. Caution is required when using this feature, however, as it can lead novices to wrong conclusions and unexpected results as they may be surprised by or not aware of that data is being grouped differently when the position of the expression in the `SELECT` clause changes. This is particularly important for `GROUP BY ROLLUP()` and other super-aggregate grouping functions, hence this functionality is guarded behind a session parameter `group_by_position_enabled`.
+
+== GROUP BY column alias
+
+_Note the `GROUP BY combined_name` which refers to a column alias in the `SELECT`._
+[source,sql]
+[subs="verbatim"]
+----
+SELECT CONCAT(r.name, ': ', co.name) AS combined_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY combined_name
+     ORDER BY combined_name;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> SELECT CONCAT(r.name, ': ', co.name) AS combined_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY combined_name
+     ORDER BY combined_name;
+
+COMBINED_NAME                  POPULATION_M
+------------------------------ ------------
+Oceania: Australia                    23.47
+Oceania: Fiji                          .926
+Oceania: Kiribati                      .109
+Oceania: Marshall Islands              .076
+Oceania: Micronesia                    .104
+Oceania: Nauru                          .01
+Oceania: New Zealand                  4.546
+Oceania: Palau                         .022
+Oceania: Papua New Guinea             7.027
+Oceania: Samoa                         .201
+Oceania: Solomon Islands                .66
+Oceania: Tonga                         .106
+Oceania: Tuvalu                        .011
+Oceania: Vanuatu                       .288
+South America: Argentina             44.694
+South America: Bolivia               11.306
+South America: Brazil               208.847
+South America: Chile                 17.925
+South America: Colombia              48.169
+South America: Ecuador               16.291
+South America: Guyana                  .741
+South America: Paraguay               7.026
+South America: Peru                  31.331
+South America: Suriname                .598
+South America: Uruguay                3.369
+South America: Venezuela             31.689
+
+26 rows selected.
+----
+
+== GROUP BY column position
+
+_Note the `GROUP BY ROLLUP (1, 2)` which refers to the first and second column in the `SELECT`._
+[source,sql]
+[subs="verbatim"]
+----
+-- Enable the GROUP_BY_POSITION parameter for the session
+ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+SELECT r.name AS region_name, co.name AS country_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> -- Enable the GROUP_BY_POSITION parameter for the session
+SQL> ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+Session altered.
+
+SQL> SELECT r.name AS region_name, co.name AS country_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;
+
+REGION_NAME   COUNTRY_NAME     POPULATION_M
+------------- ---------------- ------------
+Oceania       Australia               23.47
+Oceania       Fiji                     .926
+Oceania       Kiribati                 .109
+Oceania       Marshall Islands         .076
+Oceania       Micronesia               .104
+Oceania       Nauru                     .01
+Oceania       New Zealand             4.546
+Oceania       Palau                    .022
+Oceania       Papua New Guinea        7.027
+Oceania       Samoa                    .201
+Oceania       Solomon Islands           .66
+Oceania       Tonga                    .106
+Oceania       Tuvalu                   .011
+Oceania       Vanuatu                  .288
+Oceania                              37.556
+South America Argentina              44.694
+South America Bolivia                11.306
+South America Brazil                208.847
+South America Chile                  17.925
+South America Colombia               48.169
+South America Ecuador                16.291
+South America Guyana                   .741
+South America Paraguay                7.026
+South America Peru                   31.331
+South America Suriname                 .598
+South America Uruguay                 3.369
+South America Venezuela              31.689
+South America                       421.986
+                                    459.542
+
+29 rows selected.
+----
+
+=== Caution
+
+Let's assume that the report was supposed to list countries first and the region next to it instead of the current region first and the country next to it. If you change the columns in the `SELECT` but forget to amend the `GROUP BY ROLLUP` clause as well, because you are grouping by column _**position**_ in the `SELECT` list, your results will be grouped differently and be no longer be the same.
+
+[source,sql]
+[subs="verbatim"]
+----
+-- Enable the GROUP_BY_POSITION parameter for the session (only needed once per session)
+ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> -- Enable the GROUP_BY_POSITION parameter for the session (only needed once per session)
+SQL> ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+Session altered.
+
+SQL> SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;
+
+COUNTRY_NAME     REGION_NAME   POPULATION_M
+---------------- ------------- ------------
+Samoa            Oceania               .201
+Fiji             Oceania               .926
+Micronesia       Oceania               .104
+Kiribati         Oceania               .109
+Marshall Islands Oceania               .076
+Nauru            Oceania                .01
+New Zealand      Oceania              4.546
+Papua New Guinea Oceania              7.027
+Palau            Oceania               .022
+Solomon Islands  Oceania                .66
+Tonga            Oceania               .106
+Tuvalu           Oceania               .011
+Australia        Oceania              23.47
+Vanuatu          Oceania               .288
+Argentina        South America       44.694
+Bolivia          South America       11.306
+Brazil           South America      208.847
+Chile            South America       17.925
+Colombia         South America       48.169
+Venezuela        South America       31.689
+Guyana           South America         .741
+Peru             South America       31.331
+Paraguay         South America        7.026
+Suriname         South America         .598
+Uruguay          South America        3.369
+Ecuador          South America       16.291
+Venezuela                            31.689
+Uruguay                               3.369
+Suriname                               .598
+Paraguay                              7.026
+Peru                                 31.331
+Guyana                                 .741
+Ecuador                              16.291
+Colombia                             48.169
+Chile                                17.925
+Brazil                              208.847
+Bolivia                              11.306
+Argentina                            44.694
+Samoa                                  .201
+Vanuatu                                .288
+Tuvalu                                 .011
+Tonga                                  .106
+Solomon Islands                         .66
+Palau                                  .022
+Papua New Guinea                      7.027
+New Zealand                           4.546
+Nauru                                   .01
+Marshall Islands                       .076
+Kiribati                               .109
+Micronesia                             .104
+Fiji                                   .926
+                                    459.542
+Australia                             23.47
+
+53 rows selected.
+----
+
+In comparison, this does not happen when using the column alias:
+
+[source,sql]
+[subs="verbatim"]
+----
+SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (region_name, country_name)
+     ORDER BY region_name;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (region_name, country_name)
+     ORDER BY region_name;
+
+COUNTRY_NAME     REGION_NAME   POPULATION_M
+---------------- ------------- ------------
+Australia        Oceania              23.47
+Fiji             Oceania               .926
+Kiribati         Oceania               .109
+Marshall Islands Oceania               .076
+Micronesia       Oceania               .104
+Nauru            Oceania                .01
+New Zealand      Oceania              4.546
+Palau            Oceania               .022
+Papua New Guinea Oceania              7.027
+Samoa            Oceania               .201
+Solomon Islands  Oceania                .66
+Tonga            Oceania               .106
+Tuvalu           Oceania               .011
+Vanuatu          Oceania               .288
+                 Oceania             37.556
+Argentina        South America       44.694
+Bolivia          South America       11.306
+Brazil           South America      208.847
+Chile            South America       17.925
+Colombia         South America       48.169
+Ecuador          South America       16.291
+Guyana           South America         .741
+Paraguay         South America        7.026
+Peru             South America       31.331
+Suriname         South America         .598
+Uruguay          South America        3.369
+Venezuela        South America       31.689
+                 South America      421.986
+                                    459.542
+
+29 rows selected.
+----
+
+== Benefits
+
+GROUP BY column alias and position are both convenient shorthands for writing concise ad-hoc SQL statements.
+Extra caution should be given when using GROUP BY column position as changing the column position in the `SELECT` part can have direct influence over the grouping of the data.
+
+== Further information
+
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2065777[Documentation]
