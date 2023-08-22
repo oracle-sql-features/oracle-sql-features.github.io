@@ -1,5 +1,5 @@
 = Inline JavaScript Procedures
-:database-version: 23.2.0
+:database-version: 23.2
 :database-category: javascript
 
 [[feature_summary]]

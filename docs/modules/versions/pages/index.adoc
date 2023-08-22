@@ -2,4 +2,4 @@
 
 * xref:12.1.0.2/index.adoc[]
 * xref:12.1.0.1/index.adoc[]
-* xref:23.2.0/index.adoc[]
+* xref:23.2/index.adoc[]
