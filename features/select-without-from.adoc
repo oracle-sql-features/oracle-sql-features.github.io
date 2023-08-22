@@ -2,6 +2,8 @@
 :database-version: 23.2.0
 :database-category: sql
 
+[[feature_summary]]
+
 You can now run SELECT expression-only queries without a FROM clause, e.g. adding `from dual` is no longer needed in such cases. The `DUAL` table has not disappeared, all queries that use it will continue to work as expected.
 
 [source,sql]
