@@ -1,0 +1,124 @@
+= FUZZY_MATCH operator
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+The `FUZZY_MATCH` operator enables you to compare strings for similarity using algorithms such as Jaro-Winkler and Levenshtein distance.
+
+[source,sql]
+[subs="verbatim"]
+----
+/* Compare the team names to "Champions City" with the different fuzzy matching algorithms */
+with teams as (
+  select * from ( 
+    values ( 'Champions United' ), 
+           ( 'Runner-up City' ), 
+           ( 'Midtable Town' ), 
+           ( 'Underdogs United' ), 
+           ( 'Upstart FC' ), 
+           ( 'Relegated Athletic' )
+  ) t ( team_name )
+), match_value as (
+  select 'Champions City' match_team
+)
+  select team_name, match_team, 
+         fuzzy_match ( levenshtein, team_name, match_team ) as levenshtein,
+         fuzzy_match ( jaro_winkler, team_name, match_team ) as jaro_winkler,
+         fuzzy_match ( bigram, team_name, match_team ) as bigram,
+         fuzzy_match ( trigram, team_name, match_team ) as trigram,
+         fuzzy_match ( whole_word_match, team_name, match_team ) as wwm,
+         fuzzy_match ( longest_common_substring, team_name, match_team ) as lcs
+  from   teams 
+  cross  join match_value;
+  
+  
+/* Find the team names that match "Champions City" with Jaro-Winkler score > 90 */
+with teams as (
+  select * from ( 
+    values ( 'Champions United' ), 
+           ( 'Runner-up City' ), 
+           ( 'Midtable Town' ), 
+           ( 'Underdogs United' ), 
+           ( 'Upstart FC' ), 
+           ( 'Relegated Athletic' )
+  ) t ( team_name )
+), match_value as (
+  select 'Champions City' match_team
+)
+  select team_name, match_team
+  from   teams 
+  join   match_value
+  on     fuzzy_match ( jaro_winkler, team_name, match_team ) > 90;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> /* Compare the team names to "Champions City" for the different fuzzy matching algorithms */
+SQL> with teams as (
+  2    select * from ( 
+  3      values ( 'Champions United' ), 
+  4             ( 'Runner-up City' ), 
+  5             ( 'Midtable Town' ), 
+  6             ( 'Underdogs United' ), 
+  7             ( 'Upstart FC' ), 
+  8             ( 'Relegated Athletic' )
+  9    ) t ( team_name )
+ 10  ), match_value as (
+ 11    select 'Champions City' match_team
+ 12  )
+ 13    select team_name, match_team, 
+ 14           fuzzy_match ( levenshtein, team_name, match_team ) as levenshtein,
+ 15           fuzzy_match ( jaro_winkler, team_name, match_team ) as jaro_winkler,
+ 16           fuzzy_match ( bigram, team_name, match_team ) as bigram,
+ 17           fuzzy_match ( trigram, team_name, match_team ) as trigram,
+ 18           fuzzy_match ( whole_word_match, team_name, match_team ) as wwm,
+ 19           fuzzy_match ( longest_common_substring, team_name, match_team ) as lcs
+ 20    from   teams 
+ 21    cross  join match_value;
+
+TEAM_NAME          MATCH_TEAM     LEVENSHTEIN JARO_WINKLER     BIGRAM    TRIGRAM        WWM        LCS
+------------------ -------------- ----------- ------------ ---------- ---------- ---------- ----------
+Champions United   Champions City          75           92         66         57         50         62
+Runner-up City     Champions City          36           57         30         25         50         35
+Midtable Town      Champions City           8           44          0          0          0          7
+Underdogs United   Champions City          32           49         13          0          0         12
+Upstart FC         Champions City           8           56          0          0          0          7
+Relegated Athletic Champions City          12           41          0          0          0          5
+
+6 rows selected. 
+
+SQL> 
+SQL> /* Find the team names that match "Champions City" with Jaro-Winkler score > 90 */
+SQL> with teams as (
+  2    select * from ( 
+  3      values ( 'Champions United' ), 
+  4             ( 'Runner-up City' ), 
+  5             ( 'Midtable Town' ), 
+  6             ( 'Underdogs United' ), 
+  7             ( 'Upstart FC' ), 
+  8             ( 'Relegated Athletic' )
+  9    ) t ( team_name )
+ 10  ), match_value as (
+ 11    select 'Champions City' match_team
+ 12  )
+ 13    select team_name, match_team
+ 14    from   teams 
+ 15    join   match_value
+ 16    on     fuzzy_match ( jaro_winkler, team_name, match_team ) > 90;
+
+TEAM_NAME          MATCH_TEAM    
+------------------ --------------
+Champions United   Champions City
+----
+
+== Benefits
+
+This operator makes it easier to find similar strings with SQL.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/data-quality-operators.html#GUID-C13A179C-1F82-4522-98AA-E21C6504755E[FUZZY_MATCH Documentation]

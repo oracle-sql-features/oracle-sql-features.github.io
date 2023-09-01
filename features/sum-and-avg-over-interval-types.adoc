@@ -1,0 +1,46 @@
+= SUM and AVG over INTERVAL data types
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+You can pass `INTERVAL` datatypes to the `SUM` and `AVG` aggregate and analytic functions.
+
+[source,sql]
+[subs="verbatim"]
+----
+with rws as (
+  select interval '0' hour + numtodsinterval ( level, 'hour' ) dsi
+  connect by level <= 10
+)
+  select sum ( dsi ) total_duration, 
+         avg ( dsi ) mean_duration 
+  from   rws;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> with rws as (
+  2    select interval '0' hour + numtodsinterval ( level, 'hour' ) dsi
+  3      connect by level <= 10
+  4  )
+  5    select sum ( dsi ) total_duration, 
+  6           avg ( dsi ) mean_duration 
+  7    from   rws;
+
+TOTAL_DURATION      MEAN_DURATION      
+------------------- -------------------
++02 07:00:00.000000 +00 05:30:00.000000
+----
+
+== Benefits
+
+This enhancement makes it easier for developers to calculate totals and averages over `INTERVAL` values.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/AVG.html#GUID-B64BCBF1-DAA0-4D88-9821-2C4D3FDE5E4A[AVG Documentation]
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SUM.html#GUID-5610BE2C-CFE5-446F-A1F7-B924B5663220[SUM Documentation]
