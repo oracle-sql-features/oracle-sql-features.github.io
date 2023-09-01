@@ -1,0 +1,121 @@
+= PL/SQL and JSON type conversions
+:database-version: 23.2
+:database-category: plsql
+
+[[feature_summary]]
+
+The `JSON` constructor can now accept a PL/SQL array or record type and return a JSON object or array populated with the aggregate type data. Conversely, the built-in function `json_value` now supports PL/SQL array and record types in the `RETURNING` clause, mapping from JSON to the specified aggregate type. 
+
+[source,sql]
+[subs="verbatim"]
+----
+declare
+  type money_rec is record (
+    currency_code char(3),
+    amount        number
+  );
+  
+  type country_price_arr is table of money_rec
+    index by varchar2(2);
+    
+  country_prices country_price_arr;
+  price_json     json;
+begin
+  country_prices := country_price_arr (
+    'US' => money_rec ( 'USD', 9.99 ),
+    'GB' => money_rec ( 'GBP', 8.99 ),
+    'DE' => money_rec ( 'EUR', 8.99 ),
+    'IN' => money_rec ( 'INR', 849 )
+  );
+  
+  /* Automatically convert PL/SQL types to JSON by passing to JSON constructor */
+  price_json := json ( country_prices );
+  
+  dbms_output.put_line ( json_serialize ( price_json returning clob pretty ) );
+  
+  for country, price in pairs of 
+     /* Convert JSON to PL/SQL types with JSON_value */
+     json_value ( price_json, '$' returning country_price_arr ) 
+  loop
+    dbms_output.put_line ( 
+      country || ' = ' || price.currency_code || to_char ( price.amount, '990.00' )
+    );
+  end loop;
+end;
+/
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> declare
+  2    type money_rec is record (
+  3      currency_code char(3),
+  4      amount        number
+  5    );
+  6  
+  7    type country_price_arr is table of money_rec
+  8      index by varchar2(2);
+  9  
+ 10    country_prices country_price_arr;
+ 11    price_json     json;
+ 12  begin
+ 13    country_prices := country_price_arr (
+ 14      'US' => money_rec ( 'USD', 9.99 ),
+ 15      'GB' => money_rec ( 'GBP', 8.99 ),
+ 16      'DE' => money_rec ( 'EUR', 8.99 ),
+ 17      'IN' => money_rec ( 'INR', 849 )
+ 18    );
+ 19  
+ 20    /* Automatically convert PL/SQL types to JSON by passing to JSON constructor */
+ 21    price_json := json ( country_prices );
+ 22  
+ 23    dbms_output.put_line ( json_serialize ( price_json returning clob pretty ) );
+ 24  
+ 25    for country, price in pairs of 
+ 26       /* Convert JSON to PL/SQL types with JSON_value */
+ 27       json_value ( price_json, '$' returning country_price_arr ) 
+ 28    loop
+ 29      dbms_output.put_line ( 
+ 30        country || ' = ' || price.currency_code || to_char ( price.amount, '990.00' )
+ 31      );
+ 32    end loop;
+ 33  end;
+ 34  /
+{
+  "DE" :
+  {
+    "CURRENCY_CODE" : "EUR",
+    "AMOUNT" : 8.99
+  },
+  "GB" :
+  {
+    "CURRENCY_CODE" : "GBP",
+    "AMOUNT" : 8.99
+  },
+  "IN" :
+  {
+    "CURRENCY_CODE" : "INR",
+    "AMOUNT" : 849
+  },
+  "US" :
+  {
+    "CURRENCY_CODE" : "USD",
+    "AMOUNT" : 9.99
+  }
+}
+DE = EUR   8.99
+GB = GBP   8.99
+IN = INR 849.00
+US = USD   9.99
+----
+
+== Benefits
+
+PL/SQL to JSON type mappings enables you to convert JSON to PL/SQL types and back using built-in functions.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/lnpls/plsql-data-types.html#GUID-4B5AE6EE-6762-4125-A44F-73EFA4B37526[PL/SQL and JSON Type Conversions Documentation]

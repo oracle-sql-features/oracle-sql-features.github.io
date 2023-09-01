@@ -1,0 +1,80 @@
+= Schema Level Privileges
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+Schema privileges enable you to grant a user access to every object of the specified type in another schema. For example, to allow one user to query every table in another schema.
+
+[source,sql]
+[subs="verbatim"]
+----
+-- create user to own tables
+create user data_owner
+  no authentication;
+  
+-- create user to query the tables
+grant create session to reporting_user
+  identified by reporting_user;
+   
+-- This gives reporting_user query privileges on every current & future table owned by data_owner
+grant read any table
+  on schema data_owner 
+  to reporting_user;
+  
+-- reporting_user automatically gets access to this table
+create table data_owner.tab ( c1 int );
+
+conn reporting_user/reporting_user@23cfree
+
+select count(*) from data_owner.tab;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> create user data_owner
+  2    no authentication;
+
+User DATA_OWNER created.
+
+SQL> 
+SQL> -- create user to query the tables
+SQL> grant create session to reporting_user
+  2    identified by reporting_user;
+
+Grant succeeded.
+
+SQL> 
+SQL> -- This gives reporting_user query privileges on every current & future table owned by data_owner
+SQL> grant read any table
+  2    on schema data_owner 
+  3    to reporting_user;
+
+Grant succeeded.
+
+SQL> 
+SQL> -- reporting_user automatically gets access to this table
+SQL> create table data_owner.tab ( c1 int );
+
+Table DATA_OWNER.TAB created.
+
+SQL> conn reporting_user/reporting_user@23cfree
+Connected.
+SQL>
+SQL> select count(*) from data_owner.tab;
+
+  COUNT(*)
+----------
+         0
+----
+
+== Benefits
+
+Schema privileges simplify data access controls.
+
+== Further information
+
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/GRANT.html#GUID-20B4E2C0-A7F8-4BC8-A5E8-BE61BDC41AC3[GRANT Documentation]

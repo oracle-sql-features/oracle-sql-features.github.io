@@ -1,0 +1,73 @@
+= CEIL, FLOOR, and ROUND for datetime data types
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+You can now pass `DATE`, `TIMESTAMP`, and `INTERVAL` values to the `CEIL` and `FLOOR` functions. These functions include an optional second argument to specify a rounding unit. You can also pass `INTERVAL` values to `ROUND` and `TRUNC` functions. 
+
+[source,sql]
+[subs="verbatim"]
+----
+with vals as (
+  select 
+    interval '+123-5' year(9) to month ymi,
+    interval '+0 12:34:56' day to second dsi,
+    to_date ( '12-APR-2023 12:34:56', 'DD-MON-YYYY HH24:MI:SS' ) dt,
+    to_timestamp ( '12-APR-2023 12:34:56', 'DD-MON-YYYY HH24:MI:SS' ) ts
+)
+select 
+  -- CEIL rounds up values
+  ceil ( ymi ) as year_ceil,
+  ceil ( dsi ) as day_ceil,
+  ceil ( dt ) as dt_day_ceil,
+  ceil ( ts ) as ts_day_ceil,
+  -- FLOOR rounds down the datetime value to the units in the second paramter
+  floor ( ymi, 'year' ) as ymi_year_floor,
+  floor ( dsi, 'hh24' ) as dsi_hour_floor,
+  floor ( dt, 'hh24' ) as dt_hour_floor,
+  floor ( ts, 'hh24' ) as ts_hour_floor,
+  -- ROUND now supports INTERVALs
+  round ( dsi, 'mi' ) as dsi_minute_round
+from   vals;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> with vals as (
+  2    select 
+  3      interval '+123-5' year(9) to month ymi,
+  4      interval '+0 12:34:56' day to second dsi,
+  5      to_date ( '12-APR-2023 12:34:56', 'DD-MON-YYYY HH24:MI:SS' ) dt,
+  6      to_timestamp ( '12-APR-2023 12:34:56', 'DD-MON-YYYY HH24:MI:SS' ) ts
+  7  )
+  8  select 
+  9    -- CEIL rounds up values
+ 10    ceil ( ymi ) as year_ceil,
+ 11    ceil ( dsi ) as day_ceil,
+ 12    ceil ( dt ) as dt_day_ceil,
+ 13    ceil ( ts ) as ts_day_ceil,
+ 14    -- FLOOR rounds down the datetime value to the units in the second paramter
+ 15    floor ( ymi, 'year' ) as ymi_year_floor,
+ 16    floor ( dsi, 'hh24' ) as dsi_hour_floor,
+ 17    floor ( dt, 'hh24' ) as dt_hour_floor,
+ 18    floor ( ts, 'hh24' ) as ts_hour_floor,
+ 19    -- ROUND now supports INTERVALs
+ 20    round ( dsi, 'mi' ) as dsi_minute_round
+ 21  from   vals;
+
+YEAR_CE DAY_CEIL            DT_DAY_CEIL       TS_DAY_CEIL       YMI_YEA DSI_HOUR_FLOOR      DT_HOUR_FLOOR     TS_HOUR_FLOOR     DSI_MINUTE_ROUND   
+------- ------------------- ----------------- ----------------- ------- ------------------- ----------------- ----------------- -------------------
++124-00 +01 00:00:00.000000 13-APR-2023 00:00 13-APR-2023 00:00 +123-00 +00 12:00:00.000000 12-APR-2023 12:00 12-APR-2023 12:00 +00 12:35:00.000000
+----
+
+== Benefits
+
+These functions make it easy to find the upper and lower bounds for date and time values for a specified unit.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/ROUND-and-TRUNC-Date-Functions.html#GUID-8E10AB76-21DA-490F-A389-023B648DDEF8[CEIL, FLOOR, ROUND, and TRUNC Date Functions Documentation]

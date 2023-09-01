@@ -1,0 +1,130 @@
+= Default ON NULL for UPDATE statements
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+You can specify a default value when updating a column to `NULL`. The database assigns the default value to the column instead of `NULL`.
+
+[source,sql]
+[subs="verbatim"]
+----
+create table default_values (
+  id integer,
+  c1 number default extract ( second from systimestamp ),
+  c2 number default on null extract ( second from systimestamp ),
+  c3 number default on null for insert only extract ( second from systimestamp ),
+  c4 number default on null for insert and update extract ( second from systimestamp )
+);
+
+-- For the columns with DEFAULT ON NULL, the database replaces NULL with the timestamp value
+insert into default_values
+  values ( 1, null, null, null, null );
+       
+select * from default_values;
+
+-- The standard DEFAULT clause has no impact on UPDATEs, so C1 remains NULL
+update default_values
+set    c1 = null;
+
+-- DEFAULT ON NULL adds an implicit NOT NULL constraint to the column
+-- The default only applies on insert, so this raises an ORA-01407 error
+update default_values
+set    c2 = null;
+
+-- DEFAULT ON NULL FOR INSERT ONLY is equivalent to DEFAULT ON NULL
+-- So this also raises an ORA-01407 error
+update default_values
+set    c3 = null;
+
+-- C4 is DEFAULT ON NULL FOR INSERT AND UPDATE
+-- So the database replaces NULL with its default value
+update default_values
+set    c4 = null;
+
+-- The value of C4 has changed; all other columns retain their INSERT value
+select * from default_values;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> create table default_values (
+  2    id integer,
+  3    c1 number default extract ( second from systimestamp ),
+  4    c2 number default on null extract ( second from systimestamp ),
+  5    c3 number default on null for insert only extract ( second from systimestamp ),
+  6    c4 number default on null for insert and update extract ( second from systimestamp )
+  7  );
+
+Table created.
+
+SQL>
+SQL> -- For the columns with DEFAULT ON NULL, the database replaces NULL with the timestamp value
+SQL> insert into default_values
+  2    values ( 1, null, null, null, null );
+
+1 row created.
+
+SQL>
+SQL> select * from default_values;
+
+        ID         C1         C2         C3         C4
+---------- ---------- ---------- ---------- ----------
+         1 <null>       1.585189   1.585189   1.585189
+
+SQL>
+SQL> -- The standard DEFAULT clause has no impact on UPDATEs, so C1 remains NULL
+SQL> update default_values
+  2  set    c1 = null;
+
+1 row updated.
+
+SQL>
+SQL> -- DEFAULT ON NULL adds an implicit NOT NULL constraint to the column
+SQL> -- The default only applies on insert, so this raises an ORA-01407 error
+SQL> update default_values
+  2  set    c2 = null;
+set    c2 = null
+       *
+ERROR at line 2:
+ORA-01407: cannot update ("CHRIS"."DEFAULT_VALUES"."C2") to NULL
+
+
+SQL>
+SQL> -- DEFAULT ON NULL FOR INSERT ONLY is equivalent to DEFAULT ON NULL
+SQL> -- So this also raises an ORA-01407 error
+SQL> update default_values
+  2  set    c3 = null;
+set    c3 = null
+       *
+ERROR at line 2:
+ORA-01407: cannot update ("CHRIS"."DEFAULT_VALUES"."C3") to NULL
+
+
+SQL>
+SQL> -- C4 is DEFAULT ON NULL FOR INSERT AND UPDATE
+SQL> -- So the database replaces NULL with its default value
+SQL> update default_values
+  2  set    c4 = null;
+
+1 row updated.
+
+SQL>
+SQL> -- The value of C4 has changed; all other columns retain their INSERT value
+SQL> select * from default_values;
+
+        ID         C1         C2         C3         C4
+---------- ---------- ---------- ---------- ----------
+         1 <null>       1.585189   1.585189   1.608401
+----
+
+== Benefits
+
+Providing a default value for `NULL` on `UPDATE` simplifies code to map `NULL` to a non `NULL` value when changing data.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-TABLE.html#GUID-F9CE0CC3-13AE-4744-A43C-EAC7A71AAAB6__CJABFBAA[CREATE TABLE Documentation]
