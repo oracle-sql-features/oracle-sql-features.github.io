@@ -1,5 +1,5 @@
 = IF [NOT] EXISTS
-:database-version: 23.2.0
+:database-version: 23.2
 :database-category: sql
 
 [[feature_summary]]

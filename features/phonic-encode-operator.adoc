@@ -1,0 +1,78 @@
+= PHONIC_ENCODE operator
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+The `PHONIC_ENCODE` operator indexes words according to their English pronunciation using the metaphone or double metaphone algorithms. 
+
+[source,sql]
+[subs="verbatim"]
+----
+/* Get the phonic encoding of the team names
+   The third parameter is the number of characters in the encoded string */
+with teams as (
+  select * from ( 
+    values ( 'Champions United' ), 
+           ( 'Runner-up City' ), 
+           ( 'Midtable Town' ), 
+           ( 'Underdogs United' ), 
+           ( 'Upstart FC' ), 
+           ( 'Relegated Athletic' )
+  ) t ( team_name )
+)
+  select team_name, 
+         phonic_encode ( double_metaphone, team_name, 1 ) as team_name_dm1, 
+         phonic_encode ( double_metaphone_alt, team_name, 1 ) as team_name_dm1_alt,
+         phonic_encode ( double_metaphone, team_name, 6 ) as team_name_dm6,
+         phonic_encode ( double_metaphone_alt, team_name, 6 ) as team_name_dm6_alt,
+         phonic_encode ( double_metaphone, team_name, 12 ) as team_name_dm12,
+         phonic_encode ( double_metaphone_alt, team_name, 12 ) as team_name_dm12_alt
+  from   teams;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> /* Get the phonic encoding of the team names
+SQL>   The third parameter is the number of characters in the encoded string */
+SQL> with teams as (
+  2    select * from ( 
+  3      values ( 'Champions United' ), 
+  4             ( 'Runner-up City' ), 
+  5             ( 'Midtable Town' ), 
+  6             ( 'Underdogs United' ), 
+  7             ( 'Upstart FC' ), 
+  8             ( 'Relegated Athletic' )
+  9    ) t ( team_name )
+ 10  )
+ 11    select team_name, 
+ 12           phonic_encode ( double_metaphone, team_name, 1 ) as team_name_dm1, 
+ 13           phonic_encode ( double_metaphone_alt, team_name, 1 ) as team_name_dm1_alt,
+ 14           phonic_encode ( double_metaphone, team_name, 6 ) as team_name_dm6,
+ 15           phonic_encode ( double_metaphone_alt, team_name, 6 ) as team_name_dm6_alt,
+ 16           phonic_encode ( double_metaphone, team_name, 12 ) as team_name_dm12,
+ 17           phonic_encode ( double_metaphone_alt, team_name, 12 ) as team_name_dm12_alt
+ 18    from   teams;
+
+TEAM_NAME          TEAM_NAME_DM1             TEAM_NAME_DM1_ALT         TEAM_NAME_DM6             TEAM_NAME_DM6_ALT         TEAM_NAME_DM12            TEAM_NAME_DM12_ALT       
+------------------ ------------------------- ------------------------- ------------------------- ------------------------- ------------------------- -------------------------
+Champions United   X                         X                         XMPNSN                    XMPNSN                    XMPNSNTT                  XMPNSNTT                 
+Runner-up City     R                         R                         RNRPST                    RNRPST                    RNRPST                    RNRPST                   
+Midtable Town      M                         M                         MTPLTN                    MTPLTN                    MTPLTN                    MTPLTN                   
+Underdogs United   A                         A                         ANTRTK                    ANTRTK                    ANTRTKSNTT                ANTRTKSNTT               
+Upstart FC         A                         A                         APSTRT                    APSTRT                    APSTRTFK                  APSTRTFK                 
+Relegated Athletic R                         R                         RLKTT0                    RLKTTT                    RLKTT0LTK                 RLKTTTLTK                
+
+6 rows selected. 
+----
+
+== Benefits
+
+The `PHONIC_ENCODE` operator enables you to run data quality queries, comparing text based on how it's spoken.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/data-quality-operators.html#GUID-4D870366-C06F-4E63-BE15-609C1F2A96D3[PHONIC_ENCODE Documentation]

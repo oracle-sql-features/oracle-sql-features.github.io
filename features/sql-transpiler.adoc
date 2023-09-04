@@ -1,0 +1,201 @@
+= SQL Transpiler
+:database-version: 23.2
+:database-category: sql plsql
+
+[[feature_summary]]
+
+The SQL Transpiler automatically and wherever possible converts (transpiles) PL/SQL functions within SQL into SQL expressions, without user intervention.
+
+[source,sql]
+[subs="verbatim"]
+----
+create table employees (
+  employee_id   integer primary key,
+  first_name    varchar2(100),
+  last_name     varchar2(100),
+  hire_date     date
+);
+
+insert into employees (employee_id,first_name,last_name,hire_date) 
+values (100,'Steven','King',to_date('17-JUN-2013 00:00','DD-MON-YYYY HH24:MI')),
+       (101,'Neena','Yang',to_date('21-SEP-2015 00:00','DD-MON-YYYY HH24:MI')),
+       (102,'Lex','Garcia',to_date('13-JAN-2011 00:00','DD-MON-YYYY HH24:MI')),
+       (103,'Alexander','James',to_date('03-JAN-2016 00:00','DD-MON-YYYY HH24:MI')),
+       (104,'Bruce','Miller',to_date('21-MAY-2017 00:00','DD-MON-YYYY HH24:MI')),
+       (105,'David','Williams',to_date('25-JUN-2015 00:00','DD-MON-YYYY HH24:MI')),
+       (106,'Valli','Jackson',to_date('05-FEB-2016 00:00','DD-MON-YYYY HH24:MI')),
+       (107,'Diana','Nguyen',to_date('07-FEB-2017 00:00','DD-MON-YYYY HH24:MI')),
+       (108,'Nancy','Gruenberg',to_date('17-AUG-2012 00:00','DD-MON-YYYY HH24:MI')),
+       (109,'Daniel','Faviet',to_date('16-AUG-2012 00:00','DD-MON-YYYY HH24:MI')),
+       (110,'John','Chen',to_date('28-SEP-2015 00:00','DD-MON-YYYY HH24:MI'));
+
+
+create or replace function get_year ( dt date ) 
+  return number as
+begin
+  return extract ( year from dt );
+end get_year;
+/
+
+set serveroutput off
+-- This disables the transpiler; it is disabled by default
+alter session set sql_transpiler = 'OFF';
+
+select count (*) from employees
+where  get_year ( hire_date ) = 2015;
+
+-- With the transpiler disabled, the predicate is the function call GET_YEAR
+select * 
+from   dbms_xplan.display_cursor( format => 'BASIC LAST +PREDICATE');
+
+-- Enable the automatic SQL transpiler
+alter session set sql_transpiler = 'ON';
+
+-- With the transpiler enabled, the expression in the function is extracted
+-- the predicate is now EXTRACT(YEAR FROM INTERNAL_FUNCTION("HIRE_DATE"))
+-- => no SQL <> PL/SQL runtime context switch
+select count (*) from employees
+where  get_year ( hire_date ) = 2017;
+
+select * 
+from   dbms_xplan.display_cursor( format => 'BASIC LAST +PREDICATE');
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> create table employees (
+  2    employee_id   integer primary key,
+  3    first_name varchar2(100),
+  4    last_name varchar2(100),
+  5    hire_date     date
+  6  );
+
+Table EMPLOYEES created.
+
+SQL> 
+SQL> insert into employees (employee_id,first_name,last_name,hire_date) 
+  2  values (100,'Steven','King',to_date('17-JUN-2013 00:00','DD-MON-YYYY HH24:MI')),
+  3         (101,'Neena','Yang',to_date('21-SEP-2015 00:00','DD-MON-YYYY HH24:MI')),
+  4         (102,'Lex','Garcia',to_date('13-JAN-2011 00:00','DD-MON-YYYY HH24:MI')),
+  5         (103,'Alexander','James',to_date('03-JAN-2016 00:00','DD-MON-YYYY HH24:MI')),
+  6         (104,'Bruce','Miller',to_date('21-MAY-2017 00:00','DD-MON-YYYY HH24:MI')),
+  7         (105,'David','Williams',to_date('25-JUN-2015 00:00','DD-MON-YYYY HH24:MI')),
+  8         (106,'Valli','Jackson',to_date('05-FEB-2016 00:00','DD-MON-YYYY HH24:MI')),
+  9         (107,'Diana','Nguyen',to_date('07-FEB-2017 00:00','DD-MON-YYYY HH24:MI')),
+ 10         (108,'Nancy','Gruenberg',to_date('17-AUG-2012 00:00','DD-MON-YYYY HH24:MI')),
+ 11         (109,'Daniel','Faviet',to_date('16-AUG-2012 00:00','DD-MON-YYYY HH24:MI')),
+ 12         (110,'John','Chen',to_date('28-SEP-2015 00:00','DD-MON-YYYY HH24:MI'));
+
+11 rows inserted.
+
+SQL> 
+SQL> 
+SQL> create or replace function get_year ( dt date ) 
+  2    return number as
+  3  begin
+  4    return extract ( year from dt );
+  5  end get_year;
+  6  /
+
+Function GET_YEAR compiled
+
+SQL> 
+SQL> set serveroutput off
+SQL> -- This disables the transpiler; it is disabled by default
+SQL> alter session set sql_transpiler = 'OFF';
+
+Session altered.
+
+SQL> 
+SQL> select count (*) from employees
+  2  where  get_year ( hire_date ) = 2015;
+
+  COUNT(*)
+----------
+         3
+
+SQL> 
+SQL> -- With the transpiler disabled, the predicate is the function call GET_YEAR
+SQL> select * 
+  2  from   dbms_xplan.display_cursor( format => 'BASIC LAST +PREDICATE');
+
+PLAN_TABLE_OUTPUT                                                           
+----------------------------------------------------------------------------
+EXPLAINED SQL STATEMENT:
+------------------------
+select count (*) from employees where  get_year ( hire_date ) = 2015
+ 
+Plan hash value: 1756381138
+ 
+----------------------------------------
+| Id  | Operation          | Name      |
+----------------------------------------
+|   0 | SELECT STATEMENT   |           |
+|   1 |  SORT AGGREGATE    |           |
+|*  2 |   TABLE ACCESS FULL| EMPLOYEES |
+----------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("GET_YEAR"("HIRE_DATE")=2015)
+ 
+
+19 rows selected. 
+
+SQL> 
+SQL> -- Enable the automatic SQL transpiler
+SQL> alter session set sql_transpiler = 'ON';
+
+Session altered.
+
+SQL> 
+SQL> -- With the transpiler enabled, the expression in the function is extracted
+SQL> -- the predicate is now EXTRACT(YEAR FROM INTERNAL_FUNCTION("HIRE_DATE"))
+SQL> -- => no SQL <> PL/SQL runtime context switch
+SQL> select count (*) from employees
+  2  where  get_year ( hire_date ) = 2017;
+
+  COUNT(*)
+----------
+         2
+
+SQL> 
+SQL> select * 
+  2  from   dbms_xplan.display_cursor( format => 'BASIC LAST +PREDICATE');
+
+PLAN_TABLE_OUTPUT
+--------------------------------------------------------------------------
+EXPLAINED SQL STATEMENT:
+------------------------
+select count (*) from employees where  get_year ( hire_date ) = 2017
+ 
+Plan hash value: 1756381138
+ 
+----------------------------------------
+| Id  | Operation          | Name      |
+----------------------------------------
+|   0 | SELECT STATEMENT   |           |
+|   1 |  SORT AGGREGATE    |           |
+|*  2 |   TABLE ACCESS FULL| EMPLOYEES |
+----------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter(EXTRACT(YEAR FROM INTERNAL_FUNCTION("HIRE_DATE"))=2017)
+ 
+
+19 rows selected.
+----
+
+== Benefits
+
+The conversion operation is transparent to users and can improve performance by reducing overhead accrued from switching between the SQL and PL/SQL runtime.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/tgsql/introduction-to-sql-tuning.html#GUID-C25CC846-7515-4527-8345-DAE2896EDAC8[SQL Tuning Guide]
