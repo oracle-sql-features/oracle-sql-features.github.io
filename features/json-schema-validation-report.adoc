@@ -1,0 +1,372 @@
+= JSON Schema: check constraint
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+JSON offers the flexibility of schemaless application design. Sometimes however, you might want some JSON data to conform to a schema. You might want to ensure that all data stored in a given column has the structure defined by a schema, or you might want to check whether a given JSON document has such a structure, before processing it.
+
+A JSON schema is a JSON document that respects the JSON Schema standard, which is a Request For Comments (RFC) draft. JSON schemas are in turn used to validate other JSON documents. Refer to the https://json-schema.org[JSON schema website] for more details. A JSON schema specifies the structure and the types of allowed values of JSON data that it considers valid. 
+
+This example demonstrates how to create a JSON schema validation report.
+
+The following JSON schema ensures that only objects can be stored in the JSON column, containing at least a `firstName` field with a minimum length of 1 character. The numeric `salary` field is optional, however if defined, the salary must be greater than 10000.
+
+[source,json]
+[subs="verbatim"]
+----
+{
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "salary": {
+            "type": "number",
+            "minimum": 10000
+        }
+    },
+    "required": [
+        "firstName"
+    ]
+}
+----
+
+[source,sql]
+[subs="verbatim"]
+----
+-- note the absence of any schema validation rules in the
+-- create table statement
+CREATE TABLE json_demo(
+    id   NUMBER
+         GENERATED ALWAYS AS IDENTITY,
+    CONSTRAINT pk_json_demo PRIMARY KEY(id),
+    jcol JSON
+);
+
+-- insert a few rows into the table
+INSERT INTO json_demo (
+        jcol
+    ) values (
+        JSON('{ "contents": "does not match JSON schema" }')
+    );
+
+INSERT INTO json_demo (
+        jcol
+    ) values (
+        JSON('{ "firstName": "Martin" }' ) 
+    );
+
+INSERT INTO json_demo (
+        jcol
+    ) values ( 
+        JSON('{ "firstName": "Tom", "salary": 9999 }')
+    );
+
+INSERT INTO json_demo (
+        jcol
+    ) values ( 
+        JSON('{ "firstName": "Emily", "salary": 15000 }')
+    );
+
+COMMIT;
+
+-- validate the contents of the table
+DECLARE
+    l_JSON_schema JSON := JSON(
+        '{
+            "type": "object",
+            "properties": {
+                "firstName": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "salary": {
+                    "type": "number",
+                    "minimum": 10000
+                }
+            },
+            "required": [
+                "firstName"
+            ]
+        }'
+    );
+    l_validation_report JSON;
+BEGIN
+    FOR i IN (select id, jcol from json_demo) loop
+        SELECT
+            DBMS_JSON_SCHEMA.validate_report(
+                json_data   => i.jcol,
+                json_schema => l_JSON_schema
+            )
+        INTO
+            l_validation_report
+        FROM
+            json_demo
+        WHERE
+            id = i.id;
+        DBMS_OUTPUT.put_line('validating row with ID ' || i.id);
+        DBMS_OUTPUT.put_line(
+            json_serialize(l_validation_report pretty)
+        );
+    END LOOP;
+END;
+/
+
+-- extracting portions of the error message
+WITH validation AS (
+    SELECT
+        id,
+        DBMS_JSON_SCHEMA.validate_report(
+            json_data => jcol,
+            json_schema => JSON(
+                '{
+                    "type": "object",
+                    "properties": {
+                        "firstName": {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "salary": {
+                            "type": "number",
+                            "minimum": 10000
+                        }
+                    },
+                    "required": [
+                        "firstName"
+                    ]
+                }'
+            )
+        ) AS report
+    FROM
+        json_demo
+)
+SELECT
+    json_serialize(
+        v.report.errors[*].error
+        pretty
+    )
+FROM
+    validation v
+WHERE
+    v.id = 1
+/
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> -- note the absence of any schema validation rules in the
+SQL> -- create table statement
+SQL> CREATE TABLE json_demo(
+  2      id   NUMBER
+  3           GENERATED ALWAYS AS IDENTITY,
+  4      CONSTRAINT pk_json_demo PRIMARY KEY(id),
+  5      jcol JSON
+  6  );
+
+Table created.
+
+SQL>
+SQL> -- insert a few rows into the table
+SQL> INSERT INTO json_demo (
+  2          jcol
+  3      ) values (
+  4          JSON('{ "contents": "does not match JSON schema" }')
+  5      );
+
+1 row created.
+
+SQL>
+SQL> INSERT INTO json_demo (
+  2          jcol
+  3      ) values (
+  4          JSON('{ "firstName": "Martin" }' )
+  5      );
+
+1 row created.
+
+SQL>
+SQL> INSERT INTO json_demo (
+  2          jcol
+  3      ) values (
+  4          JSON('{ "firstName": "Tom", "salary": 9999 }')
+  5      );
+
+1 row created.
+
+SQL>
+SQL> INSERT INTO json_demo (
+  2          jcol
+  3      ) values (
+  4          JSON('{ "firstName": "Emily", "salary": 15000 }')
+  5      );
+
+1 row created.
+
+SQL>
+SQL> COMMIT;
+
+Commit complete.
+
+SQL>
+SQL> -- validate the contents of the table
+SQL> DECLARE
+  2      l_JSON_schema JSON := JSON(
+  3          '{
+  4              "type": "object",
+  5              "properties": {
+  6                  "firstName": {
+  7                      "type": "string",
+  8                      "minLength": 1
+  9                  },
+ 10                  "salary": {
+ 11                      "type": "number",
+ 12                      "minimum": 10000
+ 13                  }
+ 14              },
+ 15              "required": [
+ 16                  "firstName"
+ 17              ]
+ 18          }'
+ 19      );
+ 20      l_validation_report JSON;
+ 21  BEGIN
+ 22      FOR i IN (select id, jcol from json_demo) loop
+ 23          SELECT
+ 24              DBMS_JSON_SCHEMA.validate_report(
+ 25                  json_data   => i.jcol,
+ 26                  json_schema => l_JSON_schema
+ 27              )
+ 28          INTO
+ 29              l_validation_report
+ 30          FROM
+ 31              json_demo
+ 32          WHERE
+ 33              id = i.id;
+ 34          DBMS_OUTPUT.put_line('validating row with ID ' || i.id);
+ 35          DBMS_OUTPUT.put_line(
+ 36              json_serialize(l_validation_report pretty)
+ 37          );
+ 38      END LOOP;
+ 39  END;
+ 40  /
+validating row with ID 1
+{
+  "valid" : false,
+  "errors" :
+  [
+    {
+      "schemaPath" : "$",
+      "instancePath" : "$",
+      "code" : "JZN-00501",
+      "error" : "JSON schema validation failed"
+    },
+    {
+      "schemaPath" : "$.required",
+      "instancePath" : "$",
+      "code" : "JZN-00515",
+      "error" : "required properties not found: 'firstName'"
+    }
+  ]
+}
+validating row with ID 2
+{
+  "valid" : true,
+  "errors" :
+  [
+  ]
+}
+validating row with ID 3
+{
+  "valid" : false,
+  "errors" :
+  [
+    {
+      "schemaPath" : "$",
+      "instancePath" : "$",
+      "code" : "JZN-00501",
+      "error" : "JSON schema validation failed"
+    },
+    {
+      "schemaPath" : "$.properties",
+      "instancePath" : "$",
+      "code" : "JZN-00514",
+      "error" : "invalid properties: 'salary'"
+    },
+    {
+      "schemaPath" : "$.properties.salary.minimum",
+      "instancePath" : "$.salary",
+      "code" : "JZN-00507",
+      "error" : "value less than minimum value, actual: 9999, expected: 10000"
+    }
+  ]
+}
+validating row with ID 4
+{
+  "valid" : true,
+  "errors" :
+  [
+  ]
+}
+
+PL/SQL procedure successfully completed.
+
+SQL>
+SQL> -- extracting portions of the error message
+SQL> WITH validation AS (
+  2      SELECT
+  3          id,
+  4          DBMS_JSON_SCHEMA.validate_report(
+  5              json_data => jcol,
+  6              json_schema => JSON(
+  7                  '{
+  8                      "type": "object",
+  9                      "properties": {
+ 10                          "firstName": {
+ 11                              "type": "string",
+ 12                              "minLength": 1
+ 13                          },
+ 14                          "salary": {
+ 15                              "type": "number",
+ 16                              "minimum": 10000
+ 17                          }
+ 18                      },
+ 19                      "required": [
+ 20                          "firstName"
+ 21                      ]
+ 22                  }'
+ 23              )
+ 24          ) AS report
+ 25      FROM
+ 26          json_demo
+ 27  )
+ 28  SELECT
+ 29      json_serialize(
+ 30          v.report.errors[*].error
+ 31          pretty
+ 32      ) errors
+ 33  FROM
+ 34      validation v
+ 35  WHERE
+ 36      v.id = 1
+ 37  /
+
+ERRORS
+-----------------------------------------------------------------
+[
+  "JSON schema validation failed",
+  "required properties not found: 'firstName'"
+]
+----
+
+== Benefits
+
+JSON is a popular format for data exchange, however with flexibility comes the risk of importing incomplete or otherwise incorrect records. JSON schema allows developers to ensure better data quality. Using validation reports contents of existing JSON columns can be checked against a schema. The validation function returns JSON, which can be parsed to only return specific parts of the validation report.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/json-schema.html#GUID-980BD95E-D0EF-4E22-8E67-08CD419EE7A2[Documentation]
