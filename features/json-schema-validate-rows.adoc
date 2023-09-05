@@ -1,0 +1,198 @@
+= JSON Schema: validate rows in a table
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+JSON offers the flexibility of schemaless application design. Sometimes however, you might want some JSON data to conform to a schema. You might want to ensure that all data stored in a given column has the structure defined by a schema, or you might want to check whether a given JSON document has such a structure, before processing it.
+
+A JSON schema is a JSON document that respects the JSON Schema standard, which is a Request For Comments (RFC) draft. JSON schemas are in turn used to validate other JSON documents. Refer to the https://json-schema.org[JSON schema website] for more details. A JSON schema specifies the structure and the types of allowed values of JSON data that it considers valid. 
+
+This example demonstrates how to query data in a relational table containing a JSON column and match it against a JSON schema.
+
+The following JSON schema ensures that only objects can be stored in the JSON column, containing both a `firstName` and `lastName` field with a minimum length of 1 character each. The numeric `salary` field is optional, however if defined, the salary must be greater than 10000.
+
+[source,json]
+[subs="verbatim"]
+----
+{
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "lastName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "salary": {
+            "type": "number",
+            "minimum": 10000
+        }
+    },
+    "required": [
+        "firstName",
+        "lastName"
+    ]
+}
+----
+
+[source,sql]
+[subs="verbatim"]
+----
+CREATE TABLE json_demo(
+    id   NUMBER
+         GENERATED ALWAYS AS IDENTITY,
+    CONSTRAINT pk_json_demo PRIMARY KEY(id),
+    jcol JSON NOT NULL
+);
+
+-- will result in an error: salary too low
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "lastName": "King", "salary": 9999 }')
+);
+
+-- will result in an error: required lastName not present
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "salary": 10001 }')
+);
+
+-- will result in an error: lastName not spelled correctly
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "last_name": "King", "salary": 10001 }')
+);
+
+-- this record is fine
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "lastName": "King" }')
+);
+
+-- fetch valid data
+SELECT
+    jcol
+FROM
+    json_demo
+WHERE
+    jcol IS JSON VALIDATE
+    '{
+        "type": "object",
+        "properties": {
+            "firstName": {
+                "type": "string",
+                "minLength": 1
+            },
+            "lastName": {
+                "type": "string",
+                "minLength": 1
+            },
+            "salary": {
+                "type": "number",
+                "minimum": 10000
+            }
+        },
+        "required": [
+            "firstName",
+            "lastName"
+        ]
+    }';
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> CREATE TABLE json_demo(
+  2      id   NUMBER
+  3           GENERATED ALWAYS AS IDENTITY,
+  4      CONSTRAINT pk_json_demo PRIMARY KEY(id),
+  5      jcol JSON NOT NULL
+  6  );
+
+Table JSON_DEMO created.
+
+SQL> -- will result in an error: salary too low
+SQL> INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "lastName": "King", "salary": 9999 }')
+  5  );
+
+1 row inserted.
+
+SQL> -- will result in an error: required lastName not present
+SQL> INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "salary": 10001 }')
+  5  );
+
+1 row inserted.
+
+SQL> -- will result in an error: lastName not spelled correctly
+SQL> INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "last_name": "King", "salary": 10001 }')
+  5  );
+
+1 row inserted.
+
+SQL> INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "lastName": "King" }')
+  5  );
+
+1 row inserted.
+
+SQL> -- fetch valid data
+SQL> SELECT
+  2      jcol
+  3  FROM
+  4      json_demo
+  5  WHERE
+  6      jcol IS JSON VALIDATE
+  7      '{
+  8          "type": "object",
+  9          "properties": {
+ 10              "firstName": {
+ 11                  "type": "string",
+ 12                  "minLength": 1
+ 13              },
+ 14              "lastName": {
+ 15                  "type": "string",
+ 16                  "minLength": 1
+ 17              },
+ 18              "salary": {
+ 19                  "type": "number",
+ 20                  "minimum": 10000
+ 21              }
+ 22          },
+ 23          "required": [
+ 24              "firstName",
+ 25              "lastName"
+ 26          ]
+ 27      }';
+
+JCOL                                        
+___________________________________________ 
+{"firstName":"Steven","lastName":"King"} 
+----
+
+== Benefits
+
+JSON is a popular format for data exchange, however with flexibility comes the risk of working with incomplete or wrong records. JSON schema allows developers to ensure better data quality. Using the `IS JSON VALIDATE` clause allows developers to vet JSON data in a column using a JSON schema. The above `SELECT` statement is the perfect partner for an `INSERT INTO _table_name_ SELECT ... IS JSON VALIDATE ...`
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/json-schema.html#GUID-980BD95E-D0EF-4E22-8E67-08CD419EE7A2[Documentation]
