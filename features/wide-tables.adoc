@@ -1,0 +1,110 @@
+= 4096 table columns
+:database-version: 23.2
+:database-category: SQL
+
+[[feature_summary]]
+
+The maximum number of columns allowed in a database table or view has been increased to 4096. This feature allows you to build applications that can store attributes in a single table with more than the previous 1000-column limit. Some applications, such as Machine Learning and streaming IoT application workloads, may require the use of de-normalized tables with more than 1000 columns. The majority of existing database applications might not need extra-wide tables.
+
+Before you can create tables with more than 1000 columns you must ensure that the following initialization parameters are set to the required values:
+
+- The value of the `compatible` parameter must be set to `23.0.0` or higher
+- Once `compatible` is set accordingly you must change `max_columns` to extended
+
+Please refer to the https://docs.oracle.com/en/database/oracle/oracle-database/23/upgrd/what-is-oracle-database-compatibility.html#GUID-7FCE8614-8163-4393-AE66-2ADD1F73934F[Database Upgrade Guide] for more details about the `compatible` initialization parameter and the implications of changing it.
+
+Typing a `create table` statement featuring 4096 columns would result in a very long statement. The example simplifies the process using Native Dynamic SQL; it assumes that the above mentioned prerequisites are met.
+
+[source,sql]
+[subs="verbatim"]
+----
+DECLARE
+    l_sql       CLOB;
+    c_num_cols  CONSTANT PLS_INTEGER := 4096;
+BEGIN
+    -- construct the `create table` statement and store it as a CLOB
+    l_sql := 'create table demotable (' || chr(13) || ' c0001 number' || chr(13);
+    FOR i IN 2..c_num_cols LOOP
+        l_sql := l_sql || ',c' || lpad(i, 4, 0) || ' number' || chr(13);
+    END LOOP;
+    l_sql := l_sql || ')';
+
+    -- create the table
+    EXECUTE IMMEDIATE l_sql;
+EXCEPTION
+    -- notify of errors
+    WHEN OTHERS THEN
+        raise_application_error(
+                               -20000,
+                               'an unexpected error occurred '
+                               || ' ('
+                               || sqlerrm
+                               || ')'
+        );
+END;
+/
+
+-- validate the number of columns in the table
+SELECT
+    count(*)
+FROM
+    user_tab_columns
+WHERE
+    table_name = 'DEMOTABLE';
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> DECLARE
+  2      l_sql       CLOB;
+  3      c_num_cols  CONSTANT PLS_INTEGER := 4096;
+  4  BEGIN
+  5      -- construct the `create table` statement and store it as a CLOB
+  6      l_sql := 'create table demotable (' || chr(13) || ' c0001 number' || chr(13);
+  7      FOR i IN 2..c_num_cols LOOP
+  8          l_sql := l_sql || ',c' || lpad(i, 4, 0) || ' number' || chr(13);
+  9      END LOOP;
+ 10      l_sql := l_sql || ')';
+ 11
+ 12      -- create the table
+ 13      EXECUTE IMMEDIATE l_sql;
+ 14  EXCEPTION
+ 15      -- notify of errors
+ 16      WHEN OTHERS THEN
+ 17          raise_application_error(
+ 18                                 -20000,
+ 19                                 'an unexpected error occurred '
+ 20                                 || ' ('
+ 21                                 || sqlerrm
+ 22                                 || ')'
+ 23          );
+ 24  END;
+ 25  /
+
+PL/SQL procedure successfully completed.
+
+SQL> -- validate the number of columns in the table
+SQL> SELECT
+  2      count(*)
+  3  FROM
+  4      user_tab_columns
+  5  WHERE
+  6      table_name = 'DEMOTABLE';
+
+  COUNT(*)
+----------
+      4096
+----
+
+== Benefits
+
+Whilst most database applications should be fine with the existing limit of 1000 columns per table or view, certain IoT (Internet of Things) or Machine Learning workloads might require wider tables. In such cases you can make use of the wide tables offered by Oracle Database 23c.
+
+== Further information
+
+* Availability: All Offerings
+* Database Reference: https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/MAX_COLUMNS.html#GUID-916B35D1-364E-41C6-A025-E2D32533D08E[`max_columns` initialization parameter]
+* Database Reference: https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/COMPATIBLE.html#GUID-6C57EE11-BD06-4BB8-A0F7-D6CDDD086FA9[`compatible` initialization parameter]
+* https://blogs.oracle.com/in-memory/post/23c-free-wider-tables[Blog post] discussing wide tables on `blogs.oracle.com`
