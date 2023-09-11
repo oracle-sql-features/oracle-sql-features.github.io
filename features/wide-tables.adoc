@@ -1,6 +1,6 @@
 = 4096 table columns
 :database-version: 23.2
-:database-category: SQL
+:database-category: sql
 
 [[feature_summary]]
 
