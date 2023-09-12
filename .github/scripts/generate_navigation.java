@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 import static java.lang.System.lineSeparator;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.FileVisitResult.CONTINUE;
+import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.groupingBy;
 
 public class generate_navigation {
@@ -77,7 +78,7 @@ public class generate_navigation {
             features.add(feature);
 
             for (String category : categories) {
-                categoriesMap.computeIfAbsent(category, c -> new TreeSet<>()).add(feature);
+                categoriesMap.computeIfAbsent(category.toLowerCase(ENGLISH), c -> new TreeSet<>()).add(feature);
             }
 
             versionsMap.computeIfAbsent(version, v -> new TreeSet<>()).add(feature);
@@ -95,13 +96,13 @@ public class generate_navigation {
         Files.createDirectories(pages);
 
         for (Item o : outer.values()) {
-            var index = pages.resolve(o.getId()).resolve("index.adoc");
+            var index = pages.resolve(o.getId().toLowerCase(ENGLISH)).resolve("index.adoc");
             Files.createDirectories(index.getParent());
-            Files.write(index, ("include::" + outerLabel + ":partial$" + o.getId() + ".adoc[]" + lineSeparator()).getBytes(UTF_8));
+            Files.write(index, ("include::" + outerLabel + ":partial$" + o.getId().toLowerCase(ENGLISH) + ".adoc[]" + lineSeparator()).getBytes(UTF_8));
             for (Item i : inner.values()) {
-                index = pages.resolve(o.getId()).resolve(i.getId()).resolve("index.adoc");
+                index = pages.resolve(o.getId().toLowerCase(ENGLISH)).resolve(i.getId().toLowerCase(ENGLISH)).resolve("index.adoc");
                 Files.createDirectories(index.getParent());
-                Files.write(index, ("include::" + innerLabel + ":partial$" + i.getId() + ".adoc[]" + lineSeparator()).getBytes(UTF_8));
+                Files.write(index, ("include::" + innerLabel + ":partial$" + i.getId().toLowerCase(ENGLISH) + ".adoc[]" + lineSeparator()).getBytes(UTF_8));
             }
         }
     }
@@ -112,10 +113,11 @@ public class generate_navigation {
 
         for (Map.Entry<String, Set<Feature>> e : data.entrySet()) {
             var classifier = e.getKey();
+            var normalizedClassifier = classifier.toLowerCase(ENGLISH);
             var features = e.getValue();
 
-            System.out.printf("🔖 Generating %s%n", classifier);
-            var index = path.resolve("pages/" + classifier + "/index.adoc");
+            System.out.printf("🔖 Generating %s%n", normalizedClassifier);
+            var index = path.resolve("pages/" + normalizedClassifier + "/index.adoc");
             // create page if it does not exist
             if (!Files.exists(index)) {
                 Files.createDirectories(index.getParent());
@@ -123,11 +125,11 @@ public class generate_navigation {
             }
 
             indexNav.append("** xref:")
-                .append(classifier)
+                .append(normalizedClassifier)
                 .append("/index.adoc[]")
                 .append(lineSeparator());
 
-            System.out.printf("🔖 Generating %s/features%n", classifier);
+            System.out.printf("🔖 Generating %s/features%n", normalizedClassifier);
 
             indexNav.append("*** All")
                 .append(lineSeparator());
@@ -136,15 +138,15 @@ public class generate_navigation {
                 var featureFilename = feature.path.getFileName().toString();
 
                 indexNav.append("**** xref:")
-                    .append(classifier)
+                    .append(normalizedClassifier)
                     .append("/features/")
                     .append(featureFilename)
                     .append("[]")
                     .append(lineSeparator());
 
                 // create partial
-                System.out.printf("📝 Generating %s/features/%s%n", classifier, featureFilename);
-                var partial = path.resolve("pages/" + classifier + "/features/" + featureFilename);
+                System.out.printf("📝 Generating %s/features/%s%n", normalizedClassifier, featureFilename);
+                var partial = path.resolve("pages/" + normalizedClassifier + "/features/" + featureFilename);
                 Files.createDirectories(partial.getParent());
                 Files.write(partial, ("include::features:partial$" + featureFilename + "[]" + lineSeparator()).getBytes(UTF_8));
             }
@@ -157,10 +159,10 @@ public class generate_navigation {
                 for (Map.Entry<String, List<Feature>> ve : versionedFeatures.entrySet()) {
                     String version = ve.getKey();
 
-                    System.out.printf("🔖 Generating %s/%s%n", classifier, version);
+                    System.out.printf("🔖 Generating %s/%s%n", normalizedClassifier, version);
 
                     indexNav.append("*** xref:")
-                        .append(classifier)
+                        .append(normalizedClassifier)
                         .append("/")
                         .append(version)
                         .append("/index.adoc[]")
@@ -179,8 +181,8 @@ public class generate_navigation {
                             .append(lineSeparator());
 
                         // create partial
-                        System.out.printf("📝 Generating %s/%s/%s%n", classifier, version, featureFilename);
-                        var partial = path.resolve("pages/" + classifier + "/" + version + "/" + featureFilename);
+                        System.out.printf("📝 Generating %s/%s/%s%n", normalizedClassifier, version, featureFilename);
+                        var partial = path.resolve("pages/" + normalizedClassifier + "/" + version + "/" + featureFilename);
                         Files.createDirectories(partial.getParent());
                         Files.write(partial, ("include::features:partial$" + featureFilename + "[]" + lineSeparator()).getBytes(UTF_8));
                     }
@@ -189,13 +191,13 @@ public class generate_navigation {
                 var categorized = new TreeMap<String, Set<Feature>>();
                 for (Feature feature : features) {
                     for (String category : feature.categories) {
-                        categorized.computeIfAbsent(category, k -> new TreeSet<>())
+                        categorized.computeIfAbsent(category.toLowerCase(ENGLISH), k -> new TreeSet<>())
                             .add(feature);
                     }
                 }
 
                 for (Map.Entry<String, Set<Feature>> k : categorized.entrySet()) {
-                    var category = k.getKey();
+                    var category = k.getKey().toLowerCase(ENGLISH);
 
                     System.out.printf("🔖 Generating %s/%s%n", classifier, category);
 
@@ -261,7 +263,7 @@ public class generate_navigation {
             .append(lineSeparator());
         for (Item item : items) {
             content.append("* xref:")
-                .append(item.getId())
+                .append(item.getId().toLowerCase(ENGLISH))
                 .append("/index.adoc[]")
                 .append(lineSeparator());
         }
@@ -412,7 +414,7 @@ public class generate_navigation {
                 var category = categories[i];
                 if (i > 0) b.append(", ");
                 b.append("xref:categories:")
-                    .append(category)
+                    .append(category.toLowerCase(ENGLISH))
                     .append("/index.adoc[]");
             }
             b.append(lineSeparator());
