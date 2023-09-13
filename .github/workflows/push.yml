@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -22,14 +22,18 @@ jobs:
         run: |
           java .github/scripts/generate_navigation.java "$(pwd)"
 
-      - name: Run Antora
-        uses: kameshsampath/antora-site-action@master
+      - name: Setup node
+        uses: actions/setup-node@v3
         with:
-          antora_playbook: antora-playbook.yml
+          node-version: latest
+
+      - name: Run Antora
+        run: npx antora antora-playbook.yml
 
       - name: Copy site
         shell: bash
         run: |
+          mkdir -p $GITHUB_WORKSPACE/website
           cp -rf $GITHUB_WORKSPACE/build/site/* $GITHUB_WORKSPACE/website
           touch $GITHUB_WORKSPACE/website/.nojekyll
 
