@@ -25,7 +25,7 @@ If you find an issue to work on, you are welcome to open a PR with a fix.
 
 All source pages are organized in the [features](features) folder and are in [AsciiDoc](https://asciidoc.org/) format.
 
-New features can be organized into subfolders inside the [features](features).
+New features can be organized into subfolders **not starting with `_`** inside the [features](features).
 
 To contribute a new feature to this page, add a new [AsciiDoc](https://asciidoc.org/) (`*.adoc`) file into the [features](features) folder or a sub folder.  
 You can find an AsciiDoc template [feature.adoctemplate](features/feature.adoctemplate) in the [features](features) folder.
