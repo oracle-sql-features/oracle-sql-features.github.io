@@ -17,25 +17,21 @@ jobs:
           java-version: 17
           distribution: oracle
 
-      - name: Generate navigation
-        shell: bash
-        run: |
-          java .github/scripts/generate_navigation.java "$(pwd)"
-
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: latest
 
-      - name: Run Antora
-        run: npx antora antora-playbook.yml
+      - name: Generate navigation
+        shell: bash
+        run: sh generate.sh
 
       - name: Copy site
         shell: bash
         run: |
-          mkdir -p $GITHUB_WORKSPACE/website
-          cp -rf $GITHUB_WORKSPACE/build/site/* $GITHUB_WORKSPACE/website
-          touch $GITHUB_WORKSPACE/website/.nojekyll
+          mkdir -p website
+          cp -rf build/site/* website
+          touch website/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.0.0
