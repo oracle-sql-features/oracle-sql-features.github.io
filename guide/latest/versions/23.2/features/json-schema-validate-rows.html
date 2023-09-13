@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>JSON Schema: validate rows in a table :: Oracle SQL Features</title>
+    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/versions/23.2/features/json-schema-validate-rows.html">
+    <meta name="generator" content="Antora 3.1.4">
+    <link rel="stylesheet" href="../../../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../../../_/css/site-extra.css">
+    <link rel="stylesheet" href="../../../../../_/css/navbar-latest.css">
+    <link rel="stylesheet" href="../../../../../_/css/admonitions.css">
+    <link rel="stylesheet" href="../../../../../_/css/fontawesome.css">
+    <link rel="stylesheet" href="../../../../../_/css/all.css">
+    <script>var uiRootPath = '../../../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://oracle-sql-features.github.io">Oracle SQL Features</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <div class="navbar-link">Project</div>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/">Repository</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="guide" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../../../index.html">Oracle SQL Features</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/index.html">Categories</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/javascript/index.html">JavaScript</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/javascript/23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/plsql/12.1.0.1/index.html">12.1.0.1</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/12.1.0.1/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/plsql/23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/23.2/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/23.2/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/23.2/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/12.1.0.1/index.html">12.1.0.1</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/12.1.0.1/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/12.1.0.1/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../index.html">Versions</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../12.1.0.1/index.html">12.1.0.1</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/features/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../12.1.0.1/plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/plsql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../12.1.0.1/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/sql/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/sql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="4">
+    <a class="nav-link" href="json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="javascript-modules.html">JavaScript Modules</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../javascript/index.html">JavaScript</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../plsql/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../plsql/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../plsql/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../sql/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Oracle SQL Features</span>
+    <span class="version">latest</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../../../index.html">Oracle SQL Features</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../../../index.html">latest</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../../index.html">Oracle SQL Features</a></li>
+    <li><a href="../../index.html">Versions</a></li>
+    <li><a href="../index.html">23.2</a></li>
+    <li>All</li>
+    <li><a href="json-schema-validate-rows.html">JSON Schema: validate rows in a table</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/versions/pages/23.2/features/json-schema-validate-rows.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">JSON Schema: validate rows in a table</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Version
+</td>
+<td class="hdlist2">
+<p><a href="../index.html" class="xref page">23.2</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Categories
+</td>
+<td class="hdlist2">
+<p><a href="../../../categories/sql/index.html" class="xref page">SQL</a></p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>JSON offers the flexibility of schemaless application design. Sometimes however, you might want some JSON data to conform to a schema. You might want to ensure that all data stored in a given column has the structure defined by a schema, or you might want to check whether a given JSON document has such a structure, before processing it.</p>
+</div>
+<div class="paragraph">
+<p>A JSON schema is a JSON document that respects the JSON Schema standard, which is a Request For Comments (RFC) draft. JSON schemas are in turn used to validate other JSON documents. Refer to the <a href="https://json-schema.org">JSON schema website</a> for more details. A JSON schema specifies the structure and the types of allowed values of JSON data that it considers valid.</p>
+</div>
+<div class="paragraph">
+<p>This example demonstrates how to query data in a relational table containing a JSON column and match it against a JSON schema.</p>
+</div>
+<div class="paragraph">
+<p>The following JSON schema ensures that only objects can be stored in the JSON column, containing both a <code>firstName</code> and <code>lastName</code> field with a minimum length of 1 character each. The numeric <code>salary</code> field is optional, however if defined, the salary must be greater than 10000.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
+    "type": "object",
+    "properties": {
+        "firstName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "lastName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "salary": {
+            "type": "number",
+            "minimum": 10000
+        }
+    },
+    "required": [
+        "firstName",
+        "lastName"
+    ]
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE json_demo(
+    id   NUMBER
+         GENERATED ALWAYS AS IDENTITY,
+    CONSTRAINT pk_json_demo PRIMARY KEY(id),
+    jcol JSON NOT NULL
+);
+
+-- will result in an error: salary too low
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "lastName": "King", "salary": 9999 }')
+);
+
+-- will result in an error: required lastName not present
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "salary": 10001 }')
+);
+
+-- will result in an error: lastName not spelled correctly
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "last_name": "King", "salary": 10001 }')
+);
+
+-- this record is fine
+INSERT INTO json_demo (
+    jcol
+) values (
+    JSON('{ "firstName": "Steven", "lastName": "King" }')
+);
+
+-- fetch valid data
+SELECT
+    jcol
+FROM
+    json_demo
+WHERE
+    jcol IS JSON VALIDATE
+    '{
+        "type": "object",
+        "properties": {
+            "firstName": {
+                "type": "string",
+                "minLength": 1
+            },
+            "lastName": {
+                "type": "string",
+                "minLength": 1
+            },
+            "salary": {
+                "type": "number",
+                "minimum": 10000
+            }
+        },
+        "required": [
+            "firstName",
+            "lastName"
+        ]
+    }';</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; CREATE TABLE json_demo(
+  2      id   NUMBER
+  3           GENERATED ALWAYS AS IDENTITY,
+  4      CONSTRAINT pk_json_demo PRIMARY KEY(id),
+  5      jcol JSON NOT NULL
+  6  );
+
+Table JSON_DEMO created.
+
+SQL&gt; -- will result in an error: salary too low
+SQL&gt; INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "lastName": "King", "salary": 9999 }')
+  5  );
+
+1 row inserted.
+
+SQL&gt; -- will result in an error: required lastName not present
+SQL&gt; INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "salary": 10001 }')
+  5  );
+
+1 row inserted.
+
+SQL&gt; -- will result in an error: lastName not spelled correctly
+SQL&gt; INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "last_name": "King", "salary": 10001 }')
+  5  );
+
+1 row inserted.
+
+SQL&gt; INSERT INTO json_demo (
+  2      jcol
+  3  ) values (
+  4      JSON('{ "firstName": "Steven", "lastName": "King" }')
+  5  );
+
+1 row inserted.
+
+SQL&gt; -- fetch valid data
+SQL&gt; SELECT
+  2      jcol
+  3  FROM
+  4      json_demo
+  5  WHERE
+  6      jcol IS JSON VALIDATE
+  7      '{
+  8          "type": "object",
+  9          "properties": {
+ 10              "firstName": {
+ 11                  "type": "string",
+ 12                  "minLength": 1
+ 13              },
+ 14              "lastName": {
+ 15                  "type": "string",
+ 16                  "minLength": 1
+ 17              },
+ 18              "salary": {
+ 19                  "type": "number",
+ 20                  "minimum": 10000
+ 21              }
+ 22          },
+ 23          "required": [
+ 24              "firstName",
+ 25              "lastName"
+ 26          ]
+ 27      }';
+
+JCOL
+___________________________________________
+{"firstName":"Steven","lastName":"King"}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_benefits"><a class="anchor" href="#_benefits"></a>Benefits</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>JSON is a popular format for data exchange, however with flexibility comes the risk of working with incomplete or wrong records. JSON schema allows developers to ensure better data quality. Using the <code>IS JSON VALIDATE</code> clause allows developers to vet JSON data in a column using a JSON schema. The above <code>SELECT</code> statement is the perfect partner for an <code>INSERT INTO <em>table_name</em> SELECT &#8230;&#8203; IS JSON VALIDATE &#8230;&#8203;</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_further_information"><a class="anchor" href="#_further_information"></a>Further information</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Availability: All Offerings</p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/json-schema.html#GUID-980BD95E-D0EF-4E22-8E67-08CD419EE7A2">Documentation</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../../../../_/js/site.js" data-ui-root-path="../../../../../_"></script>
+<script async src="../../../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

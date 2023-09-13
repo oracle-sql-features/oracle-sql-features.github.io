@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>GROUP BY column alias or position :: Oracle SQL Features</title>
+    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/versions/23.2/sql/group-by-alias-position.html">
+    <meta name="generator" content="Antora 3.1.4">
+    <link rel="stylesheet" href="../../../../../_/css/site.css">
+    <link rel="stylesheet" href="../../../../../_/css/site-extra.css">
+    <link rel="stylesheet" href="../../../../../_/css/navbar-latest.css">
+    <link rel="stylesheet" href="../../../../../_/css/admonitions.css">
+    <link rel="stylesheet" href="../../../../../_/css/fontawesome.css">
+    <link rel="stylesheet" href="../../../../../_/css/all.css">
+    <script>var uiRootPath = '../../../../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="https://oracle-sql-features.github.io">Oracle SQL Features</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <div class="navbar-link">Project</div>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/">Repository</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="guide" data-version="latest">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="../../../index.html">Oracle SQL Features</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/index.html">Categories</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/javascript/index.html">JavaScript</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/features/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/javascript/23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/javascript/23.2/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/features/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/plsql/12.1.0.1/index.html">12.1.0.1</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/12.1.0.1/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/plsql/23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/23.2/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/23.2/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/plsql/23.2/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/12.1.0.1/index.html">12.1.0.1</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/12.1.0.1/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/12.1.0.1/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/23.2/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../index.html">Versions</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../12.1.0.1/index.html">12.1.0.1</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/features/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../12.1.0.1/plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/plsql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../12.1.0.1/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/sql/identity-columns.html">Identity Columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../12.1.0.1/sql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/javascript-modules.html">JavaScript Modules</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../javascript/index.html">JavaScript</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../javascript/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../plsql/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../plsql/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../plsql/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="4">
+    <a class="nav-link" href="group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Oracle SQL Features</span>
+    <span class="version">latest</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="../../../index.html">Oracle SQL Features</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="../../../index.html">latest</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="../../../index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="../../../index.html">Oracle SQL Features</a></li>
+    <li><a href="../../index.html">Versions</a></li>
+    <li><a href="../index.html">23.2</a></li>
+    <li><a href="index.html">SQL</a></li>
+    <li><a href="group-by-alias-position.html">GROUP BY column alias or position</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/versions/pages/23.2/sql/group-by-alias-position.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">GROUP BY column alias or position</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Version
+</td>
+<td class="hdlist2">
+<p><a href="../index.html" class="xref page">23.2</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Categories
+</td>
+<td class="hdlist2">
+<p><a href="../../../categories/sql/index.html" class="xref page">SQL</a></p>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The GROUP BY column alias feature is a shorthand for not having to repeat lengthy expressions from the <code>SELECT</code> clause in the <code>GROUP BY</code> and/or <code>HAVING</code> clause but instead use the defined column alias.</p>
+</div>
+<div class="paragraph">
+<p>The GROUP BY position feature is a similar shorthand and great for ad-hoc queries by simply referring to the expression position in the <code>SELECT</code> clause. Caution is required when using this feature, however, as it can lead novices to wrong conclusions and unexpected results as they may be surprised by or not aware of that data is being grouped differently when the position of the expression in the <code>SELECT</code> clause changes. This is particularly important for <code>GROUP BY ROLLUP()</code> and other super-aggregate grouping functions, hence this functionality is guarded behind a session parameter <code>group_by_position_enabled</code>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_group_by_column_alias"><a class="anchor" href="#_group_by_column_alias"></a>GROUP BY column alias</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Note the <code>GROUP BY combined_name</code> which refers to a column alias in the <code>SELECT</code>.</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SELECT CONCAT(r.name, ': ', co.name) AS combined_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY combined_name
+     ORDER BY combined_name;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; SELECT CONCAT(r.name, ': ', co.name) AS combined_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY combined_name
+     ORDER BY combined_name;
+
+COMBINED_NAME                  POPULATION_M
+------------------------------ ------------
+Oceania: Australia                    23.47
+Oceania: Fiji                          .926
+Oceania: Kiribati                      .109
+Oceania: Marshall Islands              .076
+Oceania: Micronesia                    .104
+Oceania: Nauru                          .01
+Oceania: New Zealand                  4.546
+Oceania: Palau                         .022
+Oceania: Papua New Guinea             7.027
+Oceania: Samoa                         .201
+Oceania: Solomon Islands                .66
+Oceania: Tonga                         .106
+Oceania: Tuvalu                        .011
+Oceania: Vanuatu                       .288
+South America: Argentina             44.694
+South America: Bolivia               11.306
+South America: Brazil               208.847
+South America: Chile                 17.925
+South America: Colombia              48.169
+South America: Ecuador               16.291
+South America: Guyana                  .741
+South America: Paraguay               7.026
+South America: Peru                  31.331
+South America: Suriname                .598
+South America: Uruguay                3.369
+South America: Venezuela             31.689
+
+26 rows selected.</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_group_by_column_position"><a class="anchor" href="#_group_by_column_position"></a>GROUP BY column position</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Note the <code>GROUP BY ROLLUP (1, 2)</code> which refers to the first and second column in the <code>SELECT</code>.</em></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">-- Enable the GROUP_BY_POSITION parameter for the session
+ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+SELECT r.name AS region_name, co.name AS country_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; -- Enable the GROUP_BY_POSITION parameter for the session
+SQL&gt; ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+Session altered.
+
+SQL&gt; SELECT r.name AS region_name, co.name AS country_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;
+
+REGION_NAME   COUNTRY_NAME     POPULATION_M
+------------- ---------------- ------------
+Oceania       Australia               23.47
+Oceania       Fiji                     .926
+Oceania       Kiribati                 .109
+Oceania       Marshall Islands         .076
+Oceania       Micronesia               .104
+Oceania       Nauru                     .01
+Oceania       New Zealand             4.546
+Oceania       Palau                    .022
+Oceania       Papua New Guinea        7.027
+Oceania       Samoa                    .201
+Oceania       Solomon Islands           .66
+Oceania       Tonga                    .106
+Oceania       Tuvalu                   .011
+Oceania       Vanuatu                  .288
+Oceania                              37.556
+South America Argentina              44.694
+South America Bolivia                11.306
+South America Brazil                208.847
+South America Chile                  17.925
+South America Colombia               48.169
+South America Ecuador                16.291
+South America Guyana                   .741
+South America Paraguay                7.026
+South America Peru                   31.331
+South America Suriname                 .598
+South America Uruguay                 3.369
+South America Venezuela              31.689
+South America                       421.986
+                                    459.542
+
+29 rows selected.</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_caution"><a class="anchor" href="#_caution"></a>Caution</h3>
+<div class="paragraph">
+<p>Let&#8217;s assume that the report was supposed to list countries first and the region next to it instead of the current region first and the country next to it. If you change the columns in the <code>SELECT</code> but forget to amend the <code>GROUP BY ROLLUP</code> clause as well, because you are grouping by column <em><strong>position</strong></em> in the <code>SELECT</code> list, your results will be grouped differently and be no longer be the same.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">-- Enable the GROUP_BY_POSITION parameter for the session (only needed once per session)
+ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; -- Enable the GROUP_BY_POSITION parameter for the session (only needed once per session)
+SQL&gt; ALTER SESSION SET GROUP_BY_POSITION_ENABLED=TRUE;
+
+Session altered.
+
+SQL&gt; SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (1, 2)
+     ORDER BY region_name;
+
+COUNTRY_NAME     REGION_NAME   POPULATION_M
+---------------- ------------- ------------
+Samoa            Oceania               .201
+Fiji             Oceania               .926
+Micronesia       Oceania               .104
+Kiribati         Oceania               .109
+Marshall Islands Oceania               .076
+Nauru            Oceania                .01
+New Zealand      Oceania              4.546
+Papua New Guinea Oceania              7.027
+Palau            Oceania               .022
+Solomon Islands  Oceania                .66
+Tonga            Oceania               .106
+Tuvalu           Oceania               .011
+Australia        Oceania              23.47
+Vanuatu          Oceania               .288
+Argentina        South America       44.694
+Bolivia          South America       11.306
+Brazil           South America      208.847
+Chile            South America       17.925
+Colombia         South America       48.169
+Venezuela        South America       31.689
+Guyana           South America         .741
+Peru             South America       31.331
+Paraguay         South America        7.026
+Suriname         South America         .598
+Uruguay          South America        3.369
+Ecuador          South America       16.291
+Venezuela                            31.689
+Uruguay                               3.369
+Suriname                               .598
+Paraguay                              7.026
+Peru                                 31.331
+Guyana                                 .741
+Ecuador                              16.291
+Colombia                             48.169
+Chile                                17.925
+Brazil                              208.847
+Bolivia                              11.306
+Argentina                            44.694
+Samoa                                  .201
+Vanuatu                                .288
+Tuvalu                                 .011
+Tonga                                  .106
+Solomon Islands                         .66
+Palau                                  .022
+Papua New Guinea                      7.027
+New Zealand                           4.546
+Nauru                                   .01
+Marshall Islands                       .076
+Kiribati                               .109
+Micronesia                             .104
+Fiji                                   .926
+                                    459.542
+Australia                             23.47
+
+53 rows selected.</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In comparison, this does not happen when using the column alias:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (region_name, country_name)
+     ORDER BY region_name;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; SELECT co.name AS country_name, r.name AS region_name,
+       SUM(co.population/1000/1000) AS population_m
+ FROM regions r, countries co
+  WHERE r.region_id = co.region_id
+   AND r.name IN ('Oceania', 'South America')
+    GROUP BY ROLLUP (region_name, country_name)
+     ORDER BY region_name;
+
+COUNTRY_NAME     REGION_NAME   POPULATION_M
+---------------- ------------- ------------
+Australia        Oceania              23.47
+Fiji             Oceania               .926
+Kiribati         Oceania               .109
+Marshall Islands Oceania               .076
+Micronesia       Oceania               .104
+Nauru            Oceania                .01
+New Zealand      Oceania              4.546
+Palau            Oceania               .022
+Papua New Guinea Oceania              7.027
+Samoa            Oceania               .201
+Solomon Islands  Oceania                .66
+Tonga            Oceania               .106
+Tuvalu           Oceania               .011
+Vanuatu          Oceania               .288
+                 Oceania             37.556
+Argentina        South America       44.694
+Bolivia          South America       11.306
+Brazil           South America      208.847
+Chile            South America       17.925
+Colombia         South America       48.169
+Ecuador          South America       16.291
+Guyana           South America         .741
+Paraguay         South America        7.026
+Peru             South America       31.331
+Suriname         South America         .598
+Uruguay          South America        3.369
+Venezuela        South America       31.689
+                 South America      421.986
+                                    459.542
+
+29 rows selected.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_benefits"><a class="anchor" href="#_benefits"></a>Benefits</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>GROUP BY column alias and position are both convenient shorthands for writing concise ad-hoc SQL statements.
+Extra caution should be given when using GROUP BY column position as changing the column position in the <code>SELECT</code> part can have direct influence over the grouping of the data.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_further_information"><a class="anchor" href="#_further_information"></a>Further information</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>Availability: All Offerings</p>
+</li>
+<li>
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__I2065777">Documentation</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="../../../../../_/js/site.js" data-ui-root-path="../../../../../_"></script>
+<script async src="../../../../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
