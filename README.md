@@ -2,13 +2,7 @@
 
 ## Contributing
 
-To contribute a feature to this page, add a new [AsciiDoc](https://asciidoc.org/) (`*.adoc`)
-file into the `features` folder.  
-You can find an AsciiDoc template `feature.adoctemplate` in the `features` folder.
-
-AsciiDoc files can be organized into subfolders.
-
-For more information about the AsciiDoc syntax, see the [AsciiDoc Syntax Quick Reference](https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/).
+See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Building the website locally
 

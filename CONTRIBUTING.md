@@ -23,8 +23,14 @@ If you find an issue to work on, you are welcome to open a PR with a fix.
 
 ### Make Changes
 
-All source pages are organized in the [features](features) folder.
-All files are in [AsciiDoc](https://asciidoc.org/) format, see the [AsciiDoc Syntax Quick Reference](https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/) for more information on the syntax.
+All source pages are organized in the [features](features) folder and are in [AsciiDoc](https://asciidoc.org/) format.
+
+New features can be organized into subfolders inside the [features](features).
+
+To contribute a new feature to this page, add a new [AsciiDoc](https://asciidoc.org/) (`*.adoc`) file into the [features](features) folder or a sub folder.  
+You can find an AsciiDoc template [feature.adoctemplate](features/feature.adoctemplate) in the [features](features) folder.
+
+For more information about the AsciiDoc syntax, see the [AsciiDoc Syntax Quick Reference](https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/).
 
 #### Make changes in the UI
 
