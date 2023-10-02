@@ -1,0 +1,267 @@
+= Native SQL Support for Query Row Limits and Row Offsets
+:database-version: 12.1.0.1
+:database-category: SQL
+
+[[feature_summary]]
+
+Many SQL queries benefit from limiting the result set to the top-_n_, or first _n_ rows. 
+
+Before Oracle 12c Release 1 limiting the result set required the use of sub-selects and the rownum pseudo-column and inline views as you can see in the first examples. When Oracle Database 12c introduced support for the https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBADDD[row limiting clause] selecting the first _n_ rows from a result set, or paging through a result set were significantly improved.
+
+[source,sql]
+[subs="verbatim"]
+----
+/* 
+  Displaying the top 10 customers by sales using the pre-
+  Oracle Database 12c syntax
+*/
+SELECT
+    *
+FROM
+    (
+        SELECT
+            SUM(quantity_sold * amount_sold) AS revenue,
+            cust_id
+        FROM
+            sales
+        GROUP BY
+            cust_id
+        ORDER BY
+            SUM(quantity_sold * amount_sold) DESC
+    )
+WHERE
+    ROWNUM < 11;
+
+/* 
+  Iterating over the result set, displaying 10 customers each using the pre-
+  Oracle Database 12c syntax. You typically find this type of query in reports
+  where batches of rows are displayed on screen. The following query retrieves
+  rows n to m (say, 10 to 20) from the result set.
+*/
+VAR n NUMBER
+VAR m NUMBER
+BEGIN
+    :n := 10;
+    :m := 20;
+END;
+/
+
+SELECT
+    *
+FROM
+    (
+        SELECT
+            a.*,
+            ROWNUM rn
+        FROM
+            (
+                SELECT
+                    SUM(quantity_sold * amount_sold) AS revenue,
+                    cust_id
+                FROM
+                    sales
+                GROUP BY
+                    cust_id
+                ORDER BY
+                    SUM(quantity_sold * amount_sold) DESC
+            ) a
+        WHERE
+            ROWNUM <= :m
+    )
+WHERE
+    rn >= :n;
+
+/*
+  The same queries, however this time using the new syntax, available from
+  Oracle Database 12c Release 1 onwards
+*/
+SELECT
+    SUM(quantity_sold * amount_sold) AS revenue,
+    cust_id
+FROM
+    sales
+GROUP BY
+    cust_id
+ORDER BY
+    SUM(quantity_sold * amount_sold) DESC
+FETCH FIRST 10 ROWS ONLY;
+
+SELECT
+    SUM(quantity_sold * amount_sold) AS revenue,
+    cust_id
+FROM
+    sales
+GROUP BY
+    cust_id
+ORDER BY
+    SUM(quantity_sold * amount_sold) DESC
+OFFSET 9 ROWS FETCH NEXT 11 ROWS ONLY;
+
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> /* 
+SQL>  Displaying the top 10 customers by sales using the pre-
+SQL>  Oracle Database 12c syntax
+SQL>*/
+SQL> SELECT
+  2      *
+  3  FROM
+  4      (
+  5          SELECT
+  6              SUM(quantity_sold * amount_sold) AS revenue,
+  7              cust_id
+  8          FROM
+  9              sales
+ 10          GROUP BY
+ 11              cust_id
+ 12          ORDER BY
+ 13              SUM(quantity_sold * amount_sold) DESC
+ 14      )
+ 15  WHERE
+ 16      ROWNUM < 11;
+
+     REVENUE    CUST_ID 
+____________ __________ 
+   103412,66      11407 
+    99578,09      10747 
+    98585,96      42167 
+    98006,16       4974 
+    97573,55      12783 
+    97010,48       6395 
+    94862,61       2994 
+    94819,41        429 
+    94786,13       1743 
+    93644,32       4759 
+
+10 rows selected. 
+
+SQL> /* 
+SQL>  Iterating over the result set, displaying 10 customers each using the pre-
+SQL>  Oracle Database 12c syntax. You typically find this type of query in reports
+SQL>  where batches of rows are displayed on screen. The following query retrieves
+SQL>  rows n to m (say, 10 to 20) from the result set.
+SQL>*/
+SQL> VAR n NUMBER
+SQL> VAR m NUMBER
+SQL> BEGIN
+  2      :n := 10;
+  3      :m := 20;
+  4  END;
+  5  /
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT
+  2      *
+  3  FROM
+  4      (
+  5          SELECT
+  6              a.*,
+  7              ROWNUM rn
+  8          FROM
+  9              (
+ 10                  SELECT
+ 11                      SUM(quantity_sold * amount_sold) AS revenue,
+ 12                      cust_id
+ 13                  FROM
+ 14                      sales
+ 15                  GROUP BY
+ 16                      cust_id
+ 17                  ORDER BY
+ 18                      SUM(quantity_sold * amount_sold) DESC
+ 19              ) a
+ 20          WHERE
+ 21              ROWNUM <= :m
+ 22      )
+ 23  WHERE
+ 24      rn >= :n;
+
+    REVENUE    CUST_ID    RN 
+___________ __________ _____ 
+   93644,32       4759    10 
+   92671,18       9038    11 
+   90908,24       4090    12 
+   89018,86       7178    13 
+   86440,63       6279    14 
+   85278,17      11702    15 
+   85200,78       6265    16 
+   84261,92      25939    17 
+    83833,3       7994    18 
+   83461,16      20966    19 
+   81970,44       3453    20 
+
+11 rows selected. 
+
+SQL> /*
+SQL>  The same queries, however this time using the new syntax, available from
+SQL>  Oracle Database 12c Release 1 onwards
+SQL>*/
+SQL> SELECT
+  2      SUM(quantity_sold * amount_sold) AS revenue,
+  3      cust_id
+  4  FROM
+  5      sales
+  6  GROUP BY
+  7      cust_id
+  8  ORDER BY
+  9      SUM(quantity_sold * amount_sold) DESC
+ 10  FETCH FIRST 10 ROWS ONLY;
+
+     REVENUE    CUST_ID 
+____________ __________ 
+   103412,66      11407 
+    99578,09      10747 
+    98585,96      42167 
+    98006,16       4974 
+    97573,55      12783 
+    97010,48       6395 
+    94862,61       2994 
+    94819,41        429 
+    94786,13       1743 
+    93644,32       4759 
+
+10 rows selected. 
+
+SQL> SELECT
+  2      SUM(quantity_sold * amount_sold) AS revenue,
+  3      cust_id
+  4  FROM
+  5      sales
+  6  GROUP BY
+  7      cust_id
+  8  ORDER BY
+  9      SUM(quantity_sold * amount_sold) DESC
+ 10  OFFSET 9 ROWS FETCH NEXT 11 ROWS ONLY;
+
+    REVENUE    CUST_ID 
+___________ __________ 
+   93644,32       4759 
+   92671,18       9038 
+   90908,24       4090 
+   89018,86       7178 
+   86440,63       6279 
+   85278,17      11702 
+   85200,78       6265 
+   84261,92      25939 
+    83833,3       7994 
+   83461,16      20966 
+   81970,44       3453 
+
+11 rows selected. 
+----
+
+== Benefits
+
+The FETCH FIRST and OFFSET clauses provides native SQL language support to limit the number of rows returned and to specify a starting row for the return set.
+
+Many queries need to limit the number of rows returned or offset the starting row of the results. For example, top-N queries sort their result set and then return only the first n rows. FETCH FIRST and OFFSET simplify syntax and comply with the ANSI SQL standard.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBADDD[SQL Language Reference]
+* https://blogs.oracle.com/sql/post/how-to-select-the-top-n-rows-per-group-with-sql-in-oracle-database[Blog post with additional examples] covering many aspects of top-_n_ queries, including analytic functions
