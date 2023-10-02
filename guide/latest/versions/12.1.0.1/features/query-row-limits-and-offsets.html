@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Annotations :: Oracle SQL Features</title>
-    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/versions/23.2/features/annotations.html">
+    <title>Native SQL Support for Query Row Limits and Row Offsets :: Oracle SQL Features</title>
+    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/versions/12.1.0.1/features/query-row-limits-and-offsets.html">
     <meta name="generator" content="Antora 3.1.4">
     <link rel="stylesheet" href="../../../../../_/css/site.css">
     <link rel="stylesheet" href="../../../../../_/css/site-extra.css">
@@ -303,146 +303,20 @@
 <ul class="nav-list">
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../../12.1.0.1/index.html">12.1.0.1</a>
+    <a class="nav-link" href="../index.html">12.1.0.1</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
     <button class="nav-item-toggle"></button>
     <span class="nav-text">All</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/features/identity-columns.html">Identity Columns</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/features/query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../../12.1.0.1/plsql/index.html">PL/SQL</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/plsql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../../12.1.0.1/sql/index.html">SQL</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/sql/identity-columns.html">Identity Columns</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/sql/query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../12.1.0.1/sql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
-  </li>
-</ul>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="2">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../index.html">23.2</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="3">
-    <button class="nav-item-toggle"></button>
-    <span class="nav-text">All</span>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="wide-tables.html">4096 table columns</a>
+    <a class="nav-link" href="identity-columns.html">Identity Columns</a>
   </li>
   <li class="nav-item is-current-page" data-depth="4">
-    <a class="nav-link" href="annotations.html">Annotations</a>
+    <a class="nav-link" href="query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="boolean.html">Boolean data type</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="default-on-null-update.html">Default ON NULL for UPDATE statements</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="returning-into.html">Enhanced Returning-Into Clause</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="extended-case-controls.html">Extended CASE Controls</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="fuzzy-match-operator.html">FUZZY_MATCH operator</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="group-by-alias-position.html">GROUP BY column alias or position</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="if-not-exists.html">IF [NOT] EXISTS</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="inline-javascript.html">Inline JavaScript Procedures</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="json-schema-check-constraint.html">JSON Schema: check constraint</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="javascript-call-specifications.html">JavaScript Call Specifications</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="javascript-environments.html">JavaScript Environments</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="javascript-modules.html">JavaScript Modules</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="phonic-encode-operator.html">PHONIC_ENCODE operator</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="select-without-from.html">SELECT without FROM clause</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="sql-transpiler.html">SQL Transpiler</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="schema-level-privileges.html">Schema Level Privileges</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="table-value-constructor.html">Table Value Constructor</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
-  </li>
-</ul>
-  </li>
-  <li class="nav-item" data-depth="3">
-    <button class="nav-item-toggle"></button>
-    <a class="nav-link" href="../javascript/index.html">JavaScript</a>
-<ul class="nav-list">
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../javascript/inline-javascript.html">Inline JavaScript Procedures</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../javascript/javascript-call-specifications.html">JavaScript Call Specifications</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../javascript/javascript-environments.html">JavaScript Environments</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../javascript/javascript-modules.html">JavaScript Modules</a>
+    <a class="nav-link" href="plsql-function-in-sql.html">PL/SQL Function in SQL</a>
   </li>
 </ul>
   </li>
@@ -451,13 +325,7 @@
     <a class="nav-link" href="../plsql/index.html">PL/SQL</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../plsql/extended-case-controls.html">Extended CASE Controls</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../plsql/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
-  </li>
-  <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../plsql/sql-transpiler.html">SQL Transpiler</a>
+    <a class="nav-link" href="../plsql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
   </li>
 </ul>
   </li>
@@ -466,58 +334,190 @@
     <a class="nav-link" href="../sql/index.html">SQL</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/wide-tables.html">4096 table columns</a>
+    <a class="nav-link" href="../sql/identity-columns.html">Identity Columns</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/annotations.html">Annotations</a>
+    <a class="nav-link" href="../sql/query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/boolean.html">Boolean data type</a>
+    <a class="nav-link" href="../sql/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../23.2/index.html">23.2</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/wide-tables.html">4096 table columns</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+    <a class="nav-link" href="../../23.2/features/annotations.html">Annotations</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+    <a class="nav-link" href="../../23.2/features/boolean.html">Boolean data type</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/returning-into.html">Enhanced Returning-Into Clause</a>
+    <a class="nav-link" href="../../23.2/features/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+    <a class="nav-link" href="../../23.2/features/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/group-by-alias-position.html">GROUP BY column alias or position</a>
+    <a class="nav-link" href="../../23.2/features/returning-into.html">Enhanced Returning-Into Clause</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/if-not-exists.html">IF [NOT] EXISTS</a>
+    <a class="nav-link" href="../../23.2/features/extended-case-controls.html">Extended CASE Controls</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../../23.2/features/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+    <a class="nav-link" href="../../23.2/features/group-by-alias-position.html">GROUP BY column alias or position</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+    <a class="nav-link" href="../../23.2/features/if-not-exists.html">IF [NOT] EXISTS</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/select-without-from.html">SELECT without FROM clause</a>
+    <a class="nav-link" href="../../23.2/features/inline-javascript.html">Inline JavaScript Procedures</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/sql-transpiler.html">SQL Transpiler</a>
+    <a class="nav-link" href="../../23.2/features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+    <a class="nav-link" href="../../23.2/features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/schema-level-privileges.html">Schema Level Privileges</a>
+    <a class="nav-link" href="../../23.2/features/javascript-call-specifications.html">JavaScript Call Specifications</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/table-value-constructor.html">Table Value Constructor</a>
+    <a class="nav-link" href="../../23.2/features/javascript-environments.html">JavaScript Environments</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../sql/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+    <a class="nav-link" href="../../23.2/features/javascript-modules.html">JavaScript Modules</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/features/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../23.2/javascript/index.html">JavaScript</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/javascript/inline-javascript.html">Inline JavaScript Procedures</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/javascript/javascript-call-specifications.html">JavaScript Call Specifications</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/javascript/javascript-environments.html">JavaScript Environments</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/javascript/javascript-modules.html">JavaScript Modules</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../23.2/plsql/index.html">PL/SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/plsql/extended-case-controls.html">Extended CASE Controls</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/plsql/json-plsql-type-conversions.html">PL/SQL and JSON type conversions</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/plsql/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../23.2/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/wide-tables.html">4096 table columns</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/annotations.html">Annotations</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/boolean.html">Boolean data type</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/returning-into.html">Enhanced Returning-Into Clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/group-by-alias-position.html">GROUP BY column alias or position</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/if-not-exists.html">IF [NOT] EXISTS</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/select-without-from.html">SELECT without FROM clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/sql-transpiler.html">SQL Transpiler</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/schema-level-privileges.html">Schema Level Privileges</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../23.2/sql/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
   </li>
 </ul>
   </li>
@@ -557,19 +557,19 @@
   <ul>
     <li><a href="../../../index.html">Oracle SQL Features</a></li>
     <li><a href="../../index.html">Versions</a></li>
-    <li><a href="../index.html">23.2</a></li>
+    <li><a href="../index.html">12.1.0.1</a></li>
     <li>All</li>
-    <li><a href="annotations.html">Annotations</a></li>
+    <li><a href="query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/versions/pages/23.2/features/annotations.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/versions/pages/12.1.0.1/features/query-row-limits-and-offsets.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Annotations</h1>
+<h1 class="page">Native SQL Support for Query Row Limits and Row Offsets</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="hdlist">
@@ -579,7 +579,7 @@
 Version
 </td>
 <td class="hdlist2">
-<p><a href="../index.html" class="xref page">23.2</a></p>
+<p><a href="../index.html" class="xref page">12.1.0.1</a></p>
 </td>
 </tr>
 <tr>
@@ -593,147 +593,252 @@ Categories
 </table>
 </div>
 <div class="paragraph">
-<p>Annotations are a lightweight declarative facility for developers to centrally register usage properties for database schema objects. Annotations are stored in dictionary tables and available to any application looking to standardize behavior across common data in related applications. Annotations are not interpreted by the database in any way and are custom data properties for database metadata - including table columns, tables, and indexes. Applications can use annotations as additional property metadata for rendering user interfaces or customizing application logic.</p>
+<p>Many SQL queries benefit from limiting the result set to the top-<em>n</em>, or first <em>n</em> rows.</p>
+</div>
+<div class="paragraph">
+<p>Before Oracle 12c Release 1 limiting the result set required the use of sub-selects and the rownum pseudo-column and inline views as you can see in the first examples. When Oracle Database 12c introduced support for the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBADDD">row limiting clause</a> selecting the first <em>n</em> rows from a result set, or paging through a result set were significantly improved.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">-- example 01: table-level annotation
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">/*
+  Displaying the top 10 customers by sales using the pre-
+  Oracle Database 12c syntax
+*/
+SELECT
+    *
+FROM
+    (
+        SELECT
+            SUM(quantity_sold * amount_sold) AS revenue,
+            cust_id
+        FROM
+            sales
+        GROUP BY
+            cust_id
+        ORDER BY
+            SUM(quantity_sold * amount_sold) DESC
+    )
+WHERE
+    ROWNUM &lt; 11;
 
-CREATE TABLE customers (
-    customer_id     INTEGER GENERATED BY DEFAULT ON NULL AS IDENTITY,
-    email_address   VARCHAR2(255 CHAR) NOT NULL,
-    full_name       VARCHAR2(255 CHAR) NOT NULL
-)
-ANNOTATIONS (
-    sensitivity 'high',
-    departments 'sales, delivery',
-    frontOffice
-)
+/*
+  Iterating over the result set, displaying 10 customers each using the pre-
+  Oracle Database 12c syntax. You typically find this type of query in reports
+  where batches of rows are displayed on screen. The following query retrieves
+  rows n to m (say, 10 to 20) from the result set.
+*/
+VAR n NUMBER
+VAR m NUMBER
+BEGIN
+    :n := 10;
+    :m := 20;
+END;
 /
-
--- example 02: adding a column-level annotation
-
-ALTER TABLE customers MODIFY (
-    email_address ANNOTATIONS ( sensitivity 'highest' )
-)
-/
-
--- example 03: table and column level annotations
-
-CREATE TABLE employees
-(
-    id     NUMBER(5)
-           ANNOTATIONS (
-               identity,
-               display_as 'Employee ID',
-               group_name 'Emp_Info'),
-    name   VARCHAR2(50)
-           ANNOTATIONS (
-               display_as 'Employee Name',
-               group_name 'Emp_Info'),
-    salary NUMBER
-           ANNOTATIONS (
-               display_as 'Employee Salary', UI_hidden)
-)
-ANNOTATIONS (
-    display_as 'Employee Table'
-)
-/
-
--- example 04: query the dictionary for annotation usage
 
 SELECT
-    object_name,
-    object_type,
-    column_name,
-    annotation_name,
-    annotation_value
+    *
 FROM
-    user_annotations_usage
+    (
+        SELECT
+            a.*,
+            ROWNUM rn
+        FROM
+            (
+                SELECT
+                    SUM(quantity_sold * amount_sold) AS revenue,
+                    cust_id
+                FROM
+                    sales
+                GROUP BY
+                    cust_id
+                ORDER BY
+                    SUM(quantity_sold * amount_sold) DESC
+            ) a
+        WHERE
+            ROWNUM &lt;= :m
+    )
+WHERE
+    rn &gt;= :n;
+
+/*
+  The same queries, however this time using the new syntax, available from
+  Oracle Database 12c Release 1 onwards
+*/
+SELECT
+    SUM(quantity_sold * amount_sold) AS revenue,
+    cust_id
+FROM
+    sales
+GROUP BY
+    cust_id
 ORDER BY
-    object_name,
-    column_name
-/</code></pre>
+    SUM(quantity_sold * amount_sold) DESC
+FETCH FIRST 10 ROWS ONLY;
+
+SELECT
+    SUM(quantity_sold * amount_sold) AS revenue,
+    cust_id
+FROM
+    sales
+GROUP BY
+    cust_id
+ORDER BY
+    SUM(quantity_sold * amount_sold) DESC
+OFFSET 9 ROWS FETCH NEXT 11 ROWS ONLY;</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Result</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; -- example 01: table-level annotation
-SQL&gt; CREATE TABLE customers (
-  2      customer_id     INTEGER GENERATED BY DEFAULT ON NULL AS IDENTITY,
-  3      email_address   VARCHAR2(255 CHAR) NOT NULL,
-  4      full_name       VARCHAR2(255 CHAR) NOT NULL
-  5  )
-  6  ANNOTATIONS (
-  7      sensitivity 'high',
-  8      departments 'sales, delivery',
-  9      frontOffice
- 10  )
- 11  /
-
-Table CUSTOMERS created.
-
-SQL&gt; -- example 02: adding a column-level annotation
-SQL&gt; ALTER TABLE customers MODIFY (
-  2      email_address ANNOTATIONS ( sensitivity 'highest' )
-  3  )
-  4  /
-
-Table CUSTOMERS altered.
-
-SQL&gt; -- example 03: table and column level annotations
-SQL&gt; CREATE TABLE employees
-  2  (
-  3      id     NUMBER(5)
-  4             ANNOTATIONS (
-  5                 identity,
-  6                 display_as 'Employee ID',
-  7                 group_name 'Emp_Info'),
-  8      name   VARCHAR2(50)
-  9             ANNOTATIONS (
- 10                 display_as 'Employee Name',
- 11                 group_name 'Emp_Info'),
- 12      salary NUMBER
- 13             ANNOTATIONS (
- 14                 display_as 'Employee Salary', UI_hidden)
- 15  )
- 16  ANNOTATIONS (
- 17      display_as 'Employee Table'
- 18  )
- 19  /
-
-Table EMPLOYEES created.
-
-SQL&gt; -- example 04: query the dictionary for annotation usage
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; /*
+SQL&gt;  Displaying the top 10 customers by sales using the pre-
+SQL&gt;  Oracle Database 12c syntax
+SQL&gt;*/
 SQL&gt; SELECT
-  2      object_name,
-  4      column_name,
-  5      annotation_name,
-  6      annotation_value
-  7  FROM
-  8      user_annotations_usage
-  9  ORDER BY
- 10      object_name,
- 11      column_name
- 12  /
+  2      *
+  3  FROM
+  4      (
+  5          SELECT
+  6              SUM(quantity_sold * amount_sold) AS revenue,
+  7              cust_id
+  8          FROM
+  9              sales
+ 10          GROUP BY
+ 11              cust_id
+ 12          ORDER BY
+ 13              SUM(quantity_sold * amount_sold) DESC
+ 14      )
+ 15  WHERE
+ 16      ROWNUM &lt; 11;
 
-OBJECT_NAME    COLUMN_NAME      ANNOTATION_NAME    ANNOTATION_VALUE
-______________ ________________ __________________ ___________________
-CUSTOMERS      EMAIL_ADDRESS    SENSITIVITY        highest
-CUSTOMERS                       DEPARTMENTS        sales, delivery
-CUSTOMERS                       FRONTOFFICE
-CUSTOMERS                       SENSITIVITY        high
-EMPLOYEES      ID               IDENTITY
-EMPLOYEES      ID               GROUP_NAME         Emp_Info
-EMPLOYEES      ID               DISPLAY_AS         Employee ID
-EMPLOYEES      NAME             DISPLAY_AS         Employee Name
-EMPLOYEES      NAME             GROUP_NAME         Emp_Info
-EMPLOYEES      SALARY           DISPLAY_AS         Employee Salary
-EMPLOYEES      SALARY           UI_HIDDEN
-EMPLOYEES                       DISPLAY_AS         Employee Table
+     REVENUE    CUST_ID
+____________ __________
+   103412,66      11407
+    99578,09      10747
+    98585,96      42167
+    98006,16       4974
+    97573,55      12783
+    97010,48       6395
+    94862,61       2994
+    94819,41        429
+    94786,13       1743
+    93644,32       4759
 
-12 rows selected.</code></pre>
+10 rows selected.
+
+SQL&gt; /*
+SQL&gt;  Iterating over the result set, displaying 10 customers each using the pre-
+SQL&gt;  Oracle Database 12c syntax. You typically find this type of query in reports
+SQL&gt;  where batches of rows are displayed on screen. The following query retrieves
+SQL&gt;  rows n to m (say, 10 to 20) from the result set.
+SQL&gt;*/
+SQL&gt; VAR n NUMBER
+SQL&gt; VAR m NUMBER
+SQL&gt; BEGIN
+  2      :n := 10;
+  3      :m := 20;
+  4  END;
+  5  /
+
+PL/SQL procedure successfully completed.
+
+SQL&gt; SELECT
+  2      *
+  3  FROM
+  4      (
+  5          SELECT
+  6              a.*,
+  7              ROWNUM rn
+  8          FROM
+  9              (
+ 10                  SELECT
+ 11                      SUM(quantity_sold * amount_sold) AS revenue,
+ 12                      cust_id
+ 13                  FROM
+ 14                      sales
+ 15                  GROUP BY
+ 16                      cust_id
+ 17                  ORDER BY
+ 18                      SUM(quantity_sold * amount_sold) DESC
+ 19              ) a
+ 20          WHERE
+ 21              ROWNUM &lt;= :m
+ 22      )
+ 23  WHERE
+ 24      rn &gt;= :n;
+
+    REVENUE    CUST_ID    RN
+___________ __________ _____
+   93644,32       4759    10
+   92671,18       9038    11
+   90908,24       4090    12
+   89018,86       7178    13
+   86440,63       6279    14
+   85278,17      11702    15
+   85200,78       6265    16
+   84261,92      25939    17
+    83833,3       7994    18
+   83461,16      20966    19
+   81970,44       3453    20
+
+11 rows selected.
+
+SQL&gt; /*
+SQL&gt;  The same queries, however this time using the new syntax, available from
+SQL&gt;  Oracle Database 12c Release 1 onwards
+SQL&gt;*/
+SQL&gt; SELECT
+  2      SUM(quantity_sold * amount_sold) AS revenue,
+  3      cust_id
+  4  FROM
+  5      sales
+  6  GROUP BY
+  7      cust_id
+  8  ORDER BY
+  9      SUM(quantity_sold * amount_sold) DESC
+ 10  FETCH FIRST 10 ROWS ONLY;
+
+     REVENUE    CUST_ID
+____________ __________
+   103412,66      11407
+    99578,09      10747
+    98585,96      42167
+    98006,16       4974
+    97573,55      12783
+    97010,48       6395
+    94862,61       2994
+    94819,41        429
+    94786,13       1743
+    93644,32       4759
+
+10 rows selected.
+
+SQL&gt; SELECT
+  2      SUM(quantity_sold * amount_sold) AS revenue,
+  3      cust_id
+  4  FROM
+  5      sales
+  6  GROUP BY
+  7      cust_id
+  8  ORDER BY
+  9      SUM(quantity_sold * amount_sold) DESC
+ 10  OFFSET 9 ROWS FETCH NEXT 11 ROWS ONLY;
+
+    REVENUE    CUST_ID
+___________ __________
+   93644,32       4759
+   92671,18       9038
+   90908,24       4090
+   89018,86       7178
+   86440,63       6279
+   85278,17      11702
+   85200,78       6265
+   84261,92      25939
+    83833,3       7994
+   83461,16      20966
+   81970,44       3453
+
+11 rows selected.</code></pre>
 </div>
 </div>
 </div>
@@ -742,7 +847,10 @@ EMPLOYEES                       DISPLAY_AS         Employee Table
 <h2 id="_benefits"><a class="anchor" href="#_benefits"></a>Benefits</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Annotating the data model with metadata provides additional data integrity, consistency and data model documentation benefits. Your applications can store user-defined metadata for database objects and table columns that other applications or users can retrieve and use. Storing the metadata along with the data guarantees consistency and universal accessibility to any user or application that uses the data.</p>
+<p>The FETCH FIRST and OFFSET clauses provides native SQL language support to limit the number of rows returned and to specify a starting row for the return set.</p>
+</div>
+<div class="paragraph">
+<p>Many queries need to limit the number of rows returned or offset the starting row of the results. For example, top-N queries sort their result set and then return only the first n rows. FETCH FIRST and OFFSET simplify syntax and comply with the ANSI SQL standard.</p>
 </div>
 </div>
 </div>
@@ -755,10 +863,10 @@ EMPLOYEES                       DISPLAY_AS         Employee Table
 <p>Availability: All Offerings</p>
 </li>
 <li>
-<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/cncpt/application-data-usage.html#GUID-D5D5615C-BB2C-4833-A9AF-6BAF0BF9CEC0">Database Concepts Guide</a></p>
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/SELECT.html#GUID-CFA006CA-6FF1-4972-821E-6996142A51C6__BABBADDD">SQL Language Reference</a></p>
 </li>
 <li>
-<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adfns/registering-application-data-usage-database.html#GUID-2DAF069E-0938-40AF-B05B-75AFE71D666C">Database Development Guide</a></p>
+<p><a href="https://blogs.oracle.com/sql/post/how-to-select-the-top-n-rows-per-group-with-sql-in-oracle-database">Blog post with additional examples</a> covering many aspects of top-<em>n</em> queries, including analytic functions</p>
 </li>
 </ul>
 </div>
