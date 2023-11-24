@@ -1,0 +1,88 @@
+= Window functions frame exclusion 
+:database-version: 21.3
+:database-category: sql
+
+[[feature_summary]]
+
+Use frame exclusion to omit rows from the calculation in window functions. This has four options:
+
+* `EXCLUDE CURRENT ROW` - remove the row being processed from the calculation.
+* `EXCLUDE GROUP` - omit all rows with the same value for the window's `ORDER BY` columns as the current row
+* `EXCLUDE TIES` - omit all other rows with the same value for the window's `ORDER BY` columns from the total as the current row, but include the current row
+* `EXCLUDE NO OTHERS` - Include all rows in the window in the calculation. This is the default.
+
+[source,sql]
+[subs="verbatim"]
+----
+alter session set nls_date_format = 'DD-MON-YYYY';
+
+select hire_date
+  , count(*) over ( 
+      -- include all previous rows; default
+      hire_w rows unbounded preceding exclude no others 
+    ) include_all
+  , count(*) over ( 
+      -- omit this row from the count
+      hire_w rows unbounded preceding exclude current row 
+    ) omit_current
+  , count(*) over ( 
+       -- omit all rows with the same value for hire_date as this
+       hire_w rows unbounded preceding exclude group 
+    ) omit_group
+  , count(*) over ( 
+       -- omit other rows with the same value for hire_date as this
+       hire_w rows unbounded preceding exclude ties 
+    ) omit_ties
+from   hr.employees
+where  hire_date >= date'2015-03-03'
+window hire_w as ( order by hire_date )
+fetch first 5 rows only;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> alter session set nls_date_format = 'DD-MON-YYYY';
+
+Session altered.
+
+SQL> select hire_date
+  2    , count(*) over ( 
+  3        -- include all previous rows; default
+  4        hire_w rows unbounded preceding exclude no others 
+  5      ) include_all
+  6    , count(*) over ( 
+  7        -- omit this row from the count
+  8        hire_w rows unbounded preceding exclude current row 
+  9      ) omit_current
+ 10    , count(*) over ( 
+ 11         -- omit all rows with the same value for hire_date as this
+ 12         hire_w rows unbounded preceding exclude group 
+ 13      ) omit_group
+ 14    , count(*) over ( 
+ 15         -- omit other rows with the same value for hire_date as this
+ 16         hire_w rows unbounded preceding exclude ties 
+ 17      ) omit_ties
+ 18  from   hr.employees
+ 19  where  hire_date >= date'2015-03-03'
+ 20  window hire_w as ( order by hire_date )
+ 21  fetch first 5 rows only;
+
+HIRE_DATE   INCLUDE_ALL OMIT_CURRENT OMIT_GROUP  OMIT_TIES
+----------- ----------- ------------ ---------- ----------
+03-MAR-2015           1            0          0          1
+10-MAR-2015           2            1          1          2
+10-MAR-2015           3            2          1          2
+11-MAR-2015           4            3          3          4
+19-MAR-2015           5            4          4          5
+----
+
+== Benefits
+
+Frame exclusion simplifies SQL statements that need to remove rows from running total and moving window calculations
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/21/dwhsg/sql-analysis-reporting-data-warehouses.html#GUID-2877E1A5-9F11-47F1-A5ED-D7D5C7DED90A[Documentation]

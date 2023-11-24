@@ -1,0 +1,67 @@
+= Window functions GROUPS frame
+:database-version: 21.3
+:database-category: sql
+
+[[feature_summary]]
+
+The `GROUPS` frame enables you to get running totals over the previous N sort values in window functions.
+
+This in addition to the existing `ROWS` and `RANGE` frames. The differences between these are:
+
+* `ROWS :N PRECEDING` - include the current row and up to N rows before it
+* `RANGE :N PRECEDING` - include all rows between _current_ - N and _current_; _current_ is the value of the `ORDER BY` column for the row the function is processing
+* `GROUPS :N PRECEDING` - include all rows with the same value and previous N unique values for the columns in the window's `ORDER BY`
+
+[source,sql]
+[subs="verbatim"]
+----
+alter session set nls_date_format = 'DD-MON-YYYY';
+
+select hire_date
+    -- include current & three previous rows
+  , count(*) over ( order by hire_date rows 3 preceding ) prev3_rows
+    -- include all rows between hire_date - 3 and hire_date for the current row
+  , count(*) over ( order by hire_date range 3 preceding ) prev3_days
+    -- include all rows with the any of the previous three and current hire_dates
+  , count(*) over ( order by hire_date groups 3 preceding ) prev3_values
+from   hr.employees
+where  hire_date >= date'2015-03-03'
+fetch first 5 rows only;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> alter session set nls_date_format = 'DD-MON-YYYY';
+
+Session altered.
+
+SQL> select hire_date
+  2      -- include current & three previous rows
+  3    , count(*) over ( order by hire_date rows 3 preceding ) prev3_rows
+  4      -- include all rows between hire_date - 3 and hire_date for the current row
+  5    , count(*) over ( order by hire_date range 3 preceding ) prev3_days
+  6      -- include all rows with the any of the previous three and current hire_dates
+  7    , count(*) over ( order by hire_date groups 3 preceding ) prev3_values
+  8  from   hr.employees
+  9  where  hire_date >= date'2015-03-03'
+ 10  fetch first 5 rows only;
+
+HIRE_DATE   PREV3_ROWS PREV3_DAYS PREV3_VALUES
+----------- ---------- ---------- ------------
+03-MAR-2015          1          1            1
+10-MAR-2015          2          2            3
+10-MAR-2015          3          2            3
+11-MAR-2015          4          3            4
+19-MAR-2015          4          1            5
+----
+
+== Benefits
+
+The `GROUPS` frame simplifies SQL statements that need to calculate running totals over the previous N unique values.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/21/dwhsg/sql-analysis-reporting-data-warehouses.html#GUID-2877E1A5-9F11-47F1-A5ED-D7D5C7DED90A[Documentation]

@@ -1,0 +1,12 @@
+= 21.3
+
+Oracle Database 21c was first released in August 2021.
+
+== Marquee Features
+
+* JSON Data Type 
+* Blockchain Tables
+* SQL Macros
+* Enhanced Analytic Functions
+
+For more information about all the new features in this release, see link:https://docs.oracle.com/en/database/oracle/oracle-database/21/nfcon/introduction.html[Oracle Database 21c New Features].
