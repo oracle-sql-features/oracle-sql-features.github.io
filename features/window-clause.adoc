@@ -1,0 +1,92 @@
+= WINDOW clause 
+:database-version: 21.3
+:database-category: sql
+
+[[feature_summary]]
+
+The `WINDOW` clause enables you to define `PARTITION BY`, `ORDER BY`, and window frames for analytic functions. You can use these named windows in the `OVER` clause of functions in the `SELECT` clause.
+
+[source,sql]
+[subs="verbatim"]
+----
+alter session set nls_date_format = 'DD-MON-YYYY';
+
+select employee_id,
+       department_id, salary,
+       -- these calculate totals per department
+       count (*) over ( dept_w ) emps_per_dept,
+       sum ( salary ) over ( dept_w ) wages_per_dept,
+       hire_date,
+       -- this gets the running total of salaries/dept in order they were hired
+       sum ( salary ) over ( hired_w ) cumul_sal,
+       -- this gets the moving average of salaries for the last four hires/dept
+       round ( avg ( salary ) over last_four ) rolling_mean
+from   hr.employees
+where  department_id < 50
+window dept_w as (
+  --  split by department
+  partition by department_id
+), hired_w as (
+  -- sort by date hired
+  dept_w order by hire_date
+), last_four as (
+  -- include the previous three rows & current
+  hired_w rows 3 preceding
+);
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> alter session set nls_date_format = 'DD-MON-YYYY';
+
+Session altered.
+
+SQL> select employee_id,
+  2         department_id, salary,
+  3         -- these calculate totals per department
+  4         count (*) over ( dept_w ) emps_per_dept,
+  5         sum ( salary ) over ( dept_w ) wages_per_dept,
+  6         hire_date,
+  7         -- this gets the running total of salaries/dept in order they were hired
+  8         sum ( salary ) over ( hired_w ) cumul_sal,
+  9         -- this gets the moving average of salaries for the last four hires/dept
+ 10         round ( avg ( salary ) over last_four ) rolling_mean
+ 11  from   hr.employees
+ 12  where  department_id < 50
+ 13  window dept_w as (
+ 14    --  split by department
+ 15    partition by department_id
+ 16  ), hired_w as (
+ 17    -- sort by date hired
+ 18    dept_w order by hire_date
+ 19  ), last_four as (
+ 20    -- include the previous three rows & current
+ 21    hired_w rows 3 preceding
+ 22  );
+
+EMPLOYEE_ID DEPARTMENT_ID     SALARY EMPS_PER_DEPT WAGES_PER_DEPT HIRE_DATE    CUMUL_SAL ROLLING_MEAN
+----------- ------------- ---------- ------------- -------------- ----------- ---------- ------------
+        200            10       4400             1           4400 17-SEP-2013       4400         4400
+        201            20      13000             2          19000 17-FEB-2014      13000        13000
+        202            20       6000             2          19000 17-AUG-2015      19000         9500
+        114            30      11000             6          24900 07-DEC-2012      11000        11000
+        115            30       3100             6          24900 18-MAY-2013      14100         7050
+        117            30       2800             6          24900 24-JUL-2015      16900         5633
+        116            30       2900             6          24900 24-DEC-2015      19800         4950
+        118            30       2600             6          24900 15-NOV-2016      22400         2850
+        119            30       2500             6          24900 10-AUG-2017      24900         2700
+        203            40       6500             1           6500 07-JUN-2012       6500         6500
+
+10 rows selected. 
+----
+
+== Benefits
+
+The `WINDOW` clause enables you to define common windows once and reuse them in a statement. This makes queries easier to maintain.
+
+== Further information
+
+* Availability: All Offerings
+* https://docs.oracle.com/en/database/oracle/oracle-database/21/dwhsg/sql-analysis-reporting-data-warehouses.html#GUID-2877E1A5-9F11-47F1-A5ED-D7D5C7DED90A[Documentation]
