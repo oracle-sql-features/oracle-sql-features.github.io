@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>PHONIC_ENCODE operator :: Oracle SQL Features</title>
     <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/versions/23.2/sql/phonic-encode-operator.html">
-    <meta name="generator" content="Antora 3.1.4">
+    <meta name="generator" content="Antora 3.1.7">
     <link rel="stylesheet" href="../../../../../_/css/site.css">
     <link rel="stylesheet" href="../../../../../_/css/site-extra.css">
     <link rel="stylesheet" href="../../../../../_/css/navbar-latest.css">
@@ -180,7 +180,7 @@
     <a class="nav-link" href="../../../categories/sql/features/identity-columns.html">Identity Columns</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../../categories/sql/features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../../../categories/sql/features/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../../../categories/sql/features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
@@ -211,6 +211,15 @@
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../../../categories/sql/features/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/features/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
   </li>
 </ul>
   </li>
@@ -261,7 +270,7 @@
     <a class="nav-link" href="../../../categories/sql/23.2/if-not-exists.html">IF [NOT] EXISTS</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../../categories/sql/23.2/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../../../categories/sql/23.2/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../../../categories/sql/23.2/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
@@ -286,6 +295,21 @@
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../../../categories/sql/23.2/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../categories/sql/21.3/index.html">21.3</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/21.3/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/21.3/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../categories/sql/21.3/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
   </li>
 </ul>
   </li>
@@ -348,6 +372,42 @@
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../21.3/index.html">21.3</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../21.3/features/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../21.3/features/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../21.3/features/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../21.3/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../21.3/sql/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../21.3/sql/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../21.3/sql/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="../index.html">23.2</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -388,7 +448,7 @@
     <a class="nav-link" href="../features/inline-javascript.html">Inline JavaScript Procedures</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../features/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
@@ -493,7 +553,7 @@
     <a class="nav-link" href="if-not-exists.html">IF [NOT] EXISTS</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>

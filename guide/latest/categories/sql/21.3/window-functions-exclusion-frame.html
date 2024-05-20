@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>JSON Schema: check constraint :: Oracle SQL Features</title>
-    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/categories/sql/features/json-schema-check-constraint.html">
-    <meta name="generator" content="Antora 3.1.4">
+    <title>Window functions frame exclusion :: Oracle SQL Features</title>
+    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/categories/sql/21.3/window-functions-exclusion-frame.html">
+    <meta name="generator" content="Antora 3.1.7">
     <link rel="stylesheet" href="../../../../../_/css/site.css">
     <link rel="stylesheet" href="../../../../../_/css/site-extra.css">
     <link rel="stylesheet" href="../../../../../_/css/navbar-latest.css">
@@ -150,67 +150,76 @@
     <span class="nav-text">All</span>
 <ul class="nav-list">
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="wide-tables.html">4096 table columns</a>
+    <a class="nav-link" href="../features/wide-tables.html">4096 table columns</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="annotations.html">Annotations</a>
+    <a class="nav-link" href="../features/annotations.html">Annotations</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="boolean.html">Boolean data type</a>
+    <a class="nav-link" href="../features/boolean.html">Boolean data type</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
+    <a class="nav-link" href="../features/ceil-floor-round-for-datetime-types.html">CEIL, FLOOR, and ROUND for datetime data types</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="default-on-null-update.html">Default ON NULL for UPDATE statements</a>
+    <a class="nav-link" href="../features/default-on-null-update.html">Default ON NULL for UPDATE statements</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="returning-into.html">Enhanced Returning-Into Clause</a>
+    <a class="nav-link" href="../features/returning-into.html">Enhanced Returning-Into Clause</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="fuzzy-match-operator.html">FUZZY_MATCH operator</a>
+    <a class="nav-link" href="../features/fuzzy-match-operator.html">FUZZY_MATCH operator</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="group-by-alias-position.html">GROUP BY column alias or position</a>
+    <a class="nav-link" href="../features/group-by-alias-position.html">GROUP BY column alias or position</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="if-not-exists.html">IF [NOT] EXISTS</a>
+    <a class="nav-link" href="../features/if-not-exists.html">IF [NOT] EXISTS</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="identity-columns.html">Identity Columns</a>
-  </li>
-  <li class="nav-item is-current-page" data-depth="4">
-    <a class="nav-link" href="json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../features/identity-columns.html">Identity Columns</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
+    <a class="nav-link" href="../features/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a>
+    <a class="nav-link" href="../features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="phonic-encode-operator.html">PHONIC_ENCODE operator</a>
+    <a class="nav-link" href="../features/query-row-limits-and-offsets.html">Native SQL Support for Query Row Limits and Row Offsets</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="plsql-function-in-sql.html">PL/SQL Function in SQL</a>
+    <a class="nav-link" href="../features/phonic-encode-operator.html">PHONIC_ENCODE operator</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="select-without-from.html">SELECT without FROM clause</a>
+    <a class="nav-link" href="../features/plsql-function-in-sql.html">PL/SQL Function in SQL</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="sql-transpiler.html">SQL Transpiler</a>
+    <a class="nav-link" href="../features/select-without-from.html">SELECT without FROM clause</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
+    <a class="nav-link" href="../features/sql-transpiler.html">SQL Transpiler</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="schema-level-privileges.html">Schema Level Privileges</a>
+    <a class="nav-link" href="../features/sum-and-avg-over-interval-types.html">SUM and AVG over INTERVAL data types</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="table-value-constructor.html">Table Value Constructor</a>
+    <a class="nav-link" href="../features/schema-level-privileges.html">Schema Level Privileges</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+    <a class="nav-link" href="../features/table-value-constructor.html">Table Value Constructor</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../features/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
   </li>
 </ul>
   </li>
@@ -261,7 +270,7 @@
     <a class="nav-link" href="../23.2/if-not-exists.html">IF [NOT] EXISTS</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../23.2/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../23.2/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../23.2/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
@@ -286,6 +295,21 @@
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../23.2/update-delete-via-join.html">UPDATE/DELETE via JOIN</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">21.3</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="4">
+    <a class="nav-link" href="window-functions-exclusion-frame.html">Window functions frame exclusion</a>
   </li>
 </ul>
   </li>
@@ -348,6 +372,42 @@
   </li>
   <li class="nav-item" data-depth="2">
     <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../versions/21.3/index.html">21.3</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">All</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../versions/21.3/features/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../versions/21.3/features/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../versions/21.3/features/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="3">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="../../../versions/21.3/sql/index.html">SQL</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../versions/21.3/sql/window-clause.html">WINDOW clause</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../versions/21.3/sql/window-functions-groups-frame.html">Window functions GROUPS frame</a>
+  </li>
+  <li class="nav-item" data-depth="4">
+    <a class="nav-link" href="../../../versions/21.3/sql/window-functions-exclusion-frame.html">Window functions frame exclusion</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <button class="nav-item-toggle"></button>
     <a class="nav-link" href="../../../versions/23.2/index.html">23.2</a>
 <ul class="nav-list">
   <li class="nav-item" data-depth="3">
@@ -388,7 +448,7 @@
     <a class="nav-link" href="../../../versions/23.2/features/inline-javascript.html">Inline JavaScript Procedures</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../../versions/23.2/features/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../../../versions/23.2/features/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../../../versions/23.2/features/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
@@ -493,7 +553,7 @@
     <a class="nav-link" href="../../../versions/23.2/sql/if-not-exists.html">IF [NOT] EXISTS</a>
   </li>
   <li class="nav-item" data-depth="4">
-    <a class="nav-link" href="../../../versions/23.2/sql/json-schema-check-constraint.html">JSON Schema: check constraint</a>
+    <a class="nav-link" href="../../../versions/23.2/sql/json-schema-validation-report.html">JSON Schema: check constraint</a>
   </li>
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="../../../versions/23.2/sql/json-schema-validate-rows.html">JSON Schema: validate rows in a table</a>
@@ -558,18 +618,18 @@
     <li><a href="../../../index.html">Oracle SQL Features</a></li>
     <li><a href="../../index.html">Categories</a></li>
     <li><a href="../index.html">SQL</a></li>
-    <li>All</li>
-    <li><a href="json-schema-check-constraint.html">JSON Schema: check constraint</a></li>
+    <li><a href="index.html">21.3</a></li>
+    <li><a href="window-functions-exclusion-frame.html">Window functions frame exclusion</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/categories/pages/sql/features/json-schema-check-constraint.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/categories/pages/sql/21.3/window-functions-exclusion-frame.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">JSON Schema: check constraint</h1>
+<h1 class="page">Window functions frame exclusion</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="hdlist">
@@ -579,7 +639,7 @@
 Version
 </td>
 <td class="hdlist2">
-<p><a href="../../../versions/23.2/index.html" class="xref page">23.2</a></p>
+<p><a href="../../../versions/21.3/index.html" class="xref page">21.3</a></p>
 </td>
 </tr>
 <tr>
@@ -593,128 +653,87 @@ Categories
 </table>
 </div>
 <div class="paragraph">
-<p>JSON offers the flexibility of schemaless application design. Sometimes however, you might want some JSON data to conform to a schema. You might want to ensure that all data stored in a given column has the structure defined by a schema, or you might want to check whether a given JSON document has such a structure, before processing it.</p>
+<p>Use frame exclusion to omit rows from the calculation in window functions. This has four options:</p>
 </div>
-<div class="paragraph">
-<p>A JSON schema is a JSON document that respects the JSON Schema standard, which is a Request For Comments (RFC) draft. JSON schemas are in turn used to validate other JSON documents. Refer to the <a href="https://json-schema.org">JSON schema website</a> for more details. A JSON schema specifies the structure and the types of allowed values of JSON data that it considers valid.</p>
-</div>
-<div class="paragraph">
-<p>This example demonstrates how to add a check constraint to a JSON column ensuring its contents matches a schema.</p>
-</div>
-<div class="paragraph">
-<p>The following JSON schema ensures that only objects can be stored in the JSON column, containing at least a <code>firstName</code> field with a minimum length of 1 character. The numeric <code>salary</code> field is optional, however if defined, the salary must be greater than 10000.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{
-    "type": "object",
-    "properties": {
-        "firstName": {
-            "type": "string",
-            "minLength": 1
-        },
-        "salary": {
-            "type": "number",
-            "minimum": 10000
-        }
-    },
-    "required": [
-        "firstName"
-    ]
-}</code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>EXCLUDE CURRENT ROW</code> - remove the row being processed from the calculation.</p>
+</li>
+<li>
+<p><code>EXCLUDE GROUP</code> - omit all rows with the same value for the window&#8217;s <code>ORDER BY</code> columns as the current row</p>
+</li>
+<li>
+<p><code>EXCLUDE TIES</code> - omit all other rows with the same value for the window&#8217;s <code>ORDER BY</code> columns from the total as the current row, but include the current row</p>
+</li>
+<li>
+<p><code>EXCLUDE NO OTHERS</code> - Include all rows in the window in the calculation. This is the default.</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">CREATE TABLE json_demo(
-    id   NUMBER
-         GENERATED ALWAYS AS IDENTITY,
-    CONSTRAINT pk_json_demo PRIMARY KEY(id),
-    jcol JSON,
-    CONSTRAINT json_chk CHECK (
-        jcol IS JSON VALIDATE
-        '{
-            "type": "object",
-            "properties": {
-                "firstName": {
-                    "type": "string",
-                    "minLength": 1
-                },
-                "salary": {
-                    "type": "number",
-                    "minimum": 10000
-                }
-            },
-            "required": [
-                "firstName"
-            ]
-        }'
-    )
-);
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">alter session set nls_date_format = 'DD-MON-YYYY';
 
--- inserting invalid data results in a constraint violation
-INSERT INTO json_demo (
-    jcol
-) values (
-    JSON('{ "contents": "does not match JSON schema" }')
-);
-
--- this insert statement contains a valid JSON document
-INSERT INTO json_demo (
-    jcol
-) values (
-    JSON('{ "firstName": "Martin" }')
-);</code></pre>
+select hire_date
+  , count(*) over (
+      -- include all previous rows; default
+      hire_w rows unbounded preceding exclude no others
+    ) include_all
+  , count(*) over (
+      -- omit this row from the count
+      hire_w rows unbounded preceding exclude current row
+    ) omit_current
+  , count(*) over (
+       -- omit all rows with the same value for hire_date as this
+       hire_w rows unbounded preceding exclude group
+    ) omit_group
+  , count(*) over (
+       -- omit other rows with the same value for hire_date as this
+       hire_w rows unbounded preceding exclude ties
+    ) omit_ties
+from   hr.employees
+where  hire_date &gt;= date'2015-03-03'
+window hire_w as ( order by hire_date )
+fetch first 5 rows only;</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Result</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; CREATE TABLE json_demo(
-  2      id   NUMBER
-  3           GENERATED ALWAYS AS IDENTITY,
-  4      CONSTRAINT pk_json_demo PRIMARY KEY(id),
-  5      jcol JSON,
-  6      CONSTRAINT json_chk CHECK (
-  7          jcol IS JSON VALIDATE
-  8          '{
-  9              "type": "object",
- 10              "properties": {
- 11                  "firstName": {
- 12                      "type": "string",
- 13                      "minLength": 1
- 14                  },
- 15                  "salary": {
- 16                      "type": "number",
- 17                      "minimum": 10000
- 18                  }
- 19              },
- 20              "required": [
- 21                  "firstName"
- 22              ]
- 23          }'
- 24      )
- 25  );
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; alter session set nls_date_format = 'DD-MON-YYYY';
 
-Table JSON_DEMO created.
+Session altered.
 
-SQL&gt; INSERT INTO json_demo (
-  2    jcol
-  3  ) values (
-  4    JSON('{ "contents": "does not match JSON schema" }')
-  5  );
-INSERT INTO json_demo (
-            *
-ERROR at line 1:
-ORA-40875: JSON schema validation error
+SQL&gt; select hire_date
+  2    , count(*) over (
+  3        -- include all previous rows; default
+  4        hire_w rows unbounded preceding exclude no others
+  5      ) include_all
+  6    , count(*) over (
+  7        -- omit this row from the count
+  8        hire_w rows unbounded preceding exclude current row
+  9      ) omit_current
+ 10    , count(*) over (
+ 11         -- omit all rows with the same value for hire_date as this
+ 12         hire_w rows unbounded preceding exclude group
+ 13      ) omit_group
+ 14    , count(*) over (
+ 15         -- omit other rows with the same value for hire_date as this
+ 16         hire_w rows unbounded preceding exclude ties
+ 17      ) omit_ties
+ 18  from   hr.employees
+ 19  where  hire_date &gt;= date'2015-03-03'
+ 20  window hire_w as ( order by hire_date )
+ 21  fetch first 5 rows only;
 
-SQL&gt; INSERT INTO json_demo (
-  2      jcol
-  3  ) values (
-  4      JSON('{ "firstName": "Martin" }')
-  5  );
-
-1 row inserted.</code></pre>
+HIRE_DATE   INCLUDE_ALL OMIT_CURRENT OMIT_GROUP  OMIT_TIES
+----------- ----------- ------------ ---------- ----------
+03-MAR-2015           1            0          0          1
+10-MAR-2015           2            1          1          2
+10-MAR-2015           3            2          1          2
+11-MAR-2015           4            3          3          4
+19-MAR-2015           5            4          4          5</code></pre>
 </div>
 </div>
 </div>
@@ -723,7 +742,7 @@ SQL&gt; INSERT INTO json_demo (
 <h2 id="_benefits"><a class="anchor" href="#_benefits"></a>Benefits</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>JSON is a popular format for data exchange, however with flexibility comes the risk of importing incomplete records. JSON schema allows developers to ensure better data quality. Using check constraints attached to JSON columns in relational tables incoming information can be checked against a schema. Any records not matching the schema will be rejected.</p>
+<p>Frame exclusion simplifies SQL statements that need to remove rows from running total and moving window calculations</p>
 </div>
 </div>
 </div>
@@ -736,7 +755,7 @@ SQL&gt; INSERT INTO json_demo (
 <p>Availability: All Offerings</p>
 </li>
 <li>
-<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/json-schema.html#GUID-980BD95E-D0EF-4E22-8E67-08CD419EE7A2">Documentation</a></p>
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/21/dwhsg/sql-analysis-reporting-data-warehouses.html#GUID-2877E1A5-9F11-47F1-A5ED-D7D5C7DED90A">Documentation</a></p>
 </li>
 </ul>
 </div>
