@@ -1,0 +1,33 @@
+= Seamless concatenation via Varargs
+:database-version: 23.2
+:database-category: sql
+
+[[feature_summary]]
+
+You can now concatenate an unlimited number of parameters via the `CONCAT()` function.
+
+[source,sql]
+[subs="verbatim"]
+----
+SELECT CONCAT('Hello World! It currently is ', TO_CHAR(sysdate,'YYYY-MM-DD HH24:MI:SS'), ' here in Vienna.') AS my_string;
+----
+
+.Result
+[source,sql]
+[subs="verbatim"]
+----
+SQL> SELECT CONCAT('Hello World! It currently is ', TO_CHAR(sysdate,'YYYY-MM-DD HH24:MI:SS'), ' here in Vienna.') AS my_string;
+
+MY_STRING
+___________________________________________________________________
+Hello World! It currently is 2024-06-13 16:50:50 here in Vienna.
+----
+
+== Benefits
+
+Not having to nest multiple concatenations in multiple `CONCAT()` calls aids the readability and maintainability of code.
+
+== Further information
+
+* Availability: All Offerings
+* link:https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CONCAT.html[CONCAT Documentation]
