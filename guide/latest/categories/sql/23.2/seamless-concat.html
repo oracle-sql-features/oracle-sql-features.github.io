@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>23.2 :: Oracle SQL Features</title>
-    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/categories/sql/23.2/index.html">
+    <title>Seamless concatenation via Varargs :: Oracle SQL Features</title>
+    <link rel="canonical" href="https://oracle-sql-features.github.io/guide/latest/categories/sql/23.2/seamless-concat.html">
     <meta name="generator" content="Antora 3.1.7">
     <link rel="stylesheet" href="../../../../../_/css/site.css">
     <link rel="stylesheet" href="../../../../../_/css/site-extra.css">
@@ -241,7 +241,7 @@
   </li>
 </ul>
   </li>
-  <li class="nav-item is-current-page" data-depth="3">
+  <li class="nav-item" data-depth="3">
     <button class="nav-item-toggle"></button>
     <a class="nav-link" href="index.html">23.2</a>
 <ul class="nav-list">
@@ -293,7 +293,7 @@
   <li class="nav-item" data-depth="4">
     <a class="nav-link" href="schema-level-privileges.html">Schema Level Privileges</a>
   </li>
-  <li class="nav-item" data-depth="4">
+  <li class="nav-item is-current-page" data-depth="4">
     <a class="nav-link" href="seamless-concat.html">Seamless concatenation via Varargs</a>
   </li>
   <li class="nav-item" data-depth="4">
@@ -631,56 +631,79 @@
     <li><a href="../../index.html">Categories</a></li>
     <li><a href="../index.html">SQL</a></li>
     <li><a href="index.html">23.2</a></li>
+    <li><a href="seamless-concat.html">Seamless concatenation via Varargs</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/categories/pages/sql/23.2/index.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/oracle-sql-features/oracle-sql-features.github.io/edit/main/docs/modules/categories/pages/sql/23.2/seamless-concat.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">23.2</h1>
+<h1 class="page">Seamless concatenation via Varargs</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+Version
+</td>
+<td class="hdlist2">
+<p><a href="../../../versions/23.2/index.html" class="xref page">23.2</a></p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+Categories
+</td>
+<td class="hdlist2">
+<p><a href="../index.html" class="xref page">SQL</a></p>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Oracle Database 23c was first released in April 2023 via Oracle Database 23c Free – Developer Release.</p>
+<p>You can now concatenate an unlimited number of parameters via the <code>CONCAT()</code> function.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SELECT CONCAT('Hello World! It currently is ', TO_CHAR(sysdate,'YYYY-MM-DD HH24:MI:SS'), ' here in Vienna.') AS my_string;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Result</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SQL&gt; SELECT CONCAT('Hello World! It currently is ', TO_CHAR(sysdate,'YYYY-MM-DD HH24:MI:SS'), ' here in Vienna.') AS my_string;
+
+MY_STRING
+___________________________________________________________________
+Hello World! It currently is 2024-06-13 16:50:50 here in Vienna.</code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_marquee_features"><a class="anchor" href="#_marquee_features"></a>Marquee Features</h2>
+<h2 id="_benefits"><a class="anchor" href="#_benefits"></a>Benefits</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Not having to nest multiple concatenations in multiple <code>CONCAT()</code> calls aids the readability and maintainability of code.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_further_information"><a class="anchor" href="#_further_information"></a>Further information</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p>JSON Relational Duality</p>
+<p>Availability: All Offerings</p>
 </li>
 <li>
-<p>JSON Schemas</p>
-</li>
-<li>
-<p>JavaScript Stored Procedures</p>
-</li>
-<li>
-<p>Operational Property Graphs (SQL/PGQ)</p>
-</li>
-<li>
-<p>Schema-level Privileges</p>
-</li>
-<li>
-<p>Domains</p>
-</li>
-<li>
-<p>Annotations</p>
-</li>
-<li>
-<p>Lock-Free Reservations</p>
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CONCAT.html">CONCAT Documentation</a></p>
 </li>
 </ul>
-</div>
-<div class="paragraph">
-<p>For more information about all the new features in this release, see <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/nfcoa/introduction.html">Oracle Database 23c New Features</a>.</p>
 </div>
 </div>
 </div>
