@@ -18,3 +18,7 @@ asciidoc:
   extensions:
     - ./extensions/remote-include-processor/extension
     - ./extensions/tabs-block/extension
+
+antora:
+  extensions:
+    - ./extensions/edit-url/extension
