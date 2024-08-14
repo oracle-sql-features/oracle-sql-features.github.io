@@ -22,3 +22,4 @@ asciidoc:
 antora:
   extensions:
     - ./extensions/edit-url/extension
+    - '@antora/lunr-extension'
