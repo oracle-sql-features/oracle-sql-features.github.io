@@ -34,7 +34,7 @@ jobs:
           touch website/.nojekyll
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@4.6.3
+        uses: JamesIves/github-pages-deploy-action@v4.6.3
         with:
           folder: website
           branch: 'gh-pages'
