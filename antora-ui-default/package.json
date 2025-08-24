@@ -54,6 +54,6 @@
     "vinyl-fs": "~3.0"
   },
   "dependencies": {
-    "prismjs": "^1.29.0"
+    "prismjs": "file:./../primsmjs"
   }
 }
